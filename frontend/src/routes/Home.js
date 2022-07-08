@@ -84,10 +84,8 @@ const StudyListBox=styled.ul`
    
 `;
 const StudyList=styled.li`
-
     font-size:15px;
     text-align:left;
-   
 `;
 
 function Home(){
