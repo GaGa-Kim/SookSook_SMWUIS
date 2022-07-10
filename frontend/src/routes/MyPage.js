@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
-import BigBox from "./components/BigBox";
+import ColorBox from "./components/ColorBox";
 import MySchedule from './components/MySchedule';
-
 import MyHistory from './components/MyHistory';
 import "../fonts/Font.css";
 
@@ -61,7 +60,7 @@ const LevelText = styled.div`
 `;
 const LevelGauge = styled.div`
     width: 1000px;
-    font-family: "Dohyeon";
+    font-family: "DoHyeon";
 `;
 const ListBox = styled.ul`
     width: 100%;
@@ -91,13 +90,13 @@ function MyPage() {
     return (
         <Root>
             <GlobalStyle />
-            <BigBox>
+            <ColorBox height="300px">
                 <SettingImg src={setting} />
                 <SnowImg src={snowflake} />
                 <ProfileImg src={profile} />
                 <ProfileName>눈송</ProfileName>
                 <ProfileComment>이번 기말고사 화이팅!</ProfileComment>
-            </BigBox>
+            </ColorBox>
             <Level>
                 <LevelText>새싹 등급</LevelText>
                 <LevelGauge>

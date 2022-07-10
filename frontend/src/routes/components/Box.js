@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+
+
 const Box = styled.div`
     position: absolute;
     left: ${(props) => props.left};

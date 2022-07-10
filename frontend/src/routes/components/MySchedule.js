@@ -1,17 +1,18 @@
 import styled from "styled-components";
 import List from "./List";
 import ListText from "./ListText";
-import Box from './Box';
+import Box from "./Box";
 import CheckBox from "./CheckBox";
-import ListHeader from './ListHeader';
-import ListBox from './ListBox';
-import ListTitle from './ListTitle';
+import ListHeader from "./ListHeader";
+import ListBox from "./ListBox";
+import ListTitle from "./ListTitle";
+import InputText from "./InputText";
 
 import x from "../../images/x.png";
 import plus from "../../images/plus.png";
 import "../../fonts/Font.css";
 import { Input } from "antd";
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space } from "antd";
 
 const Add = styled.div`
     width: 100%;
@@ -29,18 +30,18 @@ const PlusImg = styled.img`
 const XImg = styled.img`
     width: 30px;
     height: 30px;
-    display:block;
-    vertical-align:center;
+    display: block;
+    vertical-align: center;
 `;
 
 const onChange = (date, dateString) => {
     console.log(date, dateString);
-  };
+};
 
-const MySchedule=()=>{
-    return(
-    <>
-    <ListHeader>
+const MySchedule = () => {
+    return (
+        <>
+            <ListHeader>
                 <ListTitle>스터디 히스토리</ListTitle>
                 <ListTitle border="2px solid black">스케줄러</ListTitle>
             </ListHeader>
@@ -71,14 +72,14 @@ const MySchedule=()=>{
             <Add>
                 <PlusImg src={plus}></PlusImg>
                 <Box left="70px" width="120px">
-                <DatePicker onChange={onChange} />
+                    <DatePicker onChange={onChange} />
                 </Box>
                 <Box left="200px" width="85%">
-                    <Input placeholder="일정을 입력하세요" />
+                    <InputText text="일정을 입력하세요"/>
                 </Box>
             </Add>
-    </>
+        </>
     );
-}
+};
 
 export default MySchedule;
