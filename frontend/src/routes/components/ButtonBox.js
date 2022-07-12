@@ -3,7 +3,7 @@ import "../../fonts/Font.css";
 
 const ButtonBox=styled.div`
     text-align:right;
-    margin-right:50px;
+    margin-right:${(props)=>props.mgRight};
     vertical-align:middle;
     font-family:"DoHyeon";
 `;

@@ -104,11 +104,12 @@ const OpenStudy = () => {
                     </Box>
                 </InputBox>
             </Main>
-            <ButtonBox>
-                <Button width="70px">업로드</Button>
-                <Button width="70px">삭제</Button>
-                <Button width="70px">목록</Button>
+            <ButtonBox mgRight="50px">
+                <Button width="70px" mg="30px">업로드</Button>
+                <Button width="70px" mg="30px">삭제</Button>
+                <Button width="70px" mg="30px">목록</Button>
             </ButtonBox>
+
         </Root>
     );
 };

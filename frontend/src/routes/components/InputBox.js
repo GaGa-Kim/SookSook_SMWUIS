@@ -7,6 +7,7 @@ const InputBox = styled.div`
     width: 344px;
     height: 50px;
     margin-bottom: ${(props) => props.mgBot};
+    
 `;
 
 export default InputBox;

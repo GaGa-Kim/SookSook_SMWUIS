@@ -1,8 +1,8 @@
 
-const CheckBox=()=>{
+const CheckBox=(item)=>{
     return(
       
-        <input type="checkbox" />
+        <input type="checkbox" checked={item.check} disabled={item.disable}/>
        
     );
 };

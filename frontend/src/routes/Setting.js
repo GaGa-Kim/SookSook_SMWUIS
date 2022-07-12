@@ -96,8 +96,8 @@ const Setting = () => {
                     </Box>
                 </InputBox>
             </Main>
-            <ButtonBox>
-                <Button width="100px">회원탈퇴</Button>
+            <ButtonBox mgRight="50px">
+                <Button width="100px" mg="30px">회원탈퇴</Button>
             </ButtonBox>
         </Root>
     );

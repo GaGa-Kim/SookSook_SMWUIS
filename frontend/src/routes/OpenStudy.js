@@ -7,12 +7,10 @@ import InputText from "./components/InputText";
 import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import CheckBox from "./components/CheckBox";
-import InputPassword from './components/InputPassword';
-import ButtonBox from './components/ButtonBox';
-import Button from './components/Button';
+import InputPassword from "./components/InputPassword";
+import ButtonBox from "./components/ButtonBox";
+import Button from "./components/Button";
 import "../fonts/Font.css";
-
-
 
 const Title = styled.div`
     position: absolute;
@@ -31,7 +29,6 @@ const Main = styled.div`
     align-items: center;
     margin-top: 20px;
     font-family: "DoHyeon";
-
 `;
 
 const Quest = styled.div`
@@ -48,18 +45,17 @@ const Select = styled.select`
     border-radius: 70px;
     text-align: center;
     border-color: #eeeeee;
-    transition:0.5s;
-    outline:none;
-    &:hover{
+    transition: 0.5s;
+    outline: none;
+    &:hover {
         border-color: #4aacfc;
-        transition:0.5s;  
+        transition: 0.5s;
     }
-    &:focus{
+    &:focus {
         border-color: #4aacfc;
-        box-shadow:0px 0px 0 2px #c7e4fe;
-        transition:0.5s;
+        box-shadow: 0px 0px 0 2px #c7e4fe;
+        transition: 0.5s;
     }
-    
 `;
 
 const OpenStudy = () => {
@@ -88,18 +84,18 @@ const OpenStudy = () => {
                 <InputBox>
                     <Quest>비밀번호</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputPassword/>
+                        <InputPassword />
                     </Box>
                 </InputBox>
                 <InputBox>
                     <Quest>과목</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputText text="입력하세요" bg="#F0F0F0"/>
+                        <InputText text="입력하세요" bg="#F0F0F0" />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="50px">
                     <Quest>내용</Quest>
-                    <Box width="200px" left="100px" top="7px" >
+                    <Box width="200px" left="100px" top="7px">
                         <InputArea area="입력하세요" />
                     </Box>
                 </InputBox>
@@ -114,8 +110,8 @@ const OpenStudy = () => {
                     <Quest>단기</Quest>
                 </InputBox>
             </Main>
-            <ButtonBox>
-            <Button width="100px">만들기</Button>
+            <ButtonBox mgRight="50px">
+                <Button width="100px" mg="30px">만들기</Button>
             </ButtonBox>
         </Root>
     );
