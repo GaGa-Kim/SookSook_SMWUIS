@@ -6,6 +6,7 @@ const ColorBox=styled.div`
   background-color:#C1DAFF;
   position:relative;
   font-family:"Dohyeon";
+  
 `;
 
 export default ColorBox;

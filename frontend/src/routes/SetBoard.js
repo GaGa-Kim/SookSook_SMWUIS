@@ -21,7 +21,7 @@ const handleChange = (value) => {
 
 const Title = styled.div`
     position: absolute;
-    top: 32px;
+    top: 30px;
     left: 100px;
     font-size: 36px;
     color: #ffffff;
@@ -80,7 +80,7 @@ const OpenStudy = () => {
     return (
         <Root>
             <GlobalStyle />
-            <ColorBox height="100px">
+            <ColorBox height="90px">
                 <Title>게시판 작성</Title>
             </ColorBox>
             <Main>

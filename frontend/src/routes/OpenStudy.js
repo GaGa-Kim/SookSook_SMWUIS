@@ -1,4 +1,4 @@
-import styled,{keyframes} from "styled-components";
+import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
 import ColorBox from "./components/ColorBox";
@@ -7,13 +7,16 @@ import InputText from "./components/InputText";
 import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import CheckBox from "./components/CheckBox";
+import InputPassword from './components/InputPassword';
+import ButtonBox from './components/ButtonBox';
+import Button from './components/Button';
 import "../fonts/Font.css";
 
-import { Input, Space } from "antd";
+
 
 const Title = styled.div`
     position: absolute;
-    top: 32px;
+    top: 30px;
     left: 100px;
     font-size: 36px;
     color: #ffffff;
@@ -22,13 +25,13 @@ const Title = styled.div`
 
 const Main = styled.div`
     width: 100%;
-    height: 100%
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 20px;
     font-family: "DoHyeon";
-    
+
 `;
 
 const Quest = styled.div`
@@ -46,7 +49,7 @@ const Select = styled.select`
     text-align: center;
     border-color: #eeeeee;
     transition:0.5s;
-
+    outline:none;
     &:hover{
         border-color: #4aacfc;
         transition:0.5s;  
@@ -58,11 +61,12 @@ const Select = styled.select`
     }
     
 `;
+
 const OpenStudy = () => {
     return (
         <Root>
             <GlobalStyle />
-            <ColorBox height="100px">
+            <ColorBox height="90px">
                 <Title>스터디 개설</Title>
             </ColorBox>
             <Main>
@@ -84,10 +88,7 @@ const OpenStudy = () => {
                 <InputBox>
                     <Quest>비밀번호</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <Input.Password
-                            placeholder="입력하세요"
-                            style={{ "border-radius": "70px" }}
-                        />
+                        <InputPassword/>
                     </Box>
                 </InputBox>
                 <InputBox>
@@ -113,6 +114,9 @@ const OpenStudy = () => {
                     <Quest>단기</Quest>
                 </InputBox>
             </Main>
+            <ButtonBox>
+            <Button width="100px">만들기</Button>
+            </ButtonBox>
         </Root>
     );
 };
