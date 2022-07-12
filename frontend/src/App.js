@@ -6,6 +6,7 @@ import{
 import Home from "./routes/Home";
 import MyPage from './routes/MyPage';
 import OpenStudy from './routes/OpenStudy';
+import SetBoard from './routes/SetBoard';
 function App() {
   return (
    <Router>
@@ -15,6 +16,9 @@ function App() {
       </Route>
       <Route path="/openstudy">
         <OpenStudy /> 
+      </Route>
+      <Route path="/setboard">
+        <SetBoard/>
       </Route>
       <Route path="/">{/*홈화면으로 갈때*/}
         <Home /> 

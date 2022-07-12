@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { Input } from "antd";
 
-const Box = styled.div`
-    position: relative;
-`;
+
 const InputText = (item) => {
     return (
-        <Input placeholder={item.text}/>
+  
+            <Input placeholder={item.text} style={{"background-color":item.bg, "border-radius":"70px"}}/>
+     
     );
 }
 export default InputText;
