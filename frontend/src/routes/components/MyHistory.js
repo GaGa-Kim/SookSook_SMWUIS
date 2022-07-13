@@ -2,13 +2,12 @@ import styled from "styled-components";
 import List from "./List";
 import ListText from "./ListText";
 import Badge from "./Badge";
-import ListBox from './ListBox';
-import ListHeader from './ListHeader';
-import ListTitle from './ListTitle';
+import ListBox from "./ListBox";
+import ListHeader from "./ListHeader";
+import ListTitle from "./ListTitle";
 
 import star from "../../images/star.png";
 import "../../fonts/Font.css";
-
 
 const StarImg = styled.img`
     width: 20px;
@@ -18,22 +17,27 @@ const StarImg = styled.img`
 const XImg = styled.img`
     width: 30px;
     height: 30px;
-    display:block;
-    vertical-align:center;
+    display: block;
+    vertical-align: center;
 `;
 const Box = styled.div`
     position: absolute;
     left: ${(props) => props.left};
     top: ${(props) => props.top};
     right: ${(props) => props.right};
-    width:${(props) => props.width};
-    height:${(props)=>props.height};
+    width: ${(props) => props.width};
+    height: ${(props) => props.height};
 `;
 
-const MyHistory=()=>{
-    return(
+const MyHistory = () => {
+    const RandomColor = () => {
+        return (
+            "#" + Math.round(Math.random() * 0xfffffe + 0x000002).toString(16)
+        );
+    };
+    return (
         <>
-        <ListHeader>
+            <ListHeader>
                 <ListTitle border="2px solid black">스터디 히스토리</ListTitle>
                 <ListTitle>스케줄러</ListTitle>
             </ListHeader>
@@ -43,12 +47,19 @@ const MyHistory=()=>{
                     <ListText>진행중</ListText>
                 </List>
                 <List>
-                    <ListText>웹 프로그래밍 기초<Badge rnd="yellow">과제 제출이 빨라요</Badge><Badge rnd="green">성실해요</Badge></ListText>
-                    <ListText><StarImg src={star}/>4.7/5</ListText>
+                    <ListText>
+                        웹 프로그래밍 기초
+                        <Badge rnd={RandomColor} mgLeft="50px">과제 제출이 빨라요</Badge>
+                        <Badge rnd={RandomColor} mgLeft="50px">성실해요</Badge>
+                    </ListText>
+                    <ListText>
+                        <StarImg src={star} />
+                        4.7/5
+                    </ListText>
                 </List>
             </ListBox>
         </>
     );
-}
+};
 
 export default MyHistory;

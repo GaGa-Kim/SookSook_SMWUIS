@@ -7,7 +7,8 @@ const Badge=styled.div`
     height:25px;
     text-align:center;
     padding-top:5px;
-    margin-left:50px;
+    margin-left:${(props)=>props.mgLeft};
+    margin-bottom:${(props)=>props.mgBot};
 `;
 
 export default Badge;
