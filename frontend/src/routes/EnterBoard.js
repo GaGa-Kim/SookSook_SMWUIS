@@ -67,12 +67,12 @@ const Footer = styled.div`
     font-family: "DoHyeon";
 `;
 const CommentBox = styled.div`
-    margin:5px 10px;
+    margin: 5px 10px;
     display: flex;
     justify-content: space-around;
 `;
 
-const OpenStudy = () => {
+const EnterBoard = () => {
     return (
         <Root>
             <GlobalStyle />
@@ -89,10 +89,7 @@ const OpenStudy = () => {
                 <InputBox>
                     <Quest ftSize="25px">과목</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputText
-                            text="웹프로그래밍 기초"
-                            disable="true"
-                        />
+                        <InputText text="웹프로그래밍 기초" disable="true" />
                     </Box>
                 </InputBox>
                 <InputBox>
@@ -133,10 +130,12 @@ const OpenStudy = () => {
                 <Quest ftSize="17px">댓글</Quest>
                 <CommentBox>
                     <InputText text="입력하세요"></InputText>
-                    <Button width="50px" mg="5px">입력</Button>
+                    <Button width="50px" mg="5px">
+                        입력
+                    </Button>
                 </CommentBox>
             </Footer>
         </Root>
     );
 };
-export default OpenStudy;
+export default EnterBoard;

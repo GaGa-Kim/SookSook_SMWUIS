@@ -37,6 +37,7 @@ const SnowImg = styled.img`
     z-index: 2;
 `;
 const ProfileName = styled.div`
+    width:150px;
     color: #ffffff;
     font-family: "Dohyeon";
     font-size: 30px;
@@ -45,6 +46,7 @@ const ProfileName = styled.div`
     left: 320px;
 `;
 const ProfileComment = styled.div`
+    width:660px;
     font-size: 15px;
     position: absolute;
     top: 320px;
@@ -55,6 +57,7 @@ const Level = styled.div`
     height: 50px;
 `;
 const LevelText = styled.div`
+    width:70px;
     font-size: 20px;
     font-family: "DoHyeon";
 `;
@@ -87,6 +90,7 @@ const StarImg = styled.img`
 `;
 
 function MyPage() {
+    
     return (
         <Root>
             <GlobalStyle />
@@ -107,9 +111,9 @@ function MyPage() {
                 </LevelGauge>
             </Level>
             {/*스터디 히스토리 클릭시*/}
-            {/* <MyHistory/> */}
+            <MyHistory/>
             {/*스케줄러 클릭시*/}
-            <MySchedule/>
+            {/* <MySchedule/> */}
         </Root> 
     );
 }
