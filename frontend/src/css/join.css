@@ -1,0 +1,55 @@
+.logo img {
+    width: 280px;
+}
+
+.search {
+    width: 600px;
+    padding-left: 120px;
+    padding-top: 46px;
+}
+
+.loginblock {
+    background-color: #c1daff;
+    padding: 12px 10px 10px 10px;
+    margin-bottom: 50px;
+}
+
+.login {
+    border-color: transparent;
+    margin-right: 5px;
+    margin-left: 10px;
+    border-radius: 10px;
+    background-color: white;
+    font-weight: bold;
+}
+
+.login:hover {
+    border-color: navy;
+    transition: border-color 1s;
+}
+
+.join {
+    margin-right: 300px;
+    margin-top: 30px;
+}
+
+.joinbutton {
+    float: right;
+}
+
+.header {
+    margin: 65px 290px 0px 270px;
+    font-size: 15px;
+    color: grey;
+    font-weight: bold;
+}
+
+.customer {
+    font-size: 11px;
+    margin-top: 48px;
+    margin-left: 450px;
+}
+
+.topright {
+    margin-right: 25px;
+}
