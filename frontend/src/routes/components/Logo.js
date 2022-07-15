@@ -1,7 +1,15 @@
 import "./board1.css";
 import React from "react";
-import logo from "./logo.png";
+import { Input } from "antd";
 import "antd/dist/antd.css";
+import logo from "./logo.png";
+
+const onSearch = (value) => console.log(value);
+const { Search } = Input;
+
+const Top = (props) => {
+    return <h2 className="topright">{props.children}</h2>;
+};
 
 const Logo = () => {
     return (
