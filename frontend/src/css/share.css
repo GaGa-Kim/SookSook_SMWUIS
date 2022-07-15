@@ -1,13 +1,3 @@
-.logo img {
-    width: 280px;
-}
-
-.search {
-    width: 600px;
-    padding-left: 120px;
-    padding-top: 46px;
-}
-
 .studyname {
     padding-right: 300px;
 }
@@ -30,39 +20,4 @@
 
 .arrow {
     width: 21px;
-}
-
-.newstudy {
-    border-color: transparent;
-    float: right;
-    margin-right: 35px;
-    border-radius: 10px;
-    background-color: white;
-    font-weight: bold;
-    font-size: 17px;
-}
-
-.newstudy:hover {
-    border-color: navy;
-    transition: border-color 1s;
-}
-
-.add {
-    float: right;
-    width: 80px;
-    margin-top: 50px;
-}
-
-.add:hover {
-    width: 85px;
-}
-
-.customer {
-    font-size: 11px;
-    margin-top: 48px;
-    margin-left: 450px;
-}
-
-.topright {
-    margin-right: 25px;
 }

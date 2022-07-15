@@ -3,29 +3,8 @@ import React from "react";
 import { Button, Form, Input } from "antd";
 import "antd/dist/antd.css";
 import Logo from "./Logo.js";
-
-const Block = () => {
-    return (
-        <section>
-            <button className="login">로그인</button>
-            <button className="login">회원가입</button>
-        </section>
-    );
-};
-
-const Header = ({ text }) => {
-    return (
-        <div
-            style={{
-                borderBottom: "thin solid #aaa",
-                lineHeight: "0.1em",
-                margin: "10px 0 20px"
-            }}
-        >
-            <span style={{ background: "#fff", padding: "0 10px" }}>{text}</span>
-        </div>
-    );
-};
+import Block from "./Block.js";
+import Header from "./Header.js";
 
 const App = () => {
     const onFinish = (values) => {
@@ -39,12 +18,8 @@ const App = () => {
     return (
         <>
             <Logo />
-            <div className="loginblock">
-                <Block />
-            </div>
-            <div className="header">
-                <Header text="로그인" />
-            </div>
+            <Block />
+            <Header text="로그인" />
             <div className="aclogin">
                 <Form
                     name="basic"

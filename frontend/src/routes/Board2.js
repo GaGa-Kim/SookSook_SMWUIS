@@ -1,10 +1,10 @@
 import "./board2.css";
 import React from "react";
-import addpage from "./addpage.png";
 import { Table, Dropdown, Menu, Space } from "antd";
 import "antd/dist/antd.css";
 import { DownOutlined } from "@ant-design/icons";
 import Logo from "./Logo.js";
+import Addpage from "./Addpage.js";
 
 const Block = () => {
     return (
@@ -106,11 +106,6 @@ const data = [
     }
 ];
 
-
-const Add = () => {
-    return <img className="add" src={addpage} alt="addpage" />;
-};
-
 const App = () => (
     <>
         <Logo />
@@ -125,7 +120,7 @@ const App = () => (
         </div>
         <div>
             <Table columns={columns} dataSource={data} />;
-            <Add />
+            <Addpage />
         </div>
     </>
 );

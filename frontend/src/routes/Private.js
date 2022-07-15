@@ -1,10 +1,10 @@
 import "./private.css";
 import React from "react";
-import addpage from "./addpage.png";
 import { Table } from "antd";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./Logo.js";
+import Addpage from "./Addpage.js";
 
 const Block = () => {
     return (
@@ -19,10 +19,6 @@ const Block = () => {
 
 const Sp = () => {
     return <Table className="spchart" columns={spcolumns} dataSource={spdata} />;
-};
-
-const Add = () => {
-    return <img className="add1" src={addpage} alt="addpage" />;
 };
 
 const piedata = [
@@ -137,7 +133,7 @@ const App = () => (
         </section>
         <section>
             <Table columns={columns} dataSource={data} />;
-            <Add />
+            <Addpage />
         </section>
     </>
 );

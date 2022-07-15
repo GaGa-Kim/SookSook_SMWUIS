@@ -42,12 +42,12 @@
 
 .add {
     float: right;
-    width: 80px;
-    margin-top: 50px;
+    width: 70px;
+    margin-top: 15px;
 }
 
 .add:hover {
-    width: 85px;
+    width: 75px;
 }
 
 .customer {

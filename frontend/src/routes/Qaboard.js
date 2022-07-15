@@ -1,17 +1,18 @@
 import "./qaboard.css";
 import React from "react";
-import addpage from "./addpage.png";
-import { Input, Table } from "antd";
+import { Table } from "antd";
 import "antd/dist/antd.css";
 import Logo from "./Logo.js";
+import Addpage from "./Addpage.js";
 
-const Block = () => {
+const Qablock = () => {
     return (
-        <section>
+        <section className="block">
             <button className="qanda">Q & A 게시판</button>
         </section>
     );
 };
+
 const columns = [
     {
         title: <div className="studyname">글 제목</div>,
@@ -65,22 +66,13 @@ const data = [
     }
 ];
 
-const onSearch = (value) => console.log(value);
-const { Search } = Input;
-
-const Add = () => {
-    return <img className="add" src={addpage} alt="addpage" />;
-};
-
 const App = () => (
     <>
         <Logo />
-        <div className="block">
-            <Block />
-        </div>
+        <Qablock />
         <section>
             <Table columns={columns} dataSource={data} />;
-            <Add />
+            <Addpage />
         </section>
     </>
 );
