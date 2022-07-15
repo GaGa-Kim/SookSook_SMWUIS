@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./board1.css";
 import React from "react";
 import logo from "./logo.png";
 import addpage from "./addpage.png";

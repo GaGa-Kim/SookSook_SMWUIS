@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./join.css";
 import React from "react";
 import logo from "./logo.png";
 import { Button, Form, Input } from "antd";

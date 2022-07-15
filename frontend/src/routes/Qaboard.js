@@ -1,4 +1,4 @@
-import "./styles.css";
+import "./qaboard.css";
 import React from "react";
 import logo from "./logo.png";
 import addpage from "./addpage.png";
