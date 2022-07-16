@@ -1,0 +1,23 @@
+.studyname {
+    padding-right: 300px;
+}
+
+.block {
+    background-color: #c1daff;
+    padding: 12px 10px 8px 10px;
+}
+
+.share {
+    background-color: #c1daff;
+    border-color: transparent;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.arrow:hover {
+    width: 24px;
+}
+
+.arrow {
+    width: 21px;
+}
