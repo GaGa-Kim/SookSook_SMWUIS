@@ -1,13 +1,13 @@
-import "./join.css";
+import "../css/join.css";
 import React from "react";
 import { Form, Input } from "antd";
 import "antd/dist/antd.css";
-import Logo from "./Logo.js";
-import Block from "./Block.js";
-import Header from "./Header.js";
-import Id from "./Id.js";
-import Pw from "./Pw.js";
-import Lgbutton from "./Lgbutton.js";
+import Logo from "./components/Logo.js";
+import Block from "./components/Block.js";
+import Header from "./components/Header.js";
+import Id from "./components/Id.js";
+import Pw from "./components/Pw.js";
+import Lgbutton from "./components/Lgbutton.js";
 
 const formItemLayout = {
     labelCol: { xs: { span: 24 }, sm: { span: 8 } },

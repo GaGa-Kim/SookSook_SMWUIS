@@ -1,8 +1,8 @@
-import "./board1.css";
+import "../../css/board1.css";
 import React from "react";
 import { Input } from "antd";
 import "antd/dist/antd.css";
-import logo from "./logo.png";
+import logo from "../../images/logo.png";
 
 const onSearch = (value) => console.log(value);
 const { Search } = Input;

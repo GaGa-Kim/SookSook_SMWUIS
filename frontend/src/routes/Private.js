@@ -1,10 +1,10 @@
-import "./private.css";
+import "../css/private.css";
 import React from "react";
 import { Table } from "antd";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
-import Logo from "./Logo.js";
-import Addpage from "./Addpage.js";
+import Logo from "./components/Logo.js";
+import Addpage from "./components/Addpage.js";
 
 const Block = () => {
     return (

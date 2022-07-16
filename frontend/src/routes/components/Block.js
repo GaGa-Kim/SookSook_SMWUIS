@@ -1,4 +1,4 @@
-import "./join.css";
+import "../../css/join.css";
 
 const Block = () => {
     return (

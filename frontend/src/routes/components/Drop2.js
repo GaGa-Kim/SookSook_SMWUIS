@@ -1,5 +1,5 @@
 import "antd/dist/antd.css";
-import "./board2.css";
+import "../../css/board2.css";
 import { Dropdown, Menu, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 

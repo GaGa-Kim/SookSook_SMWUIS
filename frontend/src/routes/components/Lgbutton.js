@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import "antd/dist/antd.css";
-import "./join.css";
+import "../../css/join.css";
 
 const Lgbutton = (props) => {
     return (

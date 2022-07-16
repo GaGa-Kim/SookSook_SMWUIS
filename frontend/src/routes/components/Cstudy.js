@@ -1,4 +1,4 @@
-import "./board1.css";
+import "../../css/board1.css";
 
 const Cstudy = () => {
     return (

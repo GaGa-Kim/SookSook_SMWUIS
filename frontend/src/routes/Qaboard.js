@@ -1,9 +1,9 @@
-import "./qaboard.css";
+import "../css/qacss.css";
 import React from "react";
 import { Table } from "antd";
 import "antd/dist/antd.css";
-import Logo from "./Logo.js";
-import Addpage from "./Addpage.js";
+import Logo from "./components/Logo.js";
+import Addpage from "./components/Addpage.js";
 
 const Qablock = () => {
     return (
