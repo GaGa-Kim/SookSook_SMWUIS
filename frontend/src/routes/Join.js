@@ -1,10 +1,13 @@
 import "./join.css";
 import React from "react";
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import "antd/dist/antd.css";
 import Logo from "./Logo.js";
 import Block from "./Block.js";
 import Header from "./Header.js";
+import Id from "./Id.js";
+import Pw from "./Pw.js";
+import Lgbutton from "./Lgbutton.js";
 
 const formItemLayout = {
     labelCol: { xs: { span: 24 }, sm: { span: 8 } },
@@ -19,21 +22,8 @@ const App = () => {
             <Header text="회원가입" />
             <div className="join">
                 <Form {...formItemLayout}>
-                    <Form.Item
-                        name="ID"
-                        label="ID"
-                        rules={[{ required: true, message: "아이디를 입력해 주세요" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="password"
-                        label="Password"
-                        rules={[{ required: true, message: "비밀번호를 입력해주세요" }]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
+                    <Id />
+                    <Pw />
                     <Form.Item
                         name="email"
                         label="E-mail"
@@ -54,9 +44,7 @@ const App = () => {
                     >
                         <Input />
                     </Form.Item>
-                    <Button className="joinbutton" type="primary" htmlType="submit">
-                        회원가입
-                    </Button>
+                    <Lgbutton>회원가입</Lgbutton>
                 </Form>
             </div>
         </>
@@ -64,4 +52,3 @@ const App = () => {
 };
 
 export default App;
-

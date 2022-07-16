@@ -1,35 +1,15 @@
-import "./private.css";
+import "./board1.css";
 import React from "react";
 import { Table } from "antd";
 import "antd/dist/antd.css";
-import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./Logo.js";
 import Addpage from "./Addpage.js";
-
-const Block = () => {
-    return (
-        <section>
-            <button className="upcome">다가오는 스터디 일정</button>
-            <button className="qrbutton">[7/21] 3주차 과제 제출</button>
-            <button className="prbutton">스터디 종료</button>
-            <button className="prbutton">글 작성</button>
-        </section>
-    );
-};
-
-const Sp = () => {
-    return <Table className="spchart" columns={spcolumns} dataSource={spdata} />;
-};
-
-const piedata = [
-    { title: "one", value: 35, color: "#FFBD3E" },
-    { title: "two", value: 45, color: "#56DBAB" },
-    { title: "three", value: 20, color: "#FF6C3E" }
-];
+import Cstudy from "./Cstudy.js";
+import Drop1 from "./Drop1.js";
 
 const columns = [
     {
-        title: <div className="studyname">게시글</div>,
+        title: <div className="studyname">스터디 명</div>,
         dataIndex: "name",
         key: "name",
         render: (text) => <a>{text}</a>
@@ -42,95 +22,51 @@ const columns = [
     }
 ];
 
-const Piein = (props) => {
-    return <h1 className="ptitle">{props.children}</h1>;
-};
-
-const spcolumns = [
-    {
-        title: "이름",
-        dataIndex: "name",
-        key: "name",
-        width: 50
-    },
-    {
-        title: "글",
-        dataIndex: "post",
-        key: "post",
-        width: 80
-    },
-    {
-        title: "댓글",
-        dataIndex: "comment",
-        key: "comment",
-        width: 80
-    }
-];
-
-const spdata = [
-    {
-        key: "1",
-        name: "가송",
-        post: 5,
-        comment: 11
-    },
-    {
-        key: "2",
-        name: "나송",
-        post: 7,
-        comment: 15
-    },
-    {
-        key: "3",
-        name: "다송",
-        post: 3,
-        comment: 7
-    }
-];
-
 const data = [
     {
         key: "1",
-        name: "스터디 규칙",
-        address: "가송"
+        name: "웹프로그래밍 기초",
+        address: "송송"
     },
     {
         key: "2",
-        name: "1주차 스터디 제출",
+        name: "데이터사이언스 개론",
         address: "나송"
     },
     {
         key: "3",
-        name: "2주차 스터디 제출",
+        name: "운영체제",
         address: "마송"
     },
     {
         key: "4",
-        name: "3주차 스터디 제출",
+        name: "객체지향프로그래밍",
         address: "라송"
     },
     {
         key: "5",
-        name: "예상문제 작성",
-        address: "마송"
+        name: "빅데이터 활용 입문",
+        address: "바송"
+    },
+    {
+        key: "6",
+        name: "선형대수학",
+        address: "아송"
+    },
+    {
+        key: "7",
+        name: "인공지능과기계학습",
+        address: "자송"
     }
 ];
 
 const App = () => (
     <>
         <Logo />
-        <section className="block">
-            <Block />
-        </section>
-        <section className="chart">
-            <Piein>스터디 참여율</Piein>
-            <div className="hp" style={{ display: "flex" }}>
-                <Sp />
-                <div className="pie">
-                    <PieChart data={piedata} label={({ dataEntry }) => dataEntry.value} />
-                </div>
-            </div>
-        </section>
+        <div className="block" style={{ display: "flex" }}>
+            <Drop1 />
+            <Cstudy />
+        </div>
         <section>
             <Table columns={columns} dataSource={data} />;
             <Addpage />
