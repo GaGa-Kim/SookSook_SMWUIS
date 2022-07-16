@@ -17,6 +17,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "StudyBoard_ID")
     private Long id; // 기본키
 
     /* 변경 필요
@@ -48,7 +49,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     private Boolean finished; // 스터디 종료 여부
 
     /* 변경 필요
-    String user -> User user
+    String uid -> User uid
      */
     @Builder
     public StudyBoard(String uid, String department, String subject, String title, String content,
@@ -82,7 +83,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     }
 
     /* 연관관계 편의 메소드 작성 필요
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(User uid) {
+        this.uid = uid;
      */
 }
