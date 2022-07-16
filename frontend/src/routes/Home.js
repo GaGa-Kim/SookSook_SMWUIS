@@ -2,6 +2,7 @@ import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
 import ColorBox from "./components/ColorBox";
+import Logo from "./components/Logo"
 import "../fonts/Font.css";
 import TitleImg from "../images/title.png";
 import study from "../images/study.png";
@@ -9,14 +10,16 @@ import study2 from "../images/study2.png";
 import sale from "../images/sale.png";
 import quest from "../images/quest.png";
 import share from "../images/share.png";
-
 const Title = styled.div`
+    width:660px;
     display: flex;
     justify-content: center;
     margin-top: ${(props) => props.mgTop};
     font-size: ${(props) => props.ftSize};
     color: #ffffff;
     font-family: "Cafe24";
+    position:absolute;
+    top:${(props) => props.top};
 `;
 const Img = styled.img`
     width: 40px;
@@ -44,6 +47,7 @@ const MenuImg = styled.img`
     margin: auto;
 `;
 const MenuText = styled.div`
+    width:80px;
     font-size: 15px;
     color: #2558b5;
     margin-top: 5px;
@@ -54,11 +58,15 @@ const StudyBox = styled.div`
     display: flex;
     justify-content: center;
     width: auto;
-    height: 260px;
+    height: auto;
     margin: 40px 20px 40px 20px;
     background-color: #e8eef4;
     border-radius: 60px;
+    @media screen and (max-width:820px){
+        flex-wrap:wrap;
+    }
 `;
+
 const StudyBoxChild = styled.div`
     display: flex;
     flex-direction: column;
@@ -67,8 +75,12 @@ const StudyBoxChild = styled.div`
     align-items: center;
     font-family: "DoHyeon";
     color: #003a71;
+    @media screen and (max-width:820px){
+        flex:1 1 100%;
+    }
 `;
 const StudyListTitle = styled.div`
+    width:155px;
     font-size: 20px;
     text-align: center;
 `;
@@ -83,14 +95,15 @@ const StudyList = styled.li`
 
 function Home() {
     return (
-        <Root>
+        <Root jc="center">
             <GlobalStyle />
-            <ColorBox height="300px">
+            <Logo/>
+            <ColorBox height="300px" jc="center">
                 <Title mgTop="110px" ftSize="40px">
                     숙명인들과 함께 쑥쑥 자라나는 공간
                     <Img src={TitleImg} />
                 </Title>
-                <Title mgTop="15px" ftSize="20px">
+                <Title mgTop="15px" ftSize="20px" top="160px">
                     숙명인들과 함께 스터디로 자라나보세요
                 </Title>
             </ColorBox>

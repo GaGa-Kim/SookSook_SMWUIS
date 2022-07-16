@@ -1,11 +1,29 @@
+.title{
+    display: flex;
+    justify-content: center;
+    margin:20px;
+}
+.name{
+    color:#013087;
+    font-size: 50px;
+    margin-top: 25px;
+    margin-left:-5px;
+}
+.logo{
+    width:auto;
+    height: 140px;
+    display: flex;
+    justify-content: space-between;
+    
+}
 .logo img {
-    width: 280px;
+    width: 50px;
+    height: 50px;
 }
 
 .search {
     width: 600px;
-    padding-left: 120px;
-    padding-top: 46px;
+    margin-top:50px;
 }
 
 .studyname {
@@ -52,11 +70,12 @@
 
 .customer {
     font-size: 11px;
-    margin-top: 48px;
-    margin-left: 450px;
+    margin-top: 60px;
+    text-align: right;
 }
 
 .topright {
+    width: 45px;
     margin-right: 25px;
 }
 
