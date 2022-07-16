@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Getter
 @NoArgsConstructor
-public class StudyScheduleUpdateDto {
+public class StudyScheduleUpdateRequestDto {
 
     @ApiModelProperty(example = "2022-07-17")
     private Date period;
@@ -18,7 +18,7 @@ public class StudyScheduleUpdateDto {
     private String content;
 
     @Builder
-    public StudyScheduleUpdateDto(Date period, String content) {
+    public StudyScheduleUpdateRequestDto(Date period, String content) {
         this.period = period;
         this.content = content;
     }

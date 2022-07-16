@@ -6,7 +6,7 @@ import com.smwuis.sooksook.domain.study.StudySchedule;
 import com.smwuis.sooksook.domain.study.StudyScheduleRepository;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleSaveRequestDto;
-import com.smwuis.sooksook.web.dto.study.StudyScheduleUpdateDto;
+import com.smwuis.sooksook.web.dto.study.StudyScheduleUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class StudyScheduleService {
     
     // 스터디 게시판 스케줄 수정
     @Transactional
-    public Long update(Long id, Long studyBoardId, StudyScheduleUpdateDto updateDto) {
+    public Long update(Long id, Long studyBoardId, StudyScheduleUpdateRequestDto updateDto) {
         StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         StudySchedule studySchedule = studyScheduleRepository.findByIdAndStudyBoardId(id, studyBoard).orElseThrow(()-> new IllegalArgumentException("해당 스케줄이 없습니다."));
         studySchedule.update(updateDto.getPeriod(),

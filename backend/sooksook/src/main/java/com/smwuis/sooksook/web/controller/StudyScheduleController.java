@@ -4,7 +4,7 @@ import com.smwuis.sooksook.domain.study.StudySchedule;
 import com.smwuis.sooksook.service.StudyScheduleService;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleSaveRequestDto;
-import com.smwuis.sooksook.web.dto.study.StudyScheduleUpdateDto;
+import com.smwuis.sooksook.web.dto.study.StudyScheduleUpdateRequestDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,7 +36,7 @@ public class StudyScheduleController {
             @ApiImplicitParam(name = "id", value = "스케줄 id"),
             @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
     })
-    public Long update(@RequestParam Long id, Long studyBoardId, @RequestBody StudyScheduleUpdateDto updateDto) {
+    public Long update(@RequestParam Long id, Long studyBoardId, @RequestBody StudyScheduleUpdateRequestDto updateDto) {
         return studyScheduleService.update(id, studyBoardId, updateDto);
     }
 
