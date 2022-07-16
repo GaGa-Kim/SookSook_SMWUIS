@@ -1,0 +1,28 @@
+.loginblock {
+    background-color: #c1daff;
+    padding: 12px 10px 10px 10px;
+    margin-bottom: 50px;
+}
+
+.login {
+    border-color: transparent;
+    margin-right: 5px;
+    margin-left: 10px;
+    border-radius: 10px;
+    background-color: white;
+    font-weight: bold;
+}
+
+.login:hover {
+    border-color: navy;
+    transition: border-color 1s;
+}
+
+.join {
+    margin-right: 300px;
+    margin-top: 30px;
+}
+
+.joinbutton {
+    float: right;
+}
