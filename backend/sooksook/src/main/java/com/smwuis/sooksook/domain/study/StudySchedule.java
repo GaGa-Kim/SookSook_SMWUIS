@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @ToString
 @Getter
 @NoArgsConstructor
-public class StudyMember extends BaseTimeEntity {
+public class StudySchedule extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,19 +30,22 @@ public class StudyMember extends BaseTimeEntity {
     @JoinColumn(name = "StudyBoard_ID")
     private StudyBoard studyBoardId; // 스터디 게시판 (fk)
 
-    private Long posts; // 글 작성 수
+    private Date period; // 기한
 
-    private Long comments; // 댓글 작성 수
+    private String content; // 내용
 
-    /* 변경 필요
-    String uid -> User uid
-    */
     @Builder
-    public StudyMember(String uid, StudyBoard studyBoardId, Long posts, Long comments) {
+    public StudySchedule(String uid, StudyBoard studyBoardId, Date period, String content) {
         this.uid = uid;
         this.studyBoardId = studyBoardId;
-        this.posts = posts;
-        this.comments = comments;
+        this.period = period;
+        this.content = content;
+    }
+
+    public StudySchedule update(Date period, String content) {
+        this.period = period;
+        this.content = content;
+        return this;
     }
 
     /* 연관관계 편의 메소드 작성 필요

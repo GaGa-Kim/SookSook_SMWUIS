@@ -29,7 +29,7 @@ public class StudyBoardService {
     // 스터디 모집 게시판 글 수정
     @Transactional
     public Long update(Long id, StudyBoardUpdateRequestDto updateRequestDto) {
-        StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
+        StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         studyBoard.update(updateRequestDto.getDepartment(),
                 updateRequestDto.getSubject(),
                 updateRequestDto.getTitle(),
@@ -46,7 +46,7 @@ public class StudyBoardService {
     // 스터디 모집 게시판 글 삭제
     @Transactional
     public void delete(Long id) {
-        StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
+        StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         studyBoardRepository.delete(studyBoard);
     }
 
@@ -59,7 +59,7 @@ public class StudyBoardService {
     // 스터디 모집 게시판 글 상세 조회
     @Transactional
     public StudyBoardResponseDto findById(Long id) {
-        StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
+        StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         return new StudyBoardResponseDto(studyBoard);
     }
 
