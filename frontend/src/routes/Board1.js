@@ -1,11 +1,11 @@
-import "./board1.css";
+import "../css/board1.css";
 import React from "react";
 import { Table } from "antd";
 import "antd/dist/antd.css";
-import Logo from "./Logo.js";
-import Addpage from "./Addpage.js";
-import Cstudy from "./Cstudy.js";
-import Drop1 from "./Drop1.js";
+import Logo from "./components/Logo.js";
+import Addpage from "./components/Addpage.js";
+import Cstudy from "./components/Cstudy.js";
+import Drop1 from "./components/Drop1.js";
 
 const columns = [
     {
