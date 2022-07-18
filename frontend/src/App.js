@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./routes/Home";
 import MyPage from './routes/MyPage';
 import OpenStudy from './routes/OpenStudy';
@@ -21,50 +17,23 @@ import Qaboard from './routes/Qaboard';
 function App() {
   return (
     <Router>
-      <Switch>{/*한번에 하나의 Route를 렌더링하기 위함*/}
-        <Route path="/mypage">
-          <MyPage />
-        </Route>
-        <Route path="/setting">
-          <Setting />
-        </Route>
-        <Route path="/enterboard">
-          <EnterBoard />
-        </Route>
-        <Route path="/membergrade">
-          <MemberGrade />
-        </Route>
-        <Route path="/openstudy">
-          <OpenStudy />
-        </Route>
-        <Route path="/private">
-          <Private />
-        </Route>
-        <Route path="/board1">
-          <Board1 />
-        </Route>
-        <Route path="/board2">
-          <Board2 />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/join">
-          <Join />
-        </Route>
-        <Route path="/share">
-          <Share />
-        </Route>
-        <Route path="/qaboard">
-          <Qaboard />
-        </Route>
-        <Route path="/setboard">
-          <SetBoard />
-        </Route>
-        <Route path="/">{/*홈화면으로 갈때*/}
-          <Home />
-        </Route>
-      </Switch>
+      <Routes>{/*한번에 하나의 Route를 렌더링하기 위함*/}
+        <Route path="/mypage" element={<MyPage />}></Route>
+        <Route path="/setting" element={<Setting />}></Route>
+        <Route path="/enterboard" element={<EnterBoard />}></Route>
+        <Route path="/openstudy" element={<OpenStudy />}></Route>
+        <Route path="/setboard" element={<SetBoard />}></Route>
+        <Route path="/membergrade" element={<MemberGrade />}></Route>
+        <Route path="/setboard" element={<SetBoard />}></Route>
+        <Route path="/board1" element={<Board1 />}></Route>
+        <Route path="/board2" element={<Board2 />}></Route>
+        <Route path="/private" element={<Private />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/join" element={<Join />}></Route>
+        <Route path="/share" element={<Share />}></Route>
+        <Route path="/qaboard" element={<Qaboard />}></Route>
+        <Route path="/" element={<Home />}></Route>
+      </Routes>
     </Router>
   );
 }
