@@ -6,6 +6,7 @@ const ButtonBox=styled.div`
     margin-right:${(props)=>props.mgRight};
     vertical-align:middle;
     font-family:"DoHyeon";
+    margin-bottom:5px;
 `;
 
 export default ButtonBox;

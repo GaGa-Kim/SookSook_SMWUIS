@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom';
 import "../../css/board1.css";
 import React from "react";
 import { Input } from "antd";
@@ -27,13 +28,13 @@ const Logo = () => {
             {show && <MenuBar style={{float:"left"}}/>}
                 <img src={logo} alt="logo" onClick={handleLogoImgClick} />
                 <div className="name" style={{ fontFamily: "Titillium" }}>
-                    SookSook
+                    <Link to="/">SookSook</Link>
                 </div>
             </div>
             <div className="search">
                 <Search onSearch={onSearch} enterButton />
             </div>
-            <div className="customer" style={{ display: "flex" }}>
+            <div className="customer" >
                 <Top>로그아웃</Top>
                 <Top>고객센터</Top>
             </div>

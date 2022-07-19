@@ -1,3 +1,4 @@
+import Logo from './components/Logo';
 import styled  from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -67,6 +68,7 @@ const Setting = () => {
     return (
         <Root>
             <GlobalStyle />
+            <Logo/>
             <ColorBox height="90px">
                 <Title>정보수정</Title>
             </ColorBox>

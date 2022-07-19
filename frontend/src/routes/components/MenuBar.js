@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyle from "./GlobalStyle";
 import Root from "./Root";
 import "../../fonts/Font.css";
 
 const Box = styled.ul`
-color:#0652a1;
+    color: #0652a1;
     width: 200px;
     height: 240px;
     height: auto;
@@ -15,10 +16,9 @@ color:#0652a1;
     background-color: #ffffff;
     border-radius: 5px;
     border: 2px solid #e0f7fa;
-    top:110px;
-    left:25px;
+    top: 110px;
+    left: 25px;
     z-index: 1;
-    
 `;
 const List = styled.li`
     width: 200px;
@@ -26,7 +26,7 @@ const List = styled.li`
     text-align: center;
     border-bottom: thin solid #c1daff;
     z-index: 1;
-    padding-top:10px;
+    padding-top: 10px;
     border-radius: 5px;
 `;
 const MenuBar = () => {
@@ -34,12 +34,27 @@ const MenuBar = () => {
         <Root>
             <GlobalStyle />
             <Box>
-                <List>강의 스터디</List>
-                <List>강의 외 스터디</List>
-                <List>자료 공유</List>
+                <List>
+                    <Link to="/board1">강의 스터디</Link>
+                </List>
+
+                <List>
+                    <Link to="/board2">강의 외 스터디</Link>
+                </List>
+
+                <List>
+                    <Link to="/share">자료 공유</Link>
+                </List>
+
                 <List>판매/나눔</List>
-                <List>질문 게시판</List>
-                <List>마이페이지</List>
+
+                <List>
+                    <Link to="/Qaboard">질문 게시판</Link>
+                </List>
+
+                <List>
+                    <Link to="/mypage">마이페이지</Link>
+                </List>
             </Box>
         </Root>
     );

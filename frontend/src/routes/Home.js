@@ -1,3 +1,5 @@
+import React from "react";
+import {Link} from 'react-router-dom';
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -20,10 +22,33 @@ const Title = styled.div`
     font-family: "Cafe24";
     position:absolute;
     top:${(props) => props.top};
+    @media screen and (max-width:660px){
+        font-size:30px;
+    }
+    @media screen and (max-width:500px){
+        font-size:23px;
+    }
+`;
+const SubTitle=styled(Title)`
+@media screen and (max-width:660px){
+    font-size:15px;
+}
+@media screen and (max-width:500px){
+    font-size:12px;
+}
+
 `;
 const Img = styled.img`
     width: 40px;
     height: 40px;
+    @media screen and (max-width:660px){
+        width:30px;
+        height:30px;
+    }
+    @media screen and (max-width:500px){
+        width:23px;
+        height:23px;
+    }
 `;
 const MenuBox = styled.ul`
     display: flex;
@@ -31,13 +56,18 @@ const MenuBox = styled.ul`
     width: 100%;
     heigth: 200px;
     margin-top: 50px;
+    @media screen and (max-width:700px){
+        flex-wrap:wrap;
+    }
 `;
 const MenuBoxChild = styled.li`
     display: flex;
     flex-direction: column;
-    margin-left: 50px;
-    margin-right: 50px;
-    flex-basis: 80px;
+    margin-left: 30px;
+    margin-right: 30px;
+    @media screen and (max-width:700px){
+        flex:1 1 40%;
+    }
 `;
 const MenuImg = styled.img`
     width: 50px;
@@ -95,7 +125,7 @@ const StudyList = styled.li`
 
 function Home() {
     return (
-        <Root jc="center">
+        <Root jc="center" >
             <GlobalStyle />
             <Logo/>
             <ColorBox height="300px" jc="center">
@@ -103,31 +133,44 @@ function Home() {
                     숙명인들과 함께 쑥쑥 자라나는 공간
                     <Img src={TitleImg} />
                 </Title>
-                <Title mgTop="15px" ftSize="20px" top="160px">
+                <SubTitle mgTop="15px" ftSize="20px" top="160px">
                     숙명인들과 함께 스터디로 자라나보세요
-                </Title>
+                </SubTitle>
             </ColorBox>
             <MenuBox>
+                <Link to="/board1">
                 <MenuBoxChild>
                     <MenuImg src={study} />
                     <MenuText>강의 스터디</MenuText>
                 </MenuBoxChild>
+                </Link>
+                <Link to="/board2">
                 <MenuBoxChild>
                     <MenuImg src={study2} />
                     <MenuText>강의 외 스터디</MenuText>
                 </MenuBoxChild>
+                </Link>
+                <Link to="/share">
+
                 <MenuBoxChild>
                     <MenuImg src={share} />
                     <MenuText>자료 공유</MenuText>
                 </MenuBoxChild>
+                </Link>
+                <Link to="/">
+
                 <MenuBoxChild>
                     <MenuImg src={sale} />
                     <MenuText>판매/나눔</MenuText>
                 </MenuBoxChild>
+                </Link>
+                <Link to="/qaboard">
+
                 <MenuBoxChild>
                     <MenuImg src={quest} />
                     <MenuText>질문</MenuText>
                 </MenuBoxChild>
+                </Link>
             </MenuBox>
             <StudyBox>
                 <StudyBoxChild>

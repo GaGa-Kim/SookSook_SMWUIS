@@ -9,6 +9,8 @@ const List=styled.li`
     justify-content:space-between;
     align-items:center;
     position:relative;
+    overflow-x:auto;
+    overflow-y:hidden;
 `;
 
 export default List;

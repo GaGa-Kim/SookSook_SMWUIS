@@ -1,3 +1,4 @@
+
 .title{
     display: flex;
     justify-content: center;
@@ -69,10 +70,12 @@
 }
 
 .customer {
+    display: flex;
     font-size: 11px;
     margin-top: 60px;
     text-align: right;
 }
+
 
 .topright {
     width: 45px;
@@ -88,4 +91,12 @@
 
 .dropdown:hover {
     color: gray;
+}
+@media screen and (max-width:660px){
+    .search{
+        display:none;
+    }
+    .customer{
+        display:none;
+    }
 }
