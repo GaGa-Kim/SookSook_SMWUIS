@@ -1,6 +1,8 @@
 import "../css/private.css";
+import GlobalStyle from "./components/GlobalStyle";
 import React from "react";
 import { Table } from "antd";
+import { Link } from 'react-router-dom';
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -11,8 +13,8 @@ const Block = () => {
         <section>
             <button className="upcome">다가오는 스터디 일정</button>
             <button className="qrbutton">[7/21] 3주차 과제 제출</button>
-            <button className="prbutton">스터디 종료</button>
-            <button className="prbutton">글 작성</button>
+            <button className="prbutton"><Link to="/mypage">스터디 종료</Link></button>
+            <button className="prbutton"><Link to="/setboard">글 작성</Link></button>
         </section>
     );
 };
@@ -118,6 +120,7 @@ const data = [
 
 const App = () => (
     <>
+        <GlobalStyle />
         <Logo />
         <section className="block">
             <Block />

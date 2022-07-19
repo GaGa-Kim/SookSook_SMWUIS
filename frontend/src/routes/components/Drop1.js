@@ -29,7 +29,7 @@ const menu = (
 const Drop1 = () => {
     return (
         <Dropdown overlay={menu}>
-            <Space className="dropdown">
+            <Space className="dropdown1">
                 학부
                 <DownOutlined />
             </Space>

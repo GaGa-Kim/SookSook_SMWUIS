@@ -1,6 +1,8 @@
 import "../css/share.css";
 import React from "react";
 import { Table } from "antd";
+import GlobalStyle from "./components/GlobalStyle";
+import { Link } from 'react-router-dom';
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
 import Addpage from "./components/Addpage.js";
@@ -18,7 +20,7 @@ const columns = [
         title: <div className="studyname">글 제목</div>,
         dataIndex: "name",
         key: "name",
-        render: (text) => <a>{text}</a>
+        render: (text) => <Link to="" >{text}</Link>
     },
 
     {
@@ -63,6 +65,7 @@ const data = [
 
 const App = () => (
     <>
+        <GlobalStyle />
         <Logo />
         <Shareblock />
         <section>
