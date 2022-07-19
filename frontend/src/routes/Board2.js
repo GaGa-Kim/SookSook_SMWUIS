@@ -1,7 +1,9 @@
 import "../css/board2.css";
 import React from "react";
+import { Link } from 'react-router-dom';
 import { Table } from "antd";
 import "antd/dist/antd.css";
+import GlobalStyle from "./components/GlobalStyle";
 import Logo from "./components/Logo.js";
 import Addpage from "./components/Addpage.js";
 import Cstudy from "./components/Cstudy.js";
@@ -12,7 +14,7 @@ const columns = [
         title: <div className="studyname">스터디 명</div>,
         dataIndex: "name",
         key: "name",
-        render: (text) => <a>{text}</a>
+        render: (text) => <Link to="" >{text}</Link>
     },
 
     {
@@ -87,6 +89,7 @@ const data = [
 
 const App = () => (
     <>
+        <GlobalStyle />
         <Logo />
         <div className="block" style={{ display: "flex" }}>
             <Drop2 />

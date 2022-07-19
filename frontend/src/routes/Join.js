@@ -3,7 +3,9 @@ import React from "react";
 import { Form, Input } from "antd";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
+import { Link } from 'react-router-dom';
 import Block from "./components/Block.js";
+import GlobalStyle from "./components/GlobalStyle";
 import Header from "./components/Header.js";
 import Id from "./components/Id.js";
 import Pw from "./components/Pw.js";
@@ -17,6 +19,7 @@ const formItemLayout = {
 const App = () => {
     return (
         <>
+            <GlobalStyle />
             <Logo />
             <Block />
             <Header text="회원가입" />
