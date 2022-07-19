@@ -25,6 +25,11 @@
     transition: border-color 1s;
 }
 
+.prbutton a,
+.prbutton a:hover {
+    color: inherit;
+}
+
 .chart {
     margin: 40px 220px 20px 220px;
     padding: 10px;
@@ -42,7 +47,8 @@
 .ptitle {
     text-align: center;
     font-weight: bold;
-    margin-top: 8px;
+    margin-top: 9px;
+    margin-bottom: 16px;
     font-size: 24px;
 }
 
