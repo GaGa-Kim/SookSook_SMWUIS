@@ -2,7 +2,6 @@ import {Link} from 'react-router-dom';
 import "../../css/board1.css";
 import React from "react";
 import { Input } from "antd";
-import { Link } from 'react-router-dom';
 import "antd/dist/antd.css";
 import MenuBar from "./MenuBar";
 import logo from "../../images/logo.png";
