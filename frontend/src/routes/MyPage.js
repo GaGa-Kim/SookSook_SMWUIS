@@ -7,20 +7,20 @@ import ColorBox from "./components/ColorBox";
 import Logo from "./components/Logo";
 import List from "./components/List";
 import ListText from "./components/ListText";
-import Badge from "./components/Badge";
 import ListBox from "./components/ListBox";
 import ListHeader from "./components/ListHeader";
 import ListTitle from "./components/ListTitle";
+import StudySchedule from "./components/StudySchedule";
 import Box from "./components/Box";
-import CheckBox from "./components/CheckBox";
+
 import InputText from "./components/InputText";
+import StudyHistory from "./components/StudyHistory";
 import "../fonts/Font.css";
 
 import setting from "../images/setting.png";
 import profile from "../images/profile.png";
 import snowflake from "../images/snowflake.png";
-import star from "../images/star.png";
-import x from "../images/x.png";
+
 import plus from "../images/plus.png";
 
 import { Progress } from "antd";
@@ -92,11 +92,7 @@ const LevelGauge = styled.div`
     width: 100%;
     font-family: "DoHyeon";
 `;
-const StarImg = styled.img`
-    width: 20px;
-    height: 20px;
-    margin: 5px;
-`;
+
 const Add = styled.div`
     width: 100%;
     height: 50px;
@@ -109,62 +105,18 @@ const PlusImg = styled.img`
     height: 25px;
     position: absolute;
     right: 22px;
-`;
-const XImg = styled.img`
-    width: 30px;
-    height: 30px;
-    display: block;
-    vertical-align: center;
-`;
 
-const onChange = (date, dateString) => {
-    console.log(date, dateString);
-};
-
-const StudyHistory = () => {
-    const RandomColor = () => {
-        return "#" + Math.round(Math.random() * 0xffffff).toString(16);
-    };
-    const studyHistoryList = [
-        { name: "IT기기구조", progress: false, badge: <></>, star: null },
-        {
-            name: "웹 프로그래밍 기초",
-            progress: true,
-            badge: <Badge></Badge>,
-            star: 4.7,
-        },
-    ];
-    return studyHistoryList.map((history, index) => {
-        if (history.progress === false) {
-            return(
-            <List key={index}>
-                <ListText>{history.name}</ListText>
-                <ListText>진행중</ListText>
-            </List>
-            );
-        } else {
-            return(
-            <List key={index}>
-                <ListText>
-                    {history.name}
-                    <Badge rnd={RandomColor} mgLeft="50px">
-                        과제 제출이 빨라요
-                    </Badge>
-                    <Badge rnd={RandomColor} mgLeft="50px">
-                        성실해요
-                    </Badge>
-                </ListText>
-                <ListText>
-                    <StarImg src={star} />
-                    {history.star}/5
-                </ListText>
-            </List>
-            );
-        }
+    &:hover {
+        width: 27px;
+        height: 27px;
     }
-    );
-};
+`;
+
 function MyPage() {
+    const [date, setDate] = React.useState("");
+    const onChange = (date, dateString) => {
+        setDate(dateString);
+    };
     const [target, setTarget] = React.useState(true);
     const [name, setName] = React.useState("눈송");
     const [comment, setComment] = React.useState("이번 기말고사 화이팅!");
@@ -174,9 +126,30 @@ function MyPage() {
     const handleHistoryClick = () => {
         setTarget(true);
     };
-    const RandomColor = () => {
-        return "#" + Math.round(Math.random() * 0xffffff).toString(16);
+    const [studyScheduleList, setStudyScheduleList] = React.useState([]);
+
+    const handleXclick = (id) => {
+        const nextStudyScheduleList = studyScheduleList.filter(
+            (schedule) => schedule.id !== id
+        );
+        setStudyScheduleList(nextStudyScheduleList);
     };
+    const [nextId, setNextId] = React.useState(1);
+    const [text, setText] = React.useState("");
+    const getText = (text) => {
+        setText(text);
+    };
+    const handlePlusClick = () => {
+        const nextStudyScheduleList = studyScheduleList.concat({
+            id: nextId,
+            date: date,
+            content: text,
+        });
+        setNextId(nextId + 1);
+        setStudyScheduleList(nextStudyScheduleList);
+        setText("");
+    };
+
     return (
         <Root>
             <GlobalStyle />
@@ -212,7 +185,7 @@ function MyPage() {
                         </ListTitle>
                     </ListHeader>
                     <ListBox>
-                        <StudyHistory/>
+                        <StudyHistory />
                     </ListBox>
                 </>
             )}
@@ -234,29 +207,28 @@ function MyPage() {
                                 <ListText>일정</ListText>
                             </Box>
                         </List>
-                        <List>
-                            <Box left="50px" top="13px">
-                                <CheckBox />
-                            </Box>
-                            <Box left="70px" top="13px">
-                                <ListText>2022/07/30</ListText>
-                            </Box>
-                            <Box left="230px">
-                                <ListText>과제 제출하기</ListText>
-                            </Box>
-                            <Box right="20px">
-                                <XImg src={x}></XImg>
-                            </Box>
-                        </List>
+
+                        {studyScheduleList.map((schedule) => (
+                            <StudySchedule
+                                key={schedule.id}
+                                {...schedule}
+                                handleXclick={handleXclick}
+                                studyScheduleList={studyScheduleList}
+                            />
+                        ))}
                     </ListBox>
                     <Add>
                         <Box left="50px" width="120px">
                             <DatePicker onChange={onChange} />
                         </Box>
                         <Box left="180px" width="200px">
-                            <InputText text="일정을 입력하세요" />
+                            <InputText
+                                getText={getText}
+                                text="일정을 입력하세요"
+                                value={text}
+                            />
                         </Box>
-                        <PlusImg src={plus}></PlusImg>
+                        <PlusImg src={plus} onClick={handlePlusClick}></PlusImg>
                     </Add>
                 </>
             )}

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Badge=styled.div`
-    border: thin solid #ffffee;
+    border: thin solid #e8eef4;
     border-radius:30px;
     background-color:${(props)=>props.rnd};
     width:150px;

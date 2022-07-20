@@ -7,6 +7,7 @@ const ListText=styled.div`
     align-items:center;
     margin-left:10px;
     margin-right:10px;
+    width:${(props)=>props.width};
 `;
 
 export default ListText;

@@ -37,7 +37,7 @@ const Logo = () => {
             </div>
 
             <div className="customer" style={{ display: "flex" }}>
-                <Top><Link to="mypage">마이페이지</Link></Top>
+                <Top><Link to="/mypage">마이페이지</Link></Top>
                 <Top>로그아웃</Top>
                 <Top>고객센터</Top>
             </div>
