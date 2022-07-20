@@ -97,7 +97,7 @@ const App = () => (
         </div>
         <div>
             <Table columns={columns} dataSource={data} />;
-            <Addpage />
+            <Link to="/openstudy2"><Addpage /></Link>
         </div>
     </>
 );
