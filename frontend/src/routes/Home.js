@@ -129,7 +129,7 @@ const StudyList = styled.li`
 `;
 const HotStudy = () => {
     const hotStudyList = ["웹 프로그래밍 기초", "IT기기구조"];
-    return hotStudyList.map((name, index) => 
+    return hotStudyList.map((name, index) =>
         <StudyList key={index}>
             {index + 1}위 {name}
         </StudyList>
@@ -137,18 +137,18 @@ const HotStudy = () => {
 };
 const NewStudy = () => {
     const newStudyList = ["자료구조"];
-    return newStudyList.map((name, index) => 
+    return newStudyList.map((name, index) =>
         <StudyList key={index}>
             ∘{name}
         </StudyList>
     );
 };
-const HighStudy=()=>{
-    const highStudyList=["공예감상"];
-    return highStudyList.map((name,index)=>
-    <StudyList key={index}>
-        {index + 1}위 {name}
-    </StudyList>
+const HighStudy = () => {
+    const highStudyList = ["공예감상"];
+    return highStudyList.map((name, index) =>
+        <StudyList key={index}>
+            {index + 1}위 {name}
+        </StudyList>
     );
 }
 
@@ -185,7 +185,7 @@ function Home() {
                         <MenuText>자료 공유</MenuText>
                     </MenuBoxChild>
                 </Link>
-                <Link to="/">
+                <Link to="/sell">
                     <MenuBoxChild>
                         <MenuImg src={sale} />
                         <MenuText>판매/나눔</MenuText>
@@ -208,13 +208,13 @@ function Home() {
                 <StudyBoxChild>
                     <StudyListTitle>새로운 스터디 NEW!</StudyListTitle>
                     <StudyListBox>
-                        <NewStudy/>
+                        <NewStudy />
                     </StudyListBox>
                 </StudyBoxChild>
                 <StudyBoxChild>
                     <StudyListTitle>참여도 높은 스터디</StudyListTitle>
                     <StudyListBox>
-                        <HighStudy/>
+                        <HighStudy />
                     </StudyListBox>
                 </StudyBoxChild>
             </StudyBox>
