@@ -13,7 +13,11 @@ import Login from './routes/Login';
 import Join from './routes/Join';
 import Share from './routes/Share';
 import Qaboard from './routes/Qaboard';
+
+import OpenStudy2 from './routes/OpenStudy2';
+
 import Sell from './routes/Sell';
+
 
 function App() {
   return (
@@ -23,6 +27,7 @@ function App() {
         <Route path="/setting" element={<Setting />}></Route>
         <Route path="/enterboard" element={<EnterBoard />}></Route>
         <Route path="/openstudy" element={<OpenStudy />}></Route>
+        <Route path="/openstudy2" element={<OpenStudy2 />}></Route>
         <Route path="/setboard" element={<SetBoard />}></Route>
         <Route path="/membergrade" element={<MemberGrade />}></Route>git
         <Route path="/setboard" element={<SetBoard />}></Route>

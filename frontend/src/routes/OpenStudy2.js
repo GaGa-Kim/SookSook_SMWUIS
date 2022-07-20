@@ -10,7 +10,7 @@ import CheckBox from "./components/CheckBox";
 import InputPassword from "./components/InputPassword";
 import ButtonBox from "./components/ButtonBox";
 import Button from "./components/Button";
-import Logo from './components/Logo';
+import Logo from "./components/Logo";
 import "../fonts/Font.css";
 
 const Title = styled.div`
@@ -63,28 +63,25 @@ const OpenStudy = () => {
     return (
         <Root>
             <GlobalStyle />
-            <Logo/>
+            <Logo />
             <ColorBox height="90px">
                 <Title>스터디 개설</Title>
             </ColorBox>
             <Main>
                 <InputBox>
-                    <Quest>대학</Quest>
+                    <Quest>카테고리</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <Select>
-                            <option>문과대학</option>
-                            <option>이과대학</option>
-                            <option>공과대학</option>
-                            <option>생활과학대학</option>
-                            <option>법과대학</option>
-                            <option>경상대학</option>
-                            <option>음악대학</option>
-                            <option>약학대학</option>
-                            <option>미술대학</option>
-                            <option>기초교양대학</option>
-                            <option>글로벌서비스학부</option>
-                            <option>영어영문학부</option>
-                            <option>미디어학부</option>
+                            <option>토익/토플</option>
+                            <option>면접</option>
+                            <option>자소서</option>
+                            <option>코딩</option>
+                            <option>어학자격증</option>
+                            <option>LEET</option>
+                            <option>공무원시험</option>
+                            <option>해외유학</option>
+                            <option>취미언어</option>
+                            <option>전문자격증</option>
                         </Select>
                     </Box>
                 </InputBox>
@@ -124,7 +121,9 @@ const OpenStudy = () => {
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
-                <Button width="100px" mg="30px">만들기</Button>
+                <Button width="100px" mg="30px">
+                    만들기
+                </Button>
             </ButtonBox>
         </Root>
     );

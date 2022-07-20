@@ -78,7 +78,7 @@ const SetBoard = () => {
             <GlobalStyle />
             <Logo/>
             <ColorBox height="90px">
-                <Title>게시판 작성</Title>
+                <Title>글 작성</Title>
             </ColorBox>
             <Main>
                 <InputBox>
