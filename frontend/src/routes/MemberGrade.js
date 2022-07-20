@@ -7,13 +7,14 @@ import Box from "./components/Box";
 import Button from "./components/Button";
 import ButtonBox from "./components/ButtonBox";
 import Badge from "./components/Badge";
+import Logo from './components/Logo';
 import "../fonts/Font.css";
 import { Rate } from "antd";
 
 const Title = styled.div`
     position: absolute;
     top: 30px;
-    left: 100px;
+    left: 90px;
     font-size: 36px;
     color: #ffffff;
     font-family: "Cafe24";
@@ -39,11 +40,11 @@ const Quest = styled.div`
 `;
 
 const MemberButton = styled.button`
-    width: 50px;
+    width: 49px;
     height: 32px;
     background-color: #d9d9d9;
     border-radius: 50px;
-    margin: 5px;
+    margin: 4px;
     border: thin solid #d9d9d9;
 `;
 const PlusButton = styled.button`
@@ -64,8 +65,9 @@ const MemberGrade = () => {
         );
     };
     return (
-        <Root>
+        <Root >
             <GlobalStyle />
+            <Logo/>
             <ColorBox height="90px">
                 <Title>스터디원 평가하기</Title>
             </ColorBox>

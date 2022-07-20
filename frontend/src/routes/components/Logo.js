@@ -1,7 +1,7 @@
+import {Link} from 'react-router-dom';
 import "../../css/board1.css";
 import React from "react";
 import { Input } from "antd";
-import { Link } from 'react-router-dom';
 import "antd/dist/antd.css";
 import MenuBar from "./MenuBar";
 import logo from "../../images/logo.png";
@@ -35,6 +35,7 @@ const Logo = () => {
             <div className="search">
                 <Search onSearch={onSearch} enterButton />
             </div>
+
             <div className="customer" style={{ display: "flex" }}>
                 <Top><Link to="mypage">마이페이지</Link></Top>
                 <Top>로그아웃</Top>

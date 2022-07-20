@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const ColorBox=styled.div`
-  width:auto;
+  width:100%;
   height:${(props)=>props.height};
   background-color:#C1DAFF;
   position:relative;

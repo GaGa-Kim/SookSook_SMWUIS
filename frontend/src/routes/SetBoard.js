@@ -7,6 +7,7 @@ import InputText from "./components/InputText";
 import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
+import Logo from './components/Logo';
 import "../fonts/Font.css";
 
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
@@ -75,6 +76,7 @@ const SetBoard = () => {
     return (
         <Root>
             <GlobalStyle />
+            <Logo/>
             <ColorBox height="90px">
                 <Title>게시판 작성</Title>
             </ColorBox>

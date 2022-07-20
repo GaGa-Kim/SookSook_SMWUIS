@@ -10,6 +10,7 @@ import CheckBox from "./components/CheckBox";
 import InputPassword from "./components/InputPassword";
 import ButtonBox from "./components/ButtonBox";
 import Button from "./components/Button";
+import Logo from './components/Logo';
 import "../fonts/Font.css";
 
 const Title = styled.div`
@@ -62,6 +63,7 @@ const OpenStudy = () => {
     return (
         <Root>
             <GlobalStyle />
+            <Logo/>
             <ColorBox height="90px">
                 <Title>스터디 개설</Title>
             </ColorBox>

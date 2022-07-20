@@ -10,6 +10,7 @@ import CheckBox from "./components/CheckBox";
 import InputPassword from "./components/InputPassword";
 import ButtonBox from "./components/ButtonBox";
 import Button from "./components/Button";
+import Logo from './components/Logo';
 import "../fonts/Font.css";
 
 const Title = styled.div`
@@ -74,8 +75,9 @@ const CommentBox = styled.div`
 
 const EnterBoard = () => {
     return (
-        <Root>
+        <Root >
             <GlobalStyle />
+            <Logo/>
             <ColorBox height="90px">
                 <Title>비밀게시판 입장</Title>
             </ColorBox>
