@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "../../css/board1.css";
 import React from "react";
 import { Input } from "antd";
