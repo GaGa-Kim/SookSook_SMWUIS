@@ -72,7 +72,7 @@ const App = () => (
         </div>
         <section>
             <Table columns={columns} dataSource={data} />;
-            <Addpage />
+            <Link to="/openstudy"><Addpage /></Link>
         </section>
     </>
 );
