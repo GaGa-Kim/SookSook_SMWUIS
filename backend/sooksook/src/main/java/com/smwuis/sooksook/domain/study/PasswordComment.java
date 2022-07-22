@@ -13,11 +13,11 @@ import java.util.List;
 @ToString
 @Getter
 @NoArgsConstructor
-public class StudyComment {
+public class PasswordComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "StudyComment_ID")
+    @Column(name = "PasswordComment_ID")
     private Long id; // 기본키
 
     /* 변경 필요
@@ -28,8 +28,8 @@ public class StudyComment {
     private String uid; // 작성자 (fk)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StudyPost_ID")
-    private StudyPost studyPostId; // 게시글 (fk)
+    @JoinColumn(name = "StudyBoard_ID")
+    private StudyBoard studyBoardId; // 게시판 (fk)
 
     private String content; // 내용
 
@@ -37,20 +37,20 @@ public class StudyComment {
 
     @ElementCollection(targetClass = Long.class)
     private List<Long> childList = new ArrayList<>();
-    
+
     private boolean isRemoved = false; // 댓글 삭제 여부
 
     @Builder
-    public StudyComment(String uid, StudyPost studyPostId, String content, Long upIndex, List<Long> childList, boolean isRemoved) {
+    public PasswordComment(String uid, StudyBoard studyBoardId, String content, Long upIndex, List<Long> childList, boolean isRemoved) {
         this.uid = uid;
-        this.studyPostId = studyPostId;
+        this.studyBoardId = studyBoardId;
         this.content = content;
         this.upIndex = upIndex;
         this.childList = childList;
         this.isRemoved = isRemoved;
     }
 
-    public StudyComment update(String content) {
+    public PasswordComment update(String content) {
         this.content = content;
         return this;
     }
@@ -65,8 +65,8 @@ public class StudyComment {
         this.uid = uid;
      */
 
-    public void setStudyPost(StudyPost studyPostId) {
-        this.studyPostId = studyPostId;
+    public void setStudyBoard(StudyBoard studyBoardId) {
+        this.studyBoardId = studyBoardId;
     }
 
 }

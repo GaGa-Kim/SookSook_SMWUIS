@@ -1,6 +1,5 @@
 package com.smwuis.sooksook.web.controller;
 
-import com.smwuis.sooksook.domain.study.StudyComment;
 import com.smwuis.sooksook.service.StudyCommentService;
 import com.smwuis.sooksook.web.dto.study.StudyCommentResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyCommentSaveRequestDto;
