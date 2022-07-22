@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @ToString
@@ -29,18 +31,18 @@ public class StudyPost {
     @JoinColumn(name = "StudyBoard_ID")
     private StudyBoard studyBoardId; // 스터디 게시판 (fk)
 
-    private String title;
+    private String title; // 제목
 
-    private String content;
+    private String content; // 내용
 
     /*
     @OneToMany
     private List<StudyFiles> studyFiles = new ArrayList<>();
+    */
 
-    @OneToMany
-    private List<StudyComment> studyComment = new ArrayList<>();
-     */
-
+    @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<StudyComment> studyComment = new ArrayList<>(); // 댓글 리스트
+    
     @Builder
     public StudyPost(String uid, StudyBoard studyBoardId, String title, String content) {
         this.uid = uid;
@@ -65,20 +67,19 @@ public class StudyPost {
     }
 
     /*
-    public addStudyFiles(StudyFiles studyFiles) {
+    public void addStudyFiles(StudyFiles studyFiles) {
         this.studyFiles.add(studyFiles);
 
         if (studyFiles.getStudyPost() != this)
             studyFiles.setStudyPost(this);
     }
+    */
 
-    public addStudyComment(StudyComment studyComment) {
+    public void addStudyComment(StudyComment studyComment) {
         this.studyComment.add(studyComment);
 
-        if (studyComment.getStudyPost() != this)
+        if (studyComment.getStudyPostId() != this)
             studyComment.setStudyPost(this);
     }
-
-     */
 
 }
