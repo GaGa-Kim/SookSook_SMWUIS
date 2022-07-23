@@ -55,7 +55,7 @@ public class StudyBoardController {
     // 스터디 모집 게시판 글 상세 조회
     @GetMapping(value = "/studyBoard")
     @ApiOperation(value = "스터디 모집 게시판 글 상세 조회", notes = "스터디 모집 게시판 글 상세 조회 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id")
+    @ApiImplicitParam(name = "id", value = "게시판 id")
     public StudyBoardResponseDto view(@RequestParam Long id) {
         return studyBoardService.findById(id);
     }

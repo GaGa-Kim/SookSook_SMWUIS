@@ -3,8 +3,6 @@ package com.smwuis.sooksook.web.controller;
 import com.smwuis.sooksook.service.PasswordCommentService;
 import com.smwuis.sooksook.web.dto.study.PasswordCommentResponseDto;
 import com.smwuis.sooksook.web.dto.study.PasswordCommentSaveRequestDto;
-import com.smwuis.sooksook.web.dto.study.StudyCommentResponseDto;
-import com.smwuis.sooksook.web.dto.study.StudyCommentSaveRequestDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

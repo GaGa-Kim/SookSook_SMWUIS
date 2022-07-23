@@ -1,5 +1,6 @@
 package com.smwuis.sooksook.domain.study;
 
+import com.smwuis.sooksook.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @ToString
 @Getter
 @NoArgsConstructor
-public class StudyPost {
+public class StudyPost extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,13 +36,11 @@ public class StudyPost {
 
     private String content; // 내용
 
-    /*
-    @OneToMany
+    @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     private List<StudyFiles> studyFiles = new ArrayList<>();
-    */
 
-    @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.ALL}, orphanRemoval = true)
-    private List<StudyComment> studyComment = new ArrayList<>(); // 댓글 리스트
+    // @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    // private List<StudyComment> studyComment = new ArrayList<>(); // 댓글 리스트
     
     @Builder
     public StudyPost(String uid, StudyBoard studyBoardId, String title, String content) {
@@ -66,20 +65,21 @@ public class StudyPost {
         this.studyBoardId = studyBoard;
     }
 
-    /*
     public void addStudyFiles(StudyFiles studyFiles) {
         this.studyFiles.add(studyFiles);
 
-        if (studyFiles.getStudyPost() != this)
+        if (studyFiles.getStudyPostId() != this)
             studyFiles.setStudyPost(this);
     }
-    */
 
+    /*
     public void addStudyComment(StudyComment studyComment) {
         this.studyComment.add(studyComment);
 
         if (studyComment.getStudyPostId() != this)
             studyComment.setStudyPost(this);
     }
+
+     */
 
 }

@@ -1,5 +1,6 @@
 package com.smwuis.sooksook.domain.study;
 
+import com.smwuis.sooksook.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @ToString
 @Getter
 @NoArgsConstructor
-public class PasswordComment {
+public class PasswordComment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
