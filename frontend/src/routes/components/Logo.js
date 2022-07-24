@@ -59,7 +59,7 @@ const Logo = () => {
                 <Search onSearch={onSearch} enterButton />
             </div>
 
-            <div className="customer">
+            <div className="customer" style={{fontFamily:"DoHyeon"}}>
                 <Login />
                 <Top>고객센터</Top>
             </div>

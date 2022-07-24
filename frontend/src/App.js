@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./routes/Home";
 import MyPage from './routes/MyPage';
 import OpenStudy from './routes/OpenStudy';
-import SetBoard from './routes/SetBoard';
+import SetBoardPrivate from './routes/SetBoardPrivate';
 import Setting from './routes/Setting';
 import EnterBoard from './routes/EnterBoard';
 import MemberGrade from './routes/MemberGrade';
@@ -28,9 +28,8 @@ function App() {
         <Route path="/enterboard" element={<EnterBoard />}></Route>
         <Route path="/openstudy" element={<OpenStudy />}></Route>
         <Route path="/openstudy2" element={<OpenStudy2 />}></Route>
-        <Route path="/setboard" element={<SetBoard />}></Route>
         <Route path="/membergrade" element={<MemberGrade />}></Route>git
-        <Route path="/setboard" element={<SetBoard />}></Route>
+        <Route path="/setboard_private" element={<SetBoardPrivate />}></Route>
         <Route path="/board1" element={<Board1 />}></Route>
         <Route path="/board2" element={<Board2 />}></Route>
         <Route path="/private" element={<Private />}></Route>
