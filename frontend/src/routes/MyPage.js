@@ -5,8 +5,8 @@ import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
 import ColorBox from "./components/ColorBox";
 import Logo from "./components/Logo";
-import List from "./components/List";
 import ListText from "./components/ListText";
+import List from "./components/List";
 import ListBox from "./components/ListBox";
 import ListHeader from "./components/ListHeader";
 import ListTitle from "./components/ListTitle";
@@ -211,7 +211,6 @@ function MyPage() {
                         {studyScheduleList.map((schedule) => (
                             <StudySchedule
                                 key={schedule.id}
-                                {...schedule}
                                 handleXclick={handleXclick}
                                 studyScheduleList={studyScheduleList}
                             />

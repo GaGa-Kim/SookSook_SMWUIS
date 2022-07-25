@@ -1,8 +1,9 @@
 import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React from "react";
+
 import { Table } from "antd";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -24,20 +25,7 @@ const Block = () => {
     );
 };
 
-const columns = [
-    {
-        title: <div className="studyname">게시글</div>,
-        dataIndex: "title",
-        key: "title",
-        render: (text) => <a>{text}</a>,
-    },
 
-    {
-        title: <div>작성자</div>,
-        dataIndex: "name",
-        key: <div>"name"</div>,
-    },
-];
 
 const Piein = (props) => {
     return <h1 className="ptitle">{props.children}</h1>;
@@ -67,9 +55,23 @@ const spcolumns = [
 const member = ["가송", "나송", "다송"];
 const Private = () => {
     const data = [
-        {  title: "스터디 규칙", name: "가송" },
-        {  title: "과제제출", name: "나송" },
+        {  key:1, title: "스터디 규칙", name: "가송" },
+        {  key:2, title: "과제제출", name: "나송" },
     ]; /*데이터받아오기*/
+    const columns = [
+        {
+            title: <div className="studyname">게시글</div>,
+            dataIndex: "title",
+            key: "key",
+            render: (text,{key}) => <Link to={`/detailboard/${key}`} state={{key:key}}>{text}</Link>,
+        },
+    
+        {
+            title: <div>작성자</div>,
+            dataIndex: "name",
+            key: <div>"name"</div>,
+        },
+    ];
     const [spdata, setSpdata] = React.useState([]);
     const [piedata,setPiedata] = React.useState([]);
 

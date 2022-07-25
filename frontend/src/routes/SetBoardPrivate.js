@@ -66,6 +66,7 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardPrivate = () => {
+    const [key,setKey]=useState(0);
     const [id,setId]=useState("가송");
     const [title,setTitle]=useState("");
     const [content,setContent]=useState("");
@@ -80,6 +81,7 @@ const SetBoardPrivate = () => {
             alert('내용을 입력하세요');
             return;
         }
+        /*db에 게시글 정보 저장*/
         
     }
     const getText = (text) => {
@@ -129,9 +131,6 @@ const SetBoardPrivate = () => {
                     업로드
                 </Button>
                 </Link>
-                <Button width="70px" mg="30px">
-                    삭제
-                </Button>
                 <Button width="70px" mg="30px">
                     목록
                 </Button>
