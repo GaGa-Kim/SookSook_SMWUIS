@@ -1,6 +1,5 @@
 import React from 'react';
 import { Input } from "antd";
-
 const InputText = (item) => {
 
     const onChange=(e)=>{
