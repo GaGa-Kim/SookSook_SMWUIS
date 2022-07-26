@@ -8,7 +8,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from './components/Logo';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "../fonts/Font.css";
 import { useState } from 'react';
 
@@ -66,35 +66,35 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardPrivate = () => {
-    const [key,setKey]=useState(0);
-    const [id,setId]=useState("가송");
-    const [title,setTitle]=useState("");
-    const [content,setContent]=useState("");
-    const [file,setFile]=useState("");
-    const handleUploadClick=()=>{
-        
-        if(title.trim()===''){
+    const [key, setKey] = useState(0);
+    const [id, setId] = useState("가송");
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [file, setFile] = useState("");
+    const handleUploadClick = () => {
+
+        if (title.trim() === '') {
             alert('제목을 입력하세요');
             return;
         }
-        if(content.trim()===''){
+        if (content.trim() === '') {
             alert('내용을 입력하세요');
             return;
         }
         /*db에 게시글 정보 저장*/
-        
+
     }
     const getText = (text) => {
         setTitle(text);
     };
-    const getArea=(text)=>{
+    const getArea = (text) => {
         setContent(text);
     }
-    
+
     return (
         <Root>
             <GlobalStyle />
-            <Logo/>
+            <Logo />
             <ColorBox height="90px">
                 <Title>글 작성</Title>
             </ColorBox>
@@ -102,13 +102,13 @@ const SetBoardPrivate = () => {
                 <InputBox>
                     <Quest>제목</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputText text="입력하세요" getText={getText}/>
+                        <InputText text="입력하세요" getText={getText} />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="62px">
                     <Quest>내용</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputArea area="입력하세요" bg="#F0F0F0" getArea={getArea}/>
+                        <InputArea area="입력하세요" bg="#F0F0F0" getArea={getArea} />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="50px">
@@ -127,15 +127,17 @@ const SetBoardPrivate = () => {
             </Main>
             <ButtonBox mgRight="50px">
                 <Link to="/private">
-                <Button width="70px" mg="30px" >
-                    업로드
-                </Button>
+                    <Button width="70px" mg="30px" >
+                        업로드
+                    </Button>
                 </Link>
-                <Button width="70px" mg="30px">
-                    목록
-                </Button>
+                <Link to="/private">
+                    <Button width="70px" mg="30px">
+                        목록
+                    </Button>
+                </Link>
             </ButtonBox>
-        </Root>
+        </Root >
     );
 };
 export default SetBoardPrivate;

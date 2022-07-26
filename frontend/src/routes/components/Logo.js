@@ -15,7 +15,7 @@ const Top = (props) => {
 };
 const Login = () => {
     const [isLogin, setIsLogin] = React.useState(true);
-    const handleLogoutClick=()=>{
+    const handleLogoutClick = () => {
         console.log("클릭");
         setIsLogin(false);
     }
@@ -59,7 +59,7 @@ const Logo = () => {
                 <Search onSearch={onSearch} enterButton />
             </div>
 
-            <div className="customer" style={{fontFamily:"DoHyeon"}}>
+            <div className="customer" style={{ fontFamily: "DoHyeon" }}>
                 <Login />
                 <Top>고객센터</Top>
             </div>

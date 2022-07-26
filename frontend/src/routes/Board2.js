@@ -5,7 +5,6 @@ import { Table } from "antd";
 import "antd/dist/antd.css";
 import GlobalStyle from "./components/GlobalStyle";
 import Logo from "./components/Logo.js";
-import Addpage from "./components/Addpage.js";
 import Cstudy from "./components/Cstudy.js";
 import Drop2 from "./components/Drop2.js";
 
@@ -97,7 +96,6 @@ const App = () => (
         </div>
         <div>
             <Table columns={columns} dataSource={data} />;
-            <Link to="/openstudy2"><Addpage /></Link>
         </div>
     </>
 );

@@ -3,7 +3,7 @@ import GlobalStyle from "./components/GlobalStyle";
 import React from "react";
 
 import { Table } from "antd";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -19,7 +19,7 @@ const Block = () => {
                 <Link to="/mypage">스터디 종료</Link>
             </button>
             <button className="prbutton">
-                <Link to="/setboard">글 작성</Link>
+                <Link to="/setboard_private">글 작성</Link>
             </button>
         </section>
     );
@@ -55,17 +55,17 @@ const spcolumns = [
 const member = ["가송", "나송", "다송"];
 const Private = () => {
     const data = [
-        {  key:1, title: "스터디 규칙", name: "가송" },
-        {  key:2, title: "과제제출", name: "나송" },
+        { key: 1, title: "스터디 규칙", name: "가송" },
+        { key: 2, title: "과제제출", name: "나송" },
     ]; /*데이터받아오기*/
     const columns = [
         {
             title: <div className="studyname">게시글</div>,
             dataIndex: "title",
             key: "key",
-            render: (text,{key}) => <Link to={`/detailboard/${key}`} state={{key:key}}>{text}</Link>,
+            render: (text, { key }) => <Link to={`/detailboard/${key}`} state={{ key: key }}>{text}</Link>,
         },
-    
+
         {
             title: <div>작성자</div>,
             dataIndex: "name",
@@ -73,13 +73,13 @@ const Private = () => {
         },
     ];
     const [spdata, setSpdata] = React.useState([]);
-    const [piedata,setPiedata] = React.useState([]);
+    const [piedata, setPiedata] = React.useState([]);
 
     let post = 0;
     let comment = 0;
     React.useEffect(() => {
         let initialSpdata = [];
-        let initialPiedata=[];
+        let initialPiedata = [];
         for (let i = 0; i < member.length; i++) {
             for (let j = 0; j < data.length; j++) {
                 if (member[i] === data[j].name) {
@@ -92,15 +92,15 @@ const Private = () => {
                 post: post,
                 comment: comment,
             });
-            if(data.length!==0&&(post+comment)!==0){
-            
-            initialPiedata.push({
+            if (data.length !== 0 && (post + comment) !== 0) {
 
-                title: member[i],
-                value: post + comment,
-                color: "#" + (0xbfbfaf + i * 16),
-            });
-        }
+                initialPiedata.push({
+
+                    title: member[i],
+                    value: post + comment,
+                    color: "#" + (0xbfbfaf + i * 16),
+                });
+            }
             post = 0;
         }
         setPiedata(initialPiedata);
