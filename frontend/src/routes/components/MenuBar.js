@@ -46,14 +46,12 @@ const MenuBar = () => {
                     <Link to="/share">자료 공유</Link>
                 </List>
 
-                <List>판매/나눔</List>
-
                 <List>
-                    <Link to="/Qaboard">질문 게시판</Link>
+                    <Link to="/sell">판매/나눔</Link>
                 </List>
 
                 <List>
-                    <Link to="/mypage">마이페이지</Link>
+                    <Link to="/Qaboard">질문 게시판</Link>
                 </List>
             </Box>
         </Root>

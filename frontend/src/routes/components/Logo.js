@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import "../../css/board1.css";
 import React from "react";
 import { Input } from "antd";
@@ -12,6 +12,29 @@ const { Search } = Input;
 
 const Top = (props) => {
     return <h2 className="topright">{props.children}</h2>;
+};
+const Login = () => {
+    const [isLogin, setIsLogin] = React.useState(true);
+    const handleLogoutClick = () => {
+        console.log("클릭");
+        setIsLogin(false);
+    }
+    if (isLogin) {
+        return (
+            <>
+                <Top>
+                    <Link to="/mypage">마이페이지</Link>
+                </Top>
+                <Top><div onClick={handleLogoutClick}>로그아웃</div></Top>
+            </>
+        );
+    } else {
+        return (
+            <Top>
+                <Link to="/login">로그인</Link>
+            </Top>
+        );
+    }
 };
 
 const Logo = () => {
@@ -36,9 +59,8 @@ const Logo = () => {
                 <Search onSearch={onSearch} enterButton />
             </div>
 
-            <div className="customer" style={{ display: "flex" }}>
-                <Top><Link to="/mypage">마이페이지</Link></Top>
-                <Top>로그아웃</Top>
+            <div className="customer" style={{ fontFamily: "DoHyeon" }}>
+                <Login />
                 <Top>고객센터</Top>
             </div>
         </section>

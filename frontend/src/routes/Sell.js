@@ -5,15 +5,25 @@ import GlobalStyle from "./components/GlobalStyle";
 import { Link } from 'react-router-dom';
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
-import Addpage from "./components/Addpage.js";
 
 const Shareblock = () => {
     return (
         <section className="block">
             <button className="share">판매/나눔 게시판</button>
+            <Cwrite />
+        </section>
+    );
+
+};
+const Cwrite = () => {
+    return (
+        <section>
+            <button className="newstudy">
+                <Link to="/setboard_sell">스터디 개설</Link></button>
         </section>
     );
 };
+
 
 const columns = [
     {
@@ -68,9 +78,8 @@ const App = () => (
         <GlobalStyle />
         <Logo />
         <Shareblock />
-        <section>
+        <section className="table">
             <Table columns={columns} dataSource={data} />;
-            <Addpage />
         </section>
     </>
 );

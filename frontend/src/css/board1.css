@@ -59,6 +59,7 @@
     background-color: white;
     font-weight: bold;
     font-size: 17px;
+    font-family: "DoHyeon";
 }
 
 .newstudy:hover {
@@ -91,7 +92,8 @@
 
 .topright {
     width: 55px;
-    margin-right: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .topright a,
@@ -105,16 +107,28 @@
     margin-right: 16px;
     font-weight: bold;
     margin-left: 8px;
+    font-family: "DoHyeon";
+    white-space: nowrap;
 }
 
 .dropdown1:hover {
     color: gray;
 }
-@media screen and (max-width:660px){
-    .search{
-        display:none;
+
+@media screen and (max-width:660px) {
+    .search {
+        display: none;
     }
-    .customer{
-        display:none;
+
+    .customer {
+        display: none;
     }
+}
+
+.table {
+    font-family: "DoHyeon";
+}
+
+.user {
+    font-size: 16px;
 }
