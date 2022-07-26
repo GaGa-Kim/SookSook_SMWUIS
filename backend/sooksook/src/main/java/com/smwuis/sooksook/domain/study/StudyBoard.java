@@ -1,6 +1,7 @@
 package com.smwuis.sooksook.domain.study;
 
 import com.smwuis.sooksook.domain.BaseTimeEntity;
+import com.smwuis.sooksook.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,9 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     @Column(name = "StudyBoard_ID")
     private Long id; // 기본키
 
-    /* 변경 필요
-    @ManyToOne
-    @JoinColumn (name = "id")
-    private User uid;
-     */
-    private String uid; // 작성자 (fk)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "User_ID")
+    private User userId; // 작성자 (fk)
 
     private String department; // 학부
     
@@ -47,14 +45,11 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     private String category; // 카테고리 (강의, 강의 외 스터디)
 
     private Boolean finished; // 스터디 종료 여부
-
-    /* 변경 필요
-    String uid -> User uid
-     */
+    
     @Builder
-    public StudyBoard(String uid, String department, String subject, String title, String content,
+    public StudyBoard(User userId, String department, String subject, String title, String content,
                       Long number, String onoff, Date period, String password, String category, Boolean finished) {
-        this.uid = uid;
+        this.userId = userId;
         this.department = department;
         this.subject = subject;
         this.title = title;
@@ -82,8 +77,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
         return this;
     }
 
-    /* 연관관계 편의 메소드 작성 필요
-    public void setUser(User uid) {
-        this.uid = uid;
-     */
+    public void setUser(User user) {
+        this.userId = user;
+    }
 }

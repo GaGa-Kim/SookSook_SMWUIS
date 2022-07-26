@@ -26,11 +26,11 @@ public class UserRating extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_received_id")
     private User receiverId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_give_id")
     private User giveId;
 
     @Column(nullable = false)

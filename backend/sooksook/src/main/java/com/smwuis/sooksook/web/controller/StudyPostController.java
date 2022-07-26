@@ -44,7 +44,6 @@ public class StudyPostController {
     public Long save(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
-                .uid(studyPostVO.getUid())
                 .studyBoardId(studyPostVO.getStudyBoardId())
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())

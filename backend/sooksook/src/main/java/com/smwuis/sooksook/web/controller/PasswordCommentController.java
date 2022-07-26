@@ -60,8 +60,8 @@ public class PasswordCommentController {
     @ApiOperation(value = "스터디 모집 게시판 댓글 상세 조회", notes = "스터디 모집 게시판 댓글 상세 조회 API")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "댓글 id"),
-            @ApiImplicitParam(name = "uid", value = "본인 닉네임")
-    })    public PasswordCommentResponseDto view(@RequestParam Long id, String uid) {
-        return passwordCommentService.view(id, uid);
+            @ApiImplicitParam(name = "email", value = "이메일")
+    })    public PasswordCommentResponseDto view(@RequestParam Long id, String email) {
+        return passwordCommentService.view(id, email);
     }
 }

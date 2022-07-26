@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyCommentSaveRequestDto {
 
-    /* 유저 부분 변경 필요 */
-
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
 
     @ApiModelProperty(example = "스터디 게시글 id")
     private Long studyPostId;
@@ -26,8 +24,8 @@ public class StudyCommentSaveRequestDto {
 
 
     @Builder
-    public StudyCommentSaveRequestDto(String uid, Long studyPostId, String content, Long upIndex) {
-        this.uid = uid;
+    public StudyCommentSaveRequestDto(String email, Long studyPostId, String content, Long upIndex) {
+        this.email = email;
         this.studyPostId = studyPostId;
         this.content = content;
         this.upIndex = upIndex;
@@ -35,7 +33,6 @@ public class StudyCommentSaveRequestDto {
 
     public StudyComment toEntity() {
         return StudyComment.builder()
-                .uid(uid)
                 .content(content)
                 .upIndex(upIndex)
                 .build();

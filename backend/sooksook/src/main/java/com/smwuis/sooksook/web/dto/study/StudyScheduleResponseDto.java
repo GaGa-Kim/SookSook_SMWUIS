@@ -9,9 +9,11 @@ import java.util.Date;
 @Getter
 public class StudyScheduleResponseDto {
 
-    /* 유저 부분 변경 필요 */
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
+
+    @ApiModelProperty(example = "작성자 닉네임")
+    private String nickname;
 
     @ApiModelProperty(example = "기간")
     private Date period;
@@ -20,7 +22,8 @@ public class StudyScheduleResponseDto {
     private String content;
 
     public StudyScheduleResponseDto(StudySchedule studySchedule) {
-        this.uid = studySchedule.getUid();
+        this.email = studySchedule.getUserId().getEmail();
+        this.nickname = studySchedule.getUserId().getNickname();
         this.period = studySchedule.getPeriod();
         this.content = studySchedule.getContent();
     }

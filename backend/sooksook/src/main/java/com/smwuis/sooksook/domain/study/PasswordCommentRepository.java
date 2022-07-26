@@ -1,6 +1,5 @@
 package com.smwuis.sooksook.domain.study;
 
-import com.smwuis.sooksook.service.PasswordCommentService;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PasswordCommentSaveRequestDto {
 
-    /* 유저 부분 변경 필요 */
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
 
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 닉네임")
+    private String nick;
 
     @ApiModelProperty(example = "스터디 게시판 id")
     private Long studyBoardId;
@@ -26,8 +27,8 @@ public class PasswordCommentSaveRequestDto {
 
 
     @Builder
-    public PasswordCommentSaveRequestDto(String uid, Long studyBoardId, String content, Long upIndex) {
-        this.uid = uid;
+    public PasswordCommentSaveRequestDto(String email, Long studyBoardId, String content, Long upIndex) {
+        this.email = email;
         this.studyBoardId = studyBoardId;
         this.content = content;
         this.upIndex = upIndex;
@@ -35,7 +36,6 @@ public class PasswordCommentSaveRequestDto {
 
     public PasswordComment toEntity() {
         return PasswordComment.builder()
-                .uid(uid)
                 .content(content)
                 .upIndex(upIndex)
                 .build();
