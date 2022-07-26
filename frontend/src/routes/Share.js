@@ -5,16 +5,23 @@ import GlobalStyle from "./components/GlobalStyle";
 import { Link } from 'react-router-dom';
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
-import Addpage from "./components/Addpage.js";
 
 const Shareblock = () => {
     return (
         <section className="block">
             <button className="share">자료공유 게시판</button>
+            <Cwrite />
         </section>
     );
 };
-
+const Cwrite = () => {
+    return (
+        <section>
+            <button className="newstudy">
+                <Link to="/setboard_share">스터디 개설</Link></button>
+        </section>
+    );
+};
 const columns = [
     {
         title: <div className="studyname">글 제목</div>,
@@ -24,7 +31,7 @@ const columns = [
     },
 
     {
-        title: <div>작성자</div>,
+        title: <div className="user">작성자</div>,
         dataIndex: "address",
         key: <div>"address"</div>
     }
@@ -68,9 +75,8 @@ const App = () => (
         <GlobalStyle />
         <Logo />
         <Shareblock />
-        <section>
+        <section className="table">
             <Table columns={columns} dataSource={data} />;
-            <Addpage />
         </section>
     </>
 );

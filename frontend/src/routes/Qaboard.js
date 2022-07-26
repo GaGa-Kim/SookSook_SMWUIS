@@ -5,12 +5,11 @@ import { Link } from 'react-router-dom';
 import GlobalStyle from "./components/GlobalStyle";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
-import Addpage from "./components/Addpage.js";
 
 const Qablock = () => {
     return (
         <section className="block">
-            <button className="qanda">Q & A 게시판</button>
+            <button className="qanda">Q & A 게시판</button><Cwrite />
         </section>
     );
 };
@@ -24,7 +23,7 @@ const columns = [
     },
 
     {
-        title: <div>작성자</div>,
+        title: <div className="user">작성자</div>,
         dataIndex: "address",
         key: <div>"address"</div>
     }
@@ -68,14 +67,24 @@ const data = [
     }
 ];
 
+const Cwrite = () => {
+    return (
+        <section>
+            <button className="newstudy">
+                <Link to="/setboard_qa">스터디 개설</Link></button>
+        </section>
+    );
+};
+
+
 const App = () => (
     <>
         <GlobalStyle />
         <Logo />
+
         <Qablock />
-        <section>
-            <Table columns={columns} dataSource={data} />;
-            <Addpage />
+        <section className="table">
+            <Table columns={columns} dataSource={data} />
         </section>
     </>
 );
