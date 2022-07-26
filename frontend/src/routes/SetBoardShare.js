@@ -4,7 +4,6 @@ import Root from "./components/Root";
 import ColorBox from "./components/ColorBox";
 import InputBox from "./components/InputBox";
 import InputText from "./components/InputText";
-import InputPassword from "./components/InputPassword";
 import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
@@ -12,7 +11,6 @@ import Logo from './components/Logo';
 import { Link } from 'react-router-dom';
 import "../fonts/Font.css";
 import { useState } from 'react';
-import CheckBox from "./components/CheckBox";
 
 
 const Title = styled.div`
@@ -42,25 +40,23 @@ const Quest = styled.div`
     font-size: 25px;
     align-items: center;
 `;
-const Select = styled.select`
-    width: 200px;
-    height: 32px;
+
+const InputFile = styled.input``;
+const LabelFile = styled.label`
+    height: 100%;
+    border: thin solid #d9d9d9;
+    color: #bfbfbf;
     border-radius: 70px;
-    text-align: center;
-    border-color: #eeeeee;
-    transition: 0.5s;
-    outline: none;
+    padding: 7px 66.5px;
+    font-size: 13px;
+
     &:hover {
         border-color: #4aacfc;
         transition: 0.5s;
     }
-    &:focus {
-        border-color: #4aacfc;
-        box-shadow: 0px 0px 0 2px #c7e4fe;
-        transition: 0.5s;
-    }
-`;
 
+    transition: 0.5s;
+`;
 const ButtonBox = styled.div`
     font-family: "DoHyeon";
     width: 100%;
@@ -69,16 +65,12 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
 `;
-
-
-const Openstudy = () => {
+const SetBoardShare = () => {
     const [key, setKey] = useState(0);
     const [id, setId] = useState("가송");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [user, setUser] = useState("");
-    const [pw, setPw] = useState("");
-
+    const [file, setFile] = useState("");
     const handleUploadClick = () => {
 
         if (title.trim() === '') {
@@ -86,14 +78,6 @@ const Openstudy = () => {
             return;
         }
         if (content.trim() === '') {
-            alert('내용을 입력하세요');
-            return;
-        }
-        if (user.trim() === '') {
-            alert('내용을 입력하세요');
-            return;
-        }
-        if (pw.trim() === '') {
             alert('내용을 입력하세요');
             return;
         }
@@ -105,12 +89,6 @@ const Openstudy = () => {
     };
     const getArea = (text) => {
         setContent(text);
-    };
-    const getUser = (text) => {
-        setUser(text);
-    }
-    const getPw = (text) => {
-        setPw(text);
     }
 
     return (
@@ -118,71 +96,43 @@ const Openstudy = () => {
             <GlobalStyle />
             <Logo />
             <ColorBox height="90px">
-                <Title>스터디 개설</Title>
+                <Title>글 작성</Title>
             </ColorBox>
             <Main>
-                <InputBox>
-                    <Quest>대학</Quest>
-                    <Box width="200px" left="100px" top="7px">
-                        <Select>
-                            <option>문과대학</option>
-                            <option>이과대학</option>
-                            <option>공과대학</option>
-                            <option>생활과학대학</option>
-                            <option>법과대학</option>
-                            <option>경상대학</option>
-                            <option>음악대학</option>
-                            <option>약학대학</option>
-                            <option>미술대학</option>
-                            <option>기초교양대학</option>
-                            <option>글로벌서비스학부</option>
-                            <option>영어영문학부</option>
-                            <option>미디어학부</option>
-                        </Select>
-                    </Box></InputBox>
-                <InputBox >
-                    <Quest>이름</Quest>
-                    <Box width="200px" left="100px" top="7px">
-                        <InputText text="입력하세요" getText={getText} />
-                    </Box>
-                </InputBox>
-                <InputBox>
-                    <Quest>비밀번호</Quest>
-                    <Box width="200px" left="100px" top="7px">
-                        <InputPassword text="입력하세요" getPw={getPw} />
-                    </Box>
-                </InputBox>
                 <InputBox>
                     <Quest>제목</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <InputText text="입력하세요" getText={getText} />
                     </Box>
                 </InputBox>
-                <InputBox mgBot="75px">
+                <InputBox mgBot="62px">
                     <Quest>내용</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <InputArea area="입력하세요" bg="#F0F0F0" getArea={getArea} />
                     </Box>
                 </InputBox>
-                <InputBox>
-                    <CheckBox />
-                    <Quest>온라인</Quest>
-                    <CheckBox />
-                    <Quest>오프라인</Quest>
-                    <CheckBox />
-                    <Quest>장기</Quest>
-                    <CheckBox />
-                    <Quest>단기</Quest>
+                <InputBox mgBot="50px">
+                    <Quest>파일</Quest>
+                    <Box width="200px" left="100px" top="17px">
+                        <LabelFile for="inputFile" onclick="focus()">
+                            파일 선택하기
+                        </LabelFile>
+                        <InputFile
+                            id="inputFile"
+                            type="file"
+                            style={{ display: "none" }}
+                        />
+                    </Box>
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
-                <Link to="/board1">
+                <Link to="/share">
                     <Button width="70px" mg="30px" >
                         업로드
                     </Button>
                 </Link>
-                <Link to="/board1">
-                    <Button width="70px" mg="30px" >
+                <Link to="/share">
+                    <Button width="70px" mg="30px">
                         목록
                     </Button>
                 </Link>
@@ -190,4 +140,4 @@ const Openstudy = () => {
         </Root >
     );
 };
-export default Openstudy;
+export default SetBoardShare;

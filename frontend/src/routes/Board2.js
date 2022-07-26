@@ -17,7 +17,7 @@ const columns = [
     },
 
     {
-        title: <div>작성자</div>,
+        title: <div className="user">작성자</div>,
         dataIndex: "address",
         key: <div>"address"</div>
     }
@@ -94,9 +94,9 @@ const App = () => (
             <Drop2 />
             <Cstudy />
         </div>
-        <div>
+        <section className="table">
             <Table columns={columns} dataSource={data} />;
-        </div>
+        </section>
     </>
 );
 

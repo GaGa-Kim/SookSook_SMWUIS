@@ -119,7 +119,7 @@ const DetailBoard = () => {
     };
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([/*db에서 가져오기*/]);
-    
+
     const handleXclick = (index) => {
         const nextComment = commentList.filter((comment) => comment.key !== index);
         setCommentList(nextComment);
@@ -131,7 +131,7 @@ const DetailBoard = () => {
     };
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
-            index:nextIndex,
+            index: nextIndex,
             id: id,
             comment: comment,
         });
@@ -221,28 +221,28 @@ const DetailBoard = () => {
                 )}
                 {isModify && isShow && (
                     <Link to="/private">
-                    <Button width="70px" mg="30px">
-                        업로드
-                    </Button>
+                        <Button width="70px" mg="30px">
+                            업로드
+                        </Button>
                     </Link>
                 )}
                 <Link to="/private">
-                <Button width="70px" mg="30px">
-                    목록
-                </Button>
+                    <Button width="70px" mg="30px">
+                        목록
+                    </Button>
                 </Link>
             </ButtonBox>
             {/* 댓글창 */}
-            {!isModify && 
+            {!isModify &&
                 <>
                     <ListBox>
                         {commentList.map((comment) => (
                             <CommentList
-                                key={comment.index}                               
+                                key={comment.index}
                                 id={comment.id}
                                 comment={comment.comment}
                                 handleXclick={handleXclick}
-                                
+
                             />
                         ))}
                     </ListBox>

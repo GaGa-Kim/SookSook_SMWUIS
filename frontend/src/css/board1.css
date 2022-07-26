@@ -59,6 +59,7 @@
     background-color: white;
     font-weight: bold;
     font-size: 17px;
+    font-family: "DoHyeon";
 }
 
 .newstudy:hover {
@@ -106,6 +107,7 @@
     margin-right: 16px;
     font-weight: bold;
     margin-left: 8px;
+    font-family: "DoHyeon";
     white-space: nowrap;
 }
 
@@ -121,4 +123,12 @@
     .customer {
         display: none;
     }
+}
+
+.table {
+    font-family: "DoHyeon";
+}
+
+.user {
+    font-size: 16px;
 }
