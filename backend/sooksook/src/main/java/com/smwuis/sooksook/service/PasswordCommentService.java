@@ -27,9 +27,11 @@ public class PasswordCommentService {
     // 댓글 작성
     @Transactional
     public Long save(PasswordCommentSaveRequestDto saveRequestDto) {
+        StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         PasswordComment passwordComment = saveRequestDto.toEntity();
-        passwordComment.setStudyBoard(studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다.")));
+        passwordComment.setStudyBoard(studyBoard);
         passwordComment.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
+        studyBoard.addPasswordComments(passwordCommentRepository.save(passwordComment));
 
         Long id = passwordCommentRepository.save(passwordComment).getId();
 

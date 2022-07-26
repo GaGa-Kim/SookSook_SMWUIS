@@ -33,6 +33,7 @@ public class StudyPostService {
         StudyPost studyPost = saveRequestDto.toEntity();
         studyPost.setStudyBoardId(studyBoard);
         studyPost.setUser(user);
+        studyBoard.addStudyPost(studyPostRepository.save(studyPost));
 
         StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyBoard, user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
         studyMember.updatePost(studyMember.getPosts());

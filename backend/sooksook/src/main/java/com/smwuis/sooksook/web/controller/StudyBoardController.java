@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "StudyBoard API (스터디 모집 게시판 API)")
 @RequiredArgsConstructor
@@ -67,4 +68,24 @@ public class StudyBoardController {
         return studyBoardService.departmentList(department);
     }
 
+    // 일주일간 댓글이 많이 달린 인기 스터디 Top 5 조회
+    @GetMapping(value = "/studyBoard/famous")
+    @ApiOperation(value = "일주일간 댓글이 많이 달린 인기 스터디 Top 5 조회", notes = "일주일간 댓글이 많이 달린 인기 스터디 Top 5 조회 API")
+    public List<Map<String, Object>> famousList() {
+        return studyBoardService.famousList();
+    }
+
+    // 새로운 스터디 5개 조회
+    @GetMapping(value = "/studyBoard/new")
+    @ApiOperation(value = "새로운 스터디 5개 조회", notes = "새로운 스터디 5개 조회 API")
+    public List<Map<String, Object>> newList() {
+        return studyBoardService.newList();
+    }
+
+    // 스터디 게시판에 글이 많아 참여도 높은 스터디
+    @GetMapping(value = "/studyBoard/hard")
+    @ApiOperation(value = "참여도 높은 스터디 5개 조회", notes = "참여도 높은 스터디 5개 조회 API")
+    public List<Map<String, Object>> hardList() {
+        return studyBoardService.hardList();
+    }
 }

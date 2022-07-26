@@ -60,6 +60,9 @@ public class StudyPost extends BaseTimeEntity {
 
     public void setStudyBoardId(StudyBoard studyBoard) {
         this.studyBoardId = studyBoard;
+
+        if(!studyBoardId.getStudyPostList().contains(this))
+            studyBoardId.getStudyPostList().add(this);
     }
 
     public void addStudyFiles(StudyFiles studyFiles) {

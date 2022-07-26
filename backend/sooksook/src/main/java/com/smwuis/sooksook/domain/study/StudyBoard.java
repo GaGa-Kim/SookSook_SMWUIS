@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @ToString
@@ -45,7 +47,13 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     private String category; // 카테고리 (강의, 강의 외 스터디)
 
     private Boolean finished; // 스터디 종료 여부
-    
+
+    @OneToMany(mappedBy = "studyBoardId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PasswordComment> passwordComments = new ArrayList<>(); // 비밀댓글 리스트
+
+    @OneToMany(mappedBy = "studyBoardId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyPost> studyPostList = new ArrayList<>(); // 스터디 게시글 리스트
+
     @Builder
     public StudyBoard(User userId, String department, String subject, String title, String content,
                       Long number, String onoff, Date period, String password, String category, Boolean finished) {
@@ -79,5 +87,20 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
 
     public void setUser(User user) {
         this.userId = user;
+    }
+
+    public void addPasswordComments(PasswordComment passwordComment) {
+        this.passwordComments.add(passwordComment);
+
+        if(passwordComment.getStudyBoardId() != this)
+            passwordComment.setStudyBoard(this);
+    }
+
+    public void addStudyPost(StudyPost studyPost) {
+        this.studyPostList.add(studyPost);
+
+        if(studyPost.getStudyBoardId() != this) {
+            studyPost.setStudyBoardId(this);
+        }
     }
 }

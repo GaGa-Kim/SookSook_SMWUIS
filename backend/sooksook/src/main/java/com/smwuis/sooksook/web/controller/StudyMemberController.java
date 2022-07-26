@@ -20,9 +20,9 @@ public class StudyMemberController {
 
     private final StudyMemberService studyMemberService;
 
-    // 스터디 가입
+    // 스터디 참여
     @PostMapping(value = "/studyMember")
-    @ApiOperation(value = "스터디 게시판 가입", notes = "스터디 게시판 가입 API")
+    @ApiOperation(value = "스터디 게시판 참여", notes = "스터디 게시판 참여 API")
     public Boolean join(@RequestBody StudyMemberSaveRequestDto saveRequestDto) {
         return studyMemberService.join(saveRequestDto);
     }
