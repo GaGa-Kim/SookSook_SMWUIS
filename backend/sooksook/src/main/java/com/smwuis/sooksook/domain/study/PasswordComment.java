@@ -1,6 +1,7 @@
 package com.smwuis.sooksook.domain.study;
 
 import com.smwuis.sooksook.domain.BaseTimeEntity;
+import com.smwuis.sooksook.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,12 +22,9 @@ public class PasswordComment extends BaseTimeEntity {
     @Column(name = "PasswordComment_ID")
     private Long id; // 기본키
 
-    /* 변경 필요
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name = "id")
-    private User uid;
-    */
-    private String uid; // 작성자 (fk)
+    @JoinColumn (name = "User_ID")
+    private User userId; // 작성자 (fk)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudyBoard_ID")
@@ -42,8 +40,8 @@ public class PasswordComment extends BaseTimeEntity {
     private boolean isRemoved = false; // 댓글 삭제 여부
 
     @Builder
-    public PasswordComment(String uid, StudyBoard studyBoardId, String content, Long upIndex, List<Long> childList, boolean isRemoved) {
-        this.uid = uid;
+    public PasswordComment(User userId, StudyBoard studyBoardId, String content, Long upIndex, List<Long> childList, boolean isRemoved) {
+        this.userId = userId;
         this.studyBoardId = studyBoardId;
         this.content = content;
         this.upIndex = upIndex;
@@ -61,10 +59,9 @@ public class PasswordComment extends BaseTimeEntity {
         this.isRemoved = true;
     }
 
-    /* 연관관계 편의 메소드 작성 필요
-    public void setUser(User uid) {
-        this.uid = uid;
-     */
+    public void setUser(User user) {
+        this.userId = user;
+    }
 
     public void setStudyBoard(StudyBoard studyBoardId) {
         this.studyBoardId = studyBoardId;

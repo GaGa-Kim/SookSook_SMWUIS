@@ -11,12 +11,11 @@ import java.util.List;
 @Setter
 public class PasswordCommentResponseDto {
 
-    /* 유저 부분 변경 필요 */
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
 
-    private Long id;
-
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 닉네임")
+    private String nickname;
 
     @ApiModelProperty(example = "내용")
     private String content;
@@ -31,8 +30,8 @@ public class PasswordCommentResponseDto {
     private boolean isRemoved = false;
 
     public PasswordCommentResponseDto(PasswordComment passwordComment) {
-        this.id = passwordComment.getId();
-        this.uid = passwordComment.getUid();
+        this.email = passwordComment.getUserId().getEmail();
+        this.nickname = passwordComment.getUserId().getNickname();
         this.content = passwordComment.getContent();
         this.upIndex = passwordComment.getUpIndex();
         this.childList = passwordComment.getChildList();

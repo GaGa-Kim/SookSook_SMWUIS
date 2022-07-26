@@ -9,10 +9,11 @@ import java.util.Date;
 @Getter
 public class StudyBoardResponseDto {
 
-    /* 유저 부분 변경 필요 */
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
 
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 닉네임")
+    private String nickname;
 
     @ApiModelProperty(example = "학부")
     private String department;
@@ -45,7 +46,8 @@ public class StudyBoardResponseDto {
     private Boolean finished;
 
     public StudyBoardResponseDto(StudyBoard studyBoard) {
-        this.uid = studyBoard.getUid();
+        this.email = studyBoard.getUserId().getEmail();
+        this.nickname = studyBoard.getUserId().getNickname();
         this.department = studyBoard.getDepartment();
         this.subject = studyBoard.getSubject();
         this.title = studyBoard.getTitle();

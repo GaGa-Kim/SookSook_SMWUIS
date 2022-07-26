@@ -8,13 +8,15 @@ import java.util.List;
 
 @Getter
 public class StudyPostResponseDto {
-    /* 유저 부분 변경 필요 */
 
     @ApiModelProperty(example = "게시글 아이디")
     private Long id;
 
-    @ApiModelProperty(example = "파일 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
+
+    @ApiModelProperty(example = "작성자 닉네임")
+    private String nickname;
 
     @ApiModelProperty(example = "제목")
     private String title;
@@ -27,7 +29,8 @@ public class StudyPostResponseDto {
 
     public StudyPostResponseDto(StudyPost studyPost, List<Long> fileId) {
         this.id = studyPost.getId();
-        this.uid = studyPost.getUid();
+        this.email = studyPost.getUserId().getEmail();
+        this.nickname = studyPost.getUserId().getNickname();
         this.title = studyPost.getTitle();
         this.content = studyPost.getContent();
         this.fileId = fileId;

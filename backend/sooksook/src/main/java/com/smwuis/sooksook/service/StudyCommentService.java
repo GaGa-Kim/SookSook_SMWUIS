@@ -4,6 +4,7 @@ import com.smwuis.sooksook.domain.study.StudyComment;
 import com.smwuis.sooksook.domain.study.StudyCommentRepository;
 import com.smwuis.sooksook.domain.study.StudyPost;
 import com.smwuis.sooksook.domain.study.StudyPostRepository;
+import com.smwuis.sooksook.repository.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyCommentResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyCommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,14 @@ public class StudyCommentService {
 
     private final StudyCommentRepository studyCommentRepository;
     private final StudyPostRepository studyPostRepository;
-
-    /* 유저 부분 변경 필요 */
+    private final UserRepository userRepository;
 
     // 댓글 작성
-    // 바로 댓글 목록을 반환하도록 변경 필요
     @Transactional
     public Long save(StudyCommentSaveRequestDto saveRequestDto) {
         StudyComment studyComment = saveRequestDto.toEntity();
         studyComment.setStudyPost(studyPostRepository.findById(saveRequestDto.getStudyPostId()).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다.")));
+        studyComment.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
 
         Long id = studyCommentRepository.save(studyComment).getId();
 
@@ -41,7 +41,6 @@ public class StudyCommentService {
     }
     
     // 댓글 수정
-    // 바로 댓글 목록을 반환하도록 변경 필요
     @Transactional
     public Long update(Long id, String content) {
         StudyComment studyComment = studyCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));

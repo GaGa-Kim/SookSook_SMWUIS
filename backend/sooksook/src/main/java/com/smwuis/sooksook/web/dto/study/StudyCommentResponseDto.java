@@ -9,12 +9,13 @@ import java.util.List;
 @Getter
 public class StudyCommentResponseDto {
 
-    /* 유저 부분 변경 필요 */
-
     private Long id;
 
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
+
+    @ApiModelProperty(example = "작성자 닉네임")
+    private String nickname;
 
     @ApiModelProperty(example = "내용")
     private String content;
@@ -30,7 +31,8 @@ public class StudyCommentResponseDto {
 
     public StudyCommentResponseDto(StudyComment studyComment) {
         this.id = studyComment.getId();
-        this.uid = studyComment.getUid();
+        this.email = studyComment.getUserId().getEmail();
+        this.nickname = studyComment.getUserId().getNickname();
         this.content = studyComment.getContent();
         this.upIndex = studyComment.getUpIndex();
         this.childList = studyComment.getChildList();

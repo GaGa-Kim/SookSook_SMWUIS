@@ -1,6 +1,7 @@
 package com.smwuis.sooksook.domain.study;
 
 import com.smwuis.sooksook.domain.BaseTimeEntity;
+import com.smwuis.sooksook.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,9 @@ public class StudySchedule extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 기본키
 
-    /* 변경 필요
-    @ManyToOne
-    @JoinColumn (name = "id")
-    private User uid;
-    */
-    private String uid; // 작성자 (fk)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "User_ID")
+    private User userId; // 작성자 (fk)
 
     @ManyToOne
     @JoinColumn(name = "StudyBoard_ID")
@@ -35,8 +33,8 @@ public class StudySchedule extends BaseTimeEntity {
     private String content; // 내용
 
     @Builder
-    public StudySchedule(String uid, StudyBoard studyBoardId, Date period, String content) {
-        this.uid = uid;
+    public StudySchedule(User userId, StudyBoard studyBoardId, Date period, String content) {
+        this.userId = userId;
         this.studyBoardId = studyBoardId;
         this.period = period;
         this.content = content;
@@ -48,10 +46,9 @@ public class StudySchedule extends BaseTimeEntity {
         return this;
     }
 
-    /* 연관관계 편의 메소드 작성 필요
-    public void setUser(User uid) {
-        this.uid = uid;
-     */
+    public void setUser(User user) {
+        this.userId = user;
+    }
 
     public void setStudyBoardId(StudyBoard studyBoard) {
         this.studyBoardId = studyBoard;

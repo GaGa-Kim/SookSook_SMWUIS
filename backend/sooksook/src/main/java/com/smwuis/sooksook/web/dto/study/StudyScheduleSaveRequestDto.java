@@ -12,9 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class StudyScheduleSaveRequestDto {
 
-    /* 유저 부분 변경 필요 */
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
 
     @ApiModelProperty(example = "스터디 게시판 id")
     private Long studyBoardId;
@@ -26,8 +25,8 @@ public class StudyScheduleSaveRequestDto {
     private String content;
 
     @Builder
-    public StudyScheduleSaveRequestDto(String uid, Long studyBoardId, Date period, String content) {
-        this.uid = uid;
+    public StudyScheduleSaveRequestDto(String email, Long studyBoardId, Date period, String content) {
+        this.email = email;
         this.studyBoardId = studyBoardId;
         this.period = period;
         this.content = content;
@@ -35,7 +34,6 @@ public class StudyScheduleSaveRequestDto {
 
     public StudySchedule toEntity() {
         return StudySchedule.builder()
-                .uid(uid)
                 .period(period)
                 .content(content)
                 .build();

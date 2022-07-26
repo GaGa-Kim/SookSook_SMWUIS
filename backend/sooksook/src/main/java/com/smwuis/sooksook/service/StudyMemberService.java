@@ -18,8 +18,6 @@ public class StudyMemberService {
     private final StudyBoardRepository studyBoardRepository;
     private final StudyMemberRepository studyMemberRepository;
 
-    /* 유저 부분 변경 필요 */
-
     // 스터디 별 정보 조회 (멤버 이름, 글 작성 수와 댓글 작성 수 등)
     @Transactional(readOnly = true)
     public List<StudyMemberListResponseDto> findByAllByStudyBoardId(Long studyBoardId) {

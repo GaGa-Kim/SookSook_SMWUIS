@@ -1,6 +1,7 @@
 package com.smwuis.sooksook.domain.study;
 
 import com.smwuis.sooksook.domain.BaseTimeEntity;
+import com.smwuis.sooksook.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,12 +22,9 @@ public class StudyPost extends BaseTimeEntity {
     @Column(name = "StudyPost_ID")
     private Long id; // 기본키
 
-    /* 변경 필요
-    @ManyToOne
-    @JoinColumn (name = "id")
-    private User uid;
-    */
-    private String uid; // 작성자 (fk)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn (name = "User_ID")
+    private User userId; // 작성자 (fk)
 
     @ManyToOne
     @JoinColumn(name = "StudyBoard_ID")
@@ -36,15 +34,15 @@ public class StudyPost extends BaseTimeEntity {
 
     private String content; // 내용
 
-    @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "studyPostId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyFiles> studyFiles = new ArrayList<>();
 
     // @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
     // private List<StudyComment> studyComment = new ArrayList<>(); // 댓글 리스트
     
     @Builder
-    public StudyPost(String uid, StudyBoard studyBoardId, String title, String content) {
-        this.uid = uid;
+    public StudyPost(User userId, StudyBoard studyBoardId, String title, String content) {
+        this.userId = userId;
         this.studyBoardId = studyBoardId;
         this.title = title;
         this.content = content;
@@ -56,10 +54,9 @@ public class StudyPost extends BaseTimeEntity {
         return this;
     }
 
-    /* 연관관계 편의 메소드 작성 필요
-    public void setUser(User uid) {
-        this.uid = uid;
-     */
+    public void setUser(User user) {
+        this.userId = user;
+    }
 
     public void setStudyBoardId(StudyBoard studyBoard) {
         this.studyBoardId = studyBoard;
