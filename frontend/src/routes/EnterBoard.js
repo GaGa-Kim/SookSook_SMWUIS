@@ -16,7 +16,6 @@ import CommentList from "./components/CommentList";
 import "../fonts/Font.css";
 import { Input } from "antd";
 import { Link, useParams, useLocation } from "react-router-dom";
-import React from "react";
 
 const Title = styled.div`
     position: absolute;
@@ -80,12 +79,11 @@ const EnterBoard = () => {
         const nextComment = commentList.filter(
             (comment) => comment.index !== index
         );
-
+        }
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
-    //현재 로그인 중인 id 받기
-    const id = "가송";
+
     //게시글 정보 db에서 key 값이 dataKey인 정보 받아오기
     const [title, setTitle] = React.useState(dataKey);
     const [content, setContent] = React.useState(dataKey);
@@ -108,13 +106,7 @@ const EnterBoard = () => {
     const onChangeArea = (e) => {
         setContent(e.target.area);
     };
-    const [comment, setComment] = React.useState("");
-    const [commentList, setCommentList] = React.useState([/*db에서 가져오기*/]);
 
-    const handleXclick = (index) => {
-        const nextComment = commentList.filter((comment) => comment.key !== index);
-        setCommentList(nextComment);
-    };
     const [nextIndex, setNextIndex] = React.useState(1);
 
     const getText = (text) => {
