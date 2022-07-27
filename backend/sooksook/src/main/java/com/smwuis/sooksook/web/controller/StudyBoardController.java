@@ -46,11 +46,12 @@ public class StudyBoardController {
         return id;
     }
 
-    // 스터디 모집 게시판 글 리스트 조회
-    @GetMapping(value = "/studyBoards/all")
-    @ApiOperation(value = "스터디 모집 게시판 글 리스트 전체 조회", notes = "스터디 모집 게시판 글 리스트 전체 조회 API")
-    public List<StudyBoard> allList(@RequestParam String category) {
-        return studyBoardService.allList(category);
+    // 스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회
+    @GetMapping(value = "/studyBoards/list")
+    @ApiOperation(value = "스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회", notes = "스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회 API")
+    @ApiImplicitParam(name = "lecture", value = "true면 스터디 게시판, false면 스터디 외 게시판")
+    public List<StudyBoard> studyList(@RequestParam Boolean lecture) {
+        return studyBoardService.studyList(lecture);
     }
 
     // 스터디 모집 게시판 글 상세 조회
@@ -61,16 +62,25 @@ public class StudyBoardController {
         return studyBoardService.findById(id);
     }
     
-    // 스터디 게시판 학부 별 검색
+    // 스터디 게시판 강의 스터디 학부 별 검색
     @GetMapping(value = "/studyBoards/department")
-    @ApiOperation(value = "스터디 모집 게시판 글 리스트 학부 별 조회", notes = "스터디 모집 게시판 글 리스트 학부 별 조회 API")
+    @ApiOperation(value = "스터디 모집 게시판 강의 스터디 학부 별 리스트 조회", notes = "스터디 모집 게시판 강의 스터디 학부 별 리스트 조회 API")
+    @ApiImplicitParam(name = "department", value = "학부 이름")
     public List<StudyBoard> departmentList(@RequestParam String department) {
         return studyBoardService.departmentList(department);
     }
 
-    // 일주일간 댓글이 많이 달린 인기 스터디 Top 5 조회
+    // 스터디 게시판 강의 외 스터디 카테고리 별 검색
+    @GetMapping(value = "/studyBoards/category")
+    @ApiOperation(value = "스터디 모집 게시판 강의 외 스터디 카테고리 별 리스트 조회", notes = "스터디 모집 게시판 강의 외 스터디 카테고리 별 리스트 조회 API")
+    @ApiImplicitParam(name = "category", value = "카테고리")
+    public List<StudyBoard> categoryList(@RequestParam String category) {
+        return studyBoardService.categoryList(category);
+    }
+
+    // 일주일간 댓글이 많이 달린 인기 스터디 5개 조회
     @GetMapping(value = "/studyBoard/famous")
-    @ApiOperation(value = "일주일간 댓글이 많이 달린 인기 스터디 Top 5 조회", notes = "일주일간 댓글이 많이 달린 인기 스터디 Top 5 조회 API")
+    @ApiOperation(value = "일주일간 댓글이 많이 달린 인기 스터디 5개 조회", notes = "일주일간 댓글이 많이 달린 인기 스터디 5개 조회 API")
     public List<Map<String, Object>> famousList() {
         return studyBoardService.famousList();
     }

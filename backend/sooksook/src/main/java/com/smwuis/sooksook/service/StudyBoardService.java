@@ -6,7 +6,6 @@ import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +45,7 @@ public class StudyBoardService {
                 updateRequestDto.getOnoff(),
                 updateRequestDto.getPeriod(),
                 updateRequestDto.getPassword(),
+                updateRequestDto.getLecture(),
                 updateRequestDto.getCategory(),
                 updateRequestDto.getFinished());
         return id;
@@ -58,10 +58,10 @@ public class StudyBoardService {
         studyBoardRepository.delete(studyBoard);
     }
 
-    // 스터디 모집 게시판 글 리스트 조회
+    // 스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회
     @Transactional
-    public List<StudyBoard> allList(String category) {
-        return studyBoardRepository.findByCategory(category);
+    public List<StudyBoard> studyList(Boolean lecture) {
+        return studyBoardRepository.findByLecture(lecture);
     }
 
     // 스터디 모집 게시판 글 상세 조회
@@ -71,10 +71,16 @@ public class StudyBoardService {
         return new StudyBoardResponseDto(studyBoard);
     }
 
-    // 스터디 모집 게시판 학부 별 검색
+    // 스터디 게시판 강의 스터디 학부 별 검색
     @Transactional
     public List<StudyBoard> departmentList(String department) {
-        return studyBoardRepository.findByDepartment(department);
+        return studyBoardRepository.findByLectureAndDepartment(true, department);
+    }
+
+    // 스터디 게시판 강의 외 스터디 카테고리 별 검색
+    @Transactional
+    public List<StudyBoard> categoryList(String category) {
+        return studyBoardRepository.findByLectureAndCategory(false, category);
     }
 
     // 일주일간 게시판에 달린 댓글 갯수
