@@ -9,6 +9,8 @@ import java.util.Date;
 @Getter
 public class StudyBoardResponseDto {
 
+    private Long id;
+
     @ApiModelProperty(example = "작성자 이메일")
     private String email;
 
@@ -49,6 +51,7 @@ public class StudyBoardResponseDto {
     private boolean finished;
 
     public StudyBoardResponseDto(StudyBoard studyBoard) {
+        this.id = studyBoard.getId();
         this.email = studyBoard.getUserId().getEmail();
         this.nickname = studyBoard.getUserId().getNickname();
         this.department = studyBoard.getDepartment();

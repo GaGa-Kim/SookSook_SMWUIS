@@ -1,8 +1,9 @@
-package com.smwuis.sooksook.service;
+package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.*;
 import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.repository.UserRepository;
+import com.smwuis.sooksook.service.study.FileHandler;
 import com.smwuis.sooksook.web.dto.study.StudyPostResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyPostSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyPostUpdateRequestDto;
@@ -50,35 +51,59 @@ public class StudyPostService {
     
     // 스터디 게시글 수정 - 첨부파일 없을 때
     @Transactional
-    public Long update(Long id, StudyPostUpdateRequestDto updateRequestDto) {
+    public String update(Long id, String email, StudyPostUpdateRequestDto updateRequestDto) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
-        studyPost.update(updateRequestDto.getTitle(),
-                updateRequestDto.getContent());
-        return id;
+
+        if(user.equals(studyPost.getUserId())) {
+            studyPost.update(updateRequestDto.getTitle(),
+                    updateRequestDto.getContent());
+            return "게시글 수정 완료";
+        }
+
+        else {
+            return "게시글 수정 실패";
+        }
     }
     
     // 스터디 게시글 수정 - 첨부파일 있을 때
     @Transactional
-    public Long updateWithFiles(Long id, StudyPostUpdateRequestDto updateRequestDto, List<MultipartFile> files) throws Exception {
+    public String updateWithFiles(Long id, String email, StudyPostUpdateRequestDto updateRequestDto, List<MultipartFile> files) throws Exception {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
 
-        List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
+        if(user.equals(studyPost.getUserId())) {
+            List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
 
-        if(!filesList.isEmpty()) {
-            for(StudyFiles studyFiles: filesList) {
-                studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+            if(!filesList.isEmpty()) {
+                for(StudyFiles studyFiles: filesList) {
+                    studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+                }
             }
+            studyPost.update(updateRequestDto.getTitle(),
+                    updateRequestDto.getContent());
+            return "게시글 수정 완료";
         }
-        studyPost.update(updateRequestDto.getTitle(),
-                updateRequestDto.getContent());
-        return id;
+
+        else {
+            return "게시글 수정 실패";
+        }
     }
     
     // 스터디 게시글 삭제
     @Transactional
-    public void delete(Long id) {
+    public String delete(Long id, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
-        studyPostRepository.delete(studyPost);
+        
+        if(user.equals(studyPost.getUserId())) {
+            studyPostRepository.delete(studyPost);
+            return "게시글 삭제 완료";
+        }
+
+        else {
+            return "게시글 삭제 실패";
+        }
     }
     
     // 특정 스터디 게시판 전체 글 조회

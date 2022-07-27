@@ -1,7 +1,7 @@
-package com.smwuis.sooksook.web.controller;
+package com.smwuis.sooksook.web.controller.study;
 
 import com.smwuis.sooksook.domain.study.StudyBoard;
-import com.smwuis.sooksook.service.StudyMemberService;
+import com.smwuis.sooksook.service.study.StudyMemberService;
 import com.smwuis.sooksook.web.dto.study.StudyMemberListResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyMemberSaveRequestDto;
 import io.swagger.annotations.Api;

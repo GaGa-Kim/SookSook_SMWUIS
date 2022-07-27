@@ -1,4 +1,4 @@
-package com.smwuis.sooksook.service;
+package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.domain.study.StudyBoardRepository;
@@ -59,6 +59,7 @@ public class StudyMemberService {
             StudyMember joinMember = saveRequestDto.toEntity();
             joinMember.setStudyBoardId(studyBoard);
             joinMember.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
+            studyBoard.addStudyMember(studyMemberRepository.save(joinMember));
             studyMemberRepository.save(joinMember);
             return true;
         }

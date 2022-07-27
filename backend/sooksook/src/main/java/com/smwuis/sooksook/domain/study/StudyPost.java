@@ -30,15 +30,17 @@ public class StudyPost extends BaseTimeEntity {
     @JoinColumn(name = "StudyBoard_ID")
     private StudyBoard studyBoardId; // 스터디 게시판 (fk)
 
+    @Column(length = 100, nullable = false)
     private String title; // 제목
 
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content; // 내용
 
     @OneToMany(mappedBy = "studyPostId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudyFiles> studyFiles = new ArrayList<>();
+    private List<StudyFiles> studyFiles = new ArrayList<>(); // 파일 리스트
 
-    // @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    // private List<StudyComment> studyComment = new ArrayList<>(); // 댓글 리스트
+    @OneToMany(mappedBy = "studyPostId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyComment> studyComment = new ArrayList<>(); // 댓글 리스트
     
     @Builder
     public StudyPost(User userId, StudyBoard studyBoardId, String title, String content) {
@@ -72,14 +74,11 @@ public class StudyPost extends BaseTimeEntity {
             studyFiles.setStudyPost(this);
     }
 
-    /*
     public void addStudyComment(StudyComment studyComment) {
         this.studyComment.add(studyComment);
 
         if (studyComment.getStudyPostId() != this)
             studyComment.setStudyPost(this);
     }
-
-     */
 
 }

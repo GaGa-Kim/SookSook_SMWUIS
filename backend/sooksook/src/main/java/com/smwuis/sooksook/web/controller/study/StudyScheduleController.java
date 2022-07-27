@@ -1,7 +1,7 @@
-package com.smwuis.sooksook.web.controller;
+package com.smwuis.sooksook.web.controller.study;
 
 import com.smwuis.sooksook.domain.study.StudySchedule;
-import com.smwuis.sooksook.service.StudyScheduleService;
+import com.smwuis.sooksook.service.study.StudyScheduleService;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleUpdateRequestDto;
