@@ -8,71 +8,53 @@ import Logo from "./components/Logo.js";
 import Cstudy from "./components/Cstudy.js";
 import Drop1 from "./components/Drop1.js";
 
-const columns = [
-    {
-        title: <div className="studyname">스터디 명</div>,
-        dataIndex: "name",
-        key: "name",
-        render: (text) => <Link to="" >{text}</Link>
-    },
+const Board1 = () => {
 
-    {
-        title: <div className="user">작성자</div>,
-        dataIndex: "address",
-        key: <div>"address"</div>
-    }
-];
 
-const data = [
-    {
-        key: "1",
-        name: "웹프로그래밍 기초",
-        address: "송송"
-    },
-    {
-        key: "2",
-        name: "데이터사이언스 개론",
-        address: "나송"
-    },
-    {
-        key: "3",
-        name: "운영체제",
-        address: "마송"
-    },
-    {
-        key: "4",
-        name: "객체지향프로그래밍",
-        address: "라송"
-    },
-    {
-        key: "5",
-        name: "빅데이터 활용 입문",
-        address: "바송"
-    },
-    {
-        key: "6",
-        name: "선형대수학",
-        address: "아송"
-    },
-    {
-        key: "7",
-        name: "인공지능과기계학습",
-        address: "자송"
-    }
-];
+    const data = [
+        {
+            key: "1",
+            title: "웹프로그래밍 기초",
+            name: "송송"
+        },
+        {
+            key: "2",
+            title: "데이터사이언스 개론",
+            name: "나송"
+        },
+        {
+            key: "3",
+            title: "운영체제",
+            name: "마송"
+        }
+    ];
+    const columns = [
+        {
+            title: <div className="studyname">스터디 명</div>,
+            dataIndex: "title",
+            key: "key",
+            render: (text, { key }) => <Link to={`/enterboard/${key}`} state={{ key: key }}>{text}</Link>
+        },
 
-const App = () => (
-    <>
-        <GlobalStyle />
-        <Logo />
-        <div className="block" style={{ display: "flex" }}>
-            <Drop1 />
-            <Cstudy />
-        </div>
-        <section className="table">
-            <Table columns={columns} dataSource={data} />;
-        </section>
-    </>
-);
+        {
+            title: <div className="user">작성자</div>,
+            dataIndex: "name",
+            key: <div>"address"</div>
+        }
+    ];
 
-export default App;
+    return (
+        <>
+            <GlobalStyle />
+            <Logo />
+            <div className="block" style={{ display: "flex" }}>
+                <Drop1 />
+                <Cstudy />
+            </div>
+            <section className="table">
+                <Table columns={columns} dataSource={data} />;
+            </section>
+        </>)
+};
+
+export default Board1;

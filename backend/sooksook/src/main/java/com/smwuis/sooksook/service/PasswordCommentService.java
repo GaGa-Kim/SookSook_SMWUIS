@@ -4,6 +4,8 @@ import com.smwuis.sooksook.domain.study.PasswordComment;
 import com.smwuis.sooksook.domain.study.PasswordCommentRepository;
 import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.domain.study.StudyBoardRepository;
+import com.smwuis.sooksook.domain.user.User;
+import com.smwuis.sooksook.repository.UserRepository;
 import com.smwuis.sooksook.web.dto.study.PasswordCommentResponseDto;
 import com.smwuis.sooksook.web.dto.study.PasswordCommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +22,14 @@ public class PasswordCommentService {
 
     private final PasswordCommentRepository passwordCommentRepository;
     private final StudyBoardRepository studyBoardRepository;
-
-    /* 유저 부분 변경 필요 */
+    private final UserRepository userRepository;
 
     // 댓글 작성
-    // 바로 댓글 목록을 반환하도록 변경 필요
     @Transactional
     public Long save(PasswordCommentSaveRequestDto saveRequestDto) {
         PasswordComment passwordComment = saveRequestDto.toEntity();
         passwordComment.setStudyBoard(studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다.")));
+        passwordComment.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
 
         Long id = passwordCommentRepository.save(passwordComment).getId();
 
@@ -41,7 +42,6 @@ public class PasswordCommentService {
     }
 
     // 댓글 수정
-    // 바로 댓글 목록을 반환하도록 변경 필요
     @Transactional
     public Long update(Long id, String content) {
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
@@ -128,14 +128,15 @@ public class PasswordCommentService {
     }
 
     // 비밀댓글 표시 여부
-    private boolean isSecretPassword(Long id, String uid) {
+    private boolean isSecretPassword(Long id, String email) {
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
         if(passwordComment.getUpIndex() != null) {
             PasswordComment passwordCommentParent = passwordCommentRepository.findById(passwordComment.getUpIndex()).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
             
             // 댓글 작성자, 댓글의 부모 댓글 작성자, 글 작성자와 같으면 댓글 내용 표시
-            if(passwordComment.getUid().equals(uid) || passwordComment.getUpIndex().equals(passwordCommentParent.getId()) || passwordComment.getStudyBoardId().getUid().equals(uid)) {
+            if(passwordComment.getUserId().equals(user) || passwordComment.getUpIndex().equals(passwordCommentParent.getId()) || passwordComment.getStudyBoardId().getUserId().equals(user)) {
                 return false;
             }
             // 그렇지 않을 경우 '비밀댓글입니다.' 표시
@@ -145,7 +146,7 @@ public class PasswordCommentService {
         }
         else {
             // 댓글 작성자, 글 작성자와 같으면 댓글 내용 표시
-            if(passwordComment.getUid().equals(uid) || passwordComment.getStudyBoardId().getUid().equals(uid)) {
+            if(passwordComment.getUserId().equals(user) || passwordComment.getStudyBoardId().getUserId().equals(user)) {
                 return false;
             }
             // 그렇지 않을 경우 '비밀댓글입니다.' 표시

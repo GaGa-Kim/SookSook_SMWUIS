@@ -12,10 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class StudyBoardSaveRequestDto {
 
-    /* 유저 부분 변경 필요 */
-
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
 
     @ApiModelProperty(example = "학부")
     private String department;
@@ -48,9 +46,9 @@ public class StudyBoardSaveRequestDto {
     private Boolean finished;
 
     @Builder
-    public StudyBoardSaveRequestDto(String uid, String department, String subject, String title, String content,
+    public StudyBoardSaveRequestDto(String email, String department, String subject, String title, String content,
                       Long number, String onoff, Date period, String password, String category, Boolean finished) {
-        this.uid = uid;
+        this.email = email;
         this.department = department;
         this.subject = subject;
         this.title = title;
@@ -65,7 +63,6 @@ public class StudyBoardSaveRequestDto {
 
     public StudyBoard toEntity() {
         return StudyBoard.builder()
-                .uid(uid)
                 .department(department)
                 .subject(subject)
                 .title(title)

@@ -16,15 +16,15 @@ const Qablock = () => {
 
 const columns = [
     {
-        title: <div className="studyname">글 제목</div>,
-        dataIndex: "name",
-        key: "name",
+        title: <div className="studyname">스터디 명</div>,
+        dataIndex: "title",
+        key: "key",
         render: (text) => <Link to="" >{text}</Link>
     },
 
     {
         title: <div className="user">작성자</div>,
-        dataIndex: "address",
+        dataIndex: "name",
         key: <div>"address"</div>
     }
 ];
@@ -32,38 +32,18 @@ const columns = [
 const data = [
     {
         key: "1",
-        name: "질문 게시판 질문 1",
-        address: "송송"
+        title: "질문 게시판 질문 1",
+        name: "송송"
     },
     {
         key: "2",
-        name: "질문 게시판 질문 2",
-        address: "나송"
+        title: "질문 게시판 질문 2",
+        name: "나송"
     },
     {
         key: "3",
-        name: "질문 게시판 질문3",
-        address: "마송"
-    },
-    {
-        key: "4",
-        name: "질문 게시판 질문4",
-        address: "라송"
-    },
-    {
-        key: "5",
-        name: "질문 게시판 질문 5",
-        address: "바송"
-    },
-    {
-        key: "6",
-        name: "질문 게시판 질문 6",
-        address: "아송"
-    },
-    {
-        key: "7",
-        name: "질문 게시판 질문 7",
-        address: "자송"
+        title: "질문 게시판 질문3",
+        name: "마송"
     }
 ];
 
@@ -71,17 +51,16 @@ const Cwrite = () => {
     return (
         <section>
             <button className="newstudy">
-                <Link to="/setboard_qa">스터디 개설</Link></button>
+                <Link to="/setboard_qa">글 작성하기</Link></button>
         </section>
     );
 };
 
 
-const App = () => (
+const Qaboard = () => (
     <>
         <GlobalStyle />
         <Logo />
-
         <Qablock />
         <section className="table">
             <Table columns={columns} dataSource={data} />
@@ -89,4 +68,4 @@ const App = () => (
     </>
 );
 
-export default App;
+export default Qaboard;

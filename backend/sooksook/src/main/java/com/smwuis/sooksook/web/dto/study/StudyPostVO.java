@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 public class StudyPostVO {
 
-    @ApiModelProperty(example = "작성자 이메일 또는 아이디")
-    private String uid;
+    @ApiModelProperty(example = "작성자 이메일")
+    private String email;
 
     @ApiModelProperty(example = "스터디 게시판 id")
     private Long studyBoardId;

@@ -2,6 +2,7 @@ package com.smwuis.sooksook.service;
 
 import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.domain.study.StudyBoardRepository;
+import com.smwuis.sooksook.repository.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
@@ -16,13 +17,13 @@ import java.util.List;
 public class StudyBoardService {
 
     private final StudyBoardRepository studyBoardRepository;
-
-    /* 유저 부분 변경 필요 */
+    private final UserRepository userRepository;
 
     // 스터디 모집 게시판 글 작성
     @Transactional
     public Long save(StudyBoardSaveRequestDto saveRequestDto) {
         StudyBoard studyBoard = saveRequestDto.toEntity();
+        studyBoard.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
         return studyBoardRepository.save(studyBoard).getId();
     }
 
