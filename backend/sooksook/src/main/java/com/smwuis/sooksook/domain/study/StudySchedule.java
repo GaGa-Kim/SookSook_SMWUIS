@@ -30,6 +30,7 @@ public class StudySchedule extends BaseTimeEntity {
 
     private Date period; // 기한
 
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content; // 내용
 
     @Builder
@@ -52,5 +53,8 @@ public class StudySchedule extends BaseTimeEntity {
 
     public void setStudyBoardId(StudyBoard studyBoard) {
         this.studyBoardId = studyBoard;
+
+        if(!studyBoardId.getStudyScheduleList().contains(this))
+            studyBoardId.getStudyScheduleList().add(this);
     }
 }

@@ -9,6 +9,8 @@ import java.util.Date;
 @Getter
 public class StudyBoardResponseDto {
 
+    private Long id;
+
     @ApiModelProperty(example = "작성자 이메일")
     private String email;
 
@@ -39,13 +41,17 @@ public class StudyBoardResponseDto {
     @ApiModelProperty(example = "비밀번호")
     private String password;
 
+    @ApiModelProperty(example = "강의 스터디인지 강의 외 스터디인지")
+    private boolean lecture;
+
     @ApiModelProperty(example = "카테고리")
     private String category;
 
     @ApiModelProperty(example = "스터디 종료 여부")
-    private Boolean finished;
+    private boolean finished;
 
     public StudyBoardResponseDto(StudyBoard studyBoard) {
+        this.id = studyBoard.getId();
         this.email = studyBoard.getUserId().getEmail();
         this.nickname = studyBoard.getUserId().getNickname();
         this.department = studyBoard.getDepartment();
@@ -56,7 +62,8 @@ public class StudyBoardResponseDto {
         this.onoff = studyBoard.getOnoff();
         this.period = studyBoard.getPeriod();
         this.password = studyBoard.getPassword();
+        this.lecture = studyBoard.isFinished();
         this.category = studyBoard.getCategory();
-        this.finished = studyBoard.getFinished();
+        this.finished = studyBoard.isFinished();
     }
 }

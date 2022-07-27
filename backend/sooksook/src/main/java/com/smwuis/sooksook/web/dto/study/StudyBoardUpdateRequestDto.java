@@ -35,15 +35,18 @@ public class StudyBoardUpdateRequestDto {
     @ApiModelProperty(example = "비밀번호")
     private String password;
 
+    @ApiModelProperty(example = "true")
+    private boolean lecture;
+
     @ApiModelProperty(example = "카테고리")
     private String category;
 
     @ApiModelProperty(example = "false")
-    private Boolean finished;
+    private boolean finished;
 
     @Builder
     public StudyBoardUpdateRequestDto(String department, String subject, String title, String content,
-                                    Long number, String onoff, Date period, String password, String category, Boolean finished) {
+                                    Long number, String onoff, Date period, String password, boolean lecture, String category, boolean finished) {
         this.department = department;
         this.subject = subject;
         this.title = title;
@@ -52,6 +55,7 @@ public class StudyBoardUpdateRequestDto {
         this.onoff = onoff;
         this.period = period;
         this.password = password;
+        this.lecture = lecture;
         this.category = category;
         this.finished = finished;
     }

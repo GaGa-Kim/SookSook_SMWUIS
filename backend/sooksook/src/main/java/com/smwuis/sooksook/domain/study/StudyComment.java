@@ -30,13 +30,15 @@ public class StudyComment extends BaseTimeEntity {
     @JoinColumn(name = "StudyPost_ID")
     private StudyPost studyPostId; // 게시글 (fk)
 
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content; // 내용
 
     private Long upIndex; // 상위 댓글 번호
 
     @ElementCollection(targetClass = Long.class)
-    private List<Long> childList = new ArrayList<>();
-    
+    private List<Long> childList = new ArrayList<>(); // 자식 댓글 아이디 리스트
+
+    @Column(nullable = false)
     private boolean isRemoved = false; // 댓글 삭제 여부
 
     @Builder
@@ -63,8 +65,11 @@ public class StudyComment extends BaseTimeEntity {
         this.userId = user;
     }
 
-    public void setStudyPost(StudyPost studyPostId) {
-        this.studyPostId = studyPostId;
+    public void setStudyPost(StudyPost studyPost) {
+        this.studyPostId = studyPost;
+
+        if(!studyPost.getStudyComment().contains(this))
+            studyPost.getStudyComment().add(this);
     }
 
 }

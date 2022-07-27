@@ -211,6 +211,7 @@ function MyPage() {
                         {studyScheduleList.map((schedule) => (
                             <StudySchedule
                                 key={schedule.id}
+                                {...schedule}
                                 handleXclick={handleXclick}
                                 studyScheduleList={studyScheduleList}
                             />

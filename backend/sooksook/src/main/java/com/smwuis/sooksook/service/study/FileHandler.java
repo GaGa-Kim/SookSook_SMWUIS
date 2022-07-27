@@ -1,4 +1,4 @@
-package com.smwuis.sooksook.service;
+package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.StudyFiles;
 import com.smwuis.sooksook.web.dto.study.StudyPostFileResponseDto;
@@ -20,7 +20,6 @@ public class FileHandler {
     public FileHandler(StudyFilesService studyFilesService) {
         this.studyFilesService = studyFilesService;
     }
-
 
     public List<StudyFiles> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception {
 

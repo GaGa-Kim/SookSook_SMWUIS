@@ -1,12 +1,11 @@
 import Logo from './components/Logo';
-import styled  from "styled-components";
+import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
 import ColorBox from "./components/ColorBox";
 import InputBox from "./components/InputBox";
 import InputText from "./components/InputText";
 import Box from "./components/Box";
-import InputArea from "./components/InputArea";
 import Button from './components/Button';
 import ButtonBox from './components/ButtonBox';
 import InputPassword from './components/InputPassword';
@@ -68,7 +67,7 @@ const Setting = () => {
     return (
         <Root>
             <GlobalStyle />
-            <Logo/>
+            <Logo />
             <ColorBox height="90px">
                 <Title>정보수정</Title>
             </ColorBox>
@@ -76,19 +75,19 @@ const Setting = () => {
                 <InputBox>
                     <Quest>닉네임</Quest>
                     <Box width="200px" left="130px" top="7px">
-                        <InputText text="입력하세요" bg="#F0F0F0"/>
+                        <InputText text="입력하세요" bg="#F0F0F0" />
                     </Box>
                 </InputBox>
                 <InputBox>
                     <Quest>비밀번호</Quest>
                     <Box width="200px" left="130px" top="7px">
-                        <InputPassword/>
+                        <InputPassword />
                     </Box>
                 </InputBox>
                 <InputBox>
                     <Quest>한 줄 소개</Quest>
                     <Box width="200px" left="130px" top="7px" >
-                        <InputText text="입력하세요" bg="#F0F0F0"/>
+                        <InputText text="입력하세요" bg="#F0F0F0" />
                     </Box>
                 </InputBox>
                 <InputBox>
