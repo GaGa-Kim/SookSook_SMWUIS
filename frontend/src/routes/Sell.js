@@ -19,23 +19,22 @@ const Cwrite = () => {
     return (
         <section>
             <button className="newstudy">
-                <Link to="/setboard_sell">스터디 개설</Link></button>
+                <Link to="/setboard_sell">글 작성하기</Link></button>
         </section>
     );
 };
 
-
 const columns = [
     {
-        title: <div className="studyname">글 제목</div>,
-        dataIndex: "name",
-        key: "name",
+        title: <div className="studyname">스터디 명</div>,
+        dataIndex: "title",
+        key: "key",
         render: (text) => <Link to="" >{text}</Link>
     },
 
     {
-        title: <div>작성자</div>,
-        dataIndex: "address",
+        title: <div className="user">작성자</div>,
+        dataIndex: "name",
         key: <div>"address"</div>
     }
 ];
@@ -43,37 +42,22 @@ const columns = [
 const data = [
     {
         key: "1",
-        name: "판매/나눔 게시판 글1",
-        address: "송송"
+        title: "판매/나눔 게시판 글1",
+        name: "송송"
     },
     {
         key: "2",
-        name: "판매/나눔 게시판 글2",
-        address: "나송"
+        title: "판매/나눔 게시판 글2",
+        name: "나송"
     },
     {
         key: "3",
-        name: "판매/나눔 게시판 글4",
-        address: "마송"
-    },
-    {
-        key: "4",
-        name: "판매/나눔 게시판 글5",
-        address: "라송"
-    },
-    {
-        key: "5",
-        name: "판매/나눔 게시판 글6",
-        address: "바송"
-    },
-    {
-        key: "6",
-        name: "판매/나눔 게시판 글7",
-        address: "아송"
+        title: "판매/나눔 게시판 글4",
+        name: "마송"
     }
 ];
 
-const App = () => (
+const Sell = () => (
     <>
         <GlobalStyle />
         <Logo />
@@ -84,4 +68,4 @@ const App = () => (
     </>
 );
 
-export default App;
+export default Sell;
