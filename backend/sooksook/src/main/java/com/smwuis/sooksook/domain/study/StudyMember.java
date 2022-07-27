@@ -55,3 +55,4 @@ public class StudyMember extends BaseTimeEntity {
         this.studyBoardId = studyBoard;
     }
 }
+

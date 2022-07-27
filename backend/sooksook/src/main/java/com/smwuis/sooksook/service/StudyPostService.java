@@ -95,3 +95,4 @@ public class StudyPostService {
         return new StudyPostResponseDto(studyPost, fileId);
     }
 }
+
