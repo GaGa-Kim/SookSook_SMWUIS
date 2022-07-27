@@ -27,7 +27,7 @@ public class StudyCommentResponseDto {
     private List<Long> childList;
 
     @ApiModelProperty(example = "댓글 삭제 여부")
-    private boolean isRemoved = false;
+    private boolean isRemoved;
 
     public StudyCommentResponseDto(StudyComment studyComment) {
         this.id = studyComment.getId();

@@ -16,10 +16,10 @@ public class StudyMemberListResponseDto {
     private String nickname;
 
     @ApiModelProperty(example = "글 작성 수")
-    private Long posts;
+    private int posts;
     
     @ApiModelProperty(example = "댓글 작성 수")
-    private Long comments;
+    private int comments;
 
     public StudyMemberListResponseDto(StudyMember studyMember) {
         this.email = studyMember.getUserId().getEmail();

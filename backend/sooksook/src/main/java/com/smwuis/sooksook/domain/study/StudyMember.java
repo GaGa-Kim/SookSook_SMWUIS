@@ -27,16 +27,24 @@ public class StudyMember extends BaseTimeEntity {
     @JoinColumn(name = "StudyBoard_ID")
     private StudyBoard studyBoardId; // 스터디 게시판 (fk)
 
-    private Long posts; // 글 작성 수
+    private int posts; // 글 작성 수
 
-    private Long comments; // 댓글 작성 수
+    private int comments; // 댓글 작성 수
 
     @Builder
-    public StudyMember(User userId, StudyBoard studyBoardId, Long posts, Long comments) {
+    public StudyMember(User userId, StudyBoard studyBoardId, int posts, int comments) {
         this.userId = userId;
         this.studyBoardId = studyBoardId;
         this.posts = posts;
         this.comments = comments;
+    }
+
+    public void updatePost(int posts) {
+        this.posts = posts++;
+    }
+
+    public void updateComments(int comments) {
+        this.comments = comments++;
     }
 
     public void setUser(User user) {
@@ -47,3 +55,4 @@ public class StudyMember extends BaseTimeEntity {
         this.studyBoardId = studyBoard;
     }
 }
+

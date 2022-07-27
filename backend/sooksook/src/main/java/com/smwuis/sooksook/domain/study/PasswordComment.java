@@ -65,6 +65,9 @@ public class PasswordComment extends BaseTimeEntity {
 
     public void setStudyBoard(StudyBoard studyBoardId) {
         this.studyBoardId = studyBoardId;
+
+        if(!studyBoardId.getPasswordComments().contains(this))
+            studyBoardId.getPasswordComments().add(this);
     }
 
 }

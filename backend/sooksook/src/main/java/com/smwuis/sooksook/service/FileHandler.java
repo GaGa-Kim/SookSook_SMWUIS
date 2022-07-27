@@ -21,7 +21,6 @@ public class FileHandler {
         this.studyFilesService = studyFilesService;
     }
 
-
     public List<StudyFiles> parseFileInfo(List<MultipartFile> multipartFiles) throws Exception {
 
         List<StudyFiles> fileList = new ArrayList<>();

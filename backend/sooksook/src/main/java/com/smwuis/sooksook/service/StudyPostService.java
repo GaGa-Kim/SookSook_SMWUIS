@@ -1,6 +1,7 @@
 package com.smwuis.sooksook.service;
 
 import com.smwuis.sooksook.domain.study.*;
+import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.repository.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyPostResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyPostSaveRequestDto;
@@ -21,13 +22,21 @@ public class StudyPostService {
     private final FileHandler fileHandler;
     private final StudyFilesRepository studyFilesRepository;
     private final UserRepository userRepository;
+    private final StudyMemberRepository studyMemberRepository;
 
     // 스터디 게시글 작성
     @Transactional
     public Long save(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files) throws Exception {
+        StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
+        User user = userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+
         StudyPost studyPost = saveRequestDto.toEntity();
-        studyPost.setStudyBoardId(studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다.")));
-        studyPost.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
+        studyPost.setStudyBoardId(studyBoard);
+        studyPost.setUser(user);
+        studyBoard.addStudyPost(studyPostRepository.save(studyPost));
+
+        StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyBoard, user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
+        studyMember.updatePost(studyMember.getPosts());
 
         List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
 
@@ -86,3 +95,4 @@ public class StudyPostService {
         return new StudyPostResponseDto(studyPost, fileId);
     }
 }
+
