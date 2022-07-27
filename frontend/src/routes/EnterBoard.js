@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -8,9 +9,10 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import CheckBox from "./components/CheckBox";
 import InputPassword from "./components/InputPassword";
-import ButtonBox from "./components/ButtonBox";
 import Button from "./components/Button";
-import Logo from './components/Logo';
+import Logo from "./components/Logo";
+import ListBox from "./components/ListBox";
+import CommentList from "./components/CommentList";
 import "../fonts/Font.css";
 import { Input } from "antd";
 import { Link, useParams, useLocation } from "react-router-dom";
@@ -44,39 +46,41 @@ const Quest = styled.div`
     align-items: center;
 `;
 
-const Select = styled.select`
-    width: 200px;
-    height: 32px;
-    border-radius: 70px;
-    text-align: center;
-    border-color: #eeeeee;
-    transition: 0.5s;
-    outline: none;
-    &:hover {
-        border-color: #4aacfc;
-        transition: 0.5s;
-    }
-    &:focus {
-        border-color: #4aacfc;
-        box-shadow: 0px 0px 0 2px #c7e4fe;
-        transition: 0.5s;
-    }
-`;
 const Footer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 10px 0px;
     font-family: "DoHyeon";
 `;
 const CommentBox = styled.div`
+    height: 40px;
     margin: 5px 10px;
     display: flex;
     justify-content: space-around;
 `;
-
+const CommentTitle = styled.div`
+    width: 100%;
+    padding: 10px 0px 7px 35px;
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    border-bottom: thin solid #c1daff;
+    background-color: #c1daff;
+`;
 const EnterBoard = () => {
+    //현재 로그인 중인 id 받기
+    const id = "가송";
+    const [comment, setComment] = React.useState("");
+    const [commentList, setCommentList] = React.useState([
+        /*db에서 가져오기*/
+    ]);
+
+    const handleXclick = (index) => {
+        const nextComment = commentList.filter(
+            (comment) => comment.index !== index
+        );
+
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
@@ -116,6 +120,7 @@ const EnterBoard = () => {
     const getText = (text) => {
         setComment(text);
     };
+
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
             index: nextIndex,
@@ -128,7 +133,7 @@ const EnterBoard = () => {
     };
 
     return (
-        <Root >
+        <Root>
             <GlobalStyle />
             <Logo />
             <ColorBox height="90px">
@@ -182,15 +187,30 @@ const EnterBoard = () => {
                 </InputBox>
             </Main>
             <Footer>
-                <Quest ftSize="17px">댓글</Quest>
+                <CommentTitle>댓글</CommentTitle>
+                <ListBox>
+                    {commentList.map((comment) => (
+                        <CommentList
+                            index={comment.index}
+                            id={comment.id}
+                            comment={comment.comment}
+                            handleXclick={handleXclick}
+                        />
+                    ))}
+                </ListBox>
                 <CommentBox>
-                    <InputText text="입력하세요"></InputText>
-                    <Button width="50px" mg="5px">
+                    <InputText
+                        text="입력하세요"
+                        getText={getText}
+                        value={comment}
+                    ></InputText>
+                    <Button width="50px" mg="5px" onClick={handlePlusClick}>
                         입력
                     </Button>
                 </CommentBox>
             </Footer>
         </Root>
+        
     );
 };
 

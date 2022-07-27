@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -9,12 +9,10 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import ListText from "./components/ListText";
-import List from "./components/List";
 import ListBox from "./components/ListBox";
 import CommentList from "./components/CommentList";
 import "../fonts/Font.css";
-import plus from "../images/plus.png";
+
 import { Input } from "antd";
 import { Link, useParams, useLocation } from "react-router-dom";
 const { TextArea } = Input;
@@ -45,6 +43,7 @@ const Quest = styled.div`
     font-size: 25px;
     align-items: center;
 `;
+
 const InputFile = styled.input``;
 const LabelFile = styled.label`
     height: 100%;
@@ -66,25 +65,29 @@ const ButtonBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: thin solid #c1dafe;
 `;
-const Add = styled.div`
+const Footer = styled.div`
     width: 100%;
-    height: 60px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: "DoHyeon";
+`;
+const CommentBox = styled.div`
+    height: 40px;
+    margin: 5px 10px;
+    display: flex;
+    justify-content: space-around;
+`;
+const CommentTitle = styled.div`
+    width: 100%;
+    padding:10px 0px 7px 35px;
     display: flex;
     align-items: center;
-    margin-bottom:10px;
-`;
-const PlusImg = styled.img`
-    width: 25px;
-    height: 25px;
-    position: absolute;
-    right: 22px;
-
-    &:hover {
-        width: 27px;
-        height: 27px;
-    }
+    font-size: 17px;
+    border-bottom: thin solid #c1daff;
+    background-color:#c1daff;
 `;
 const DetailBoard = () => {
     const { key } = useParams();
@@ -116,10 +119,14 @@ const DetailBoard = () => {
         setContent(e.target.area);
     };
     const [comment, setComment] = React.useState("");
-    const [commentList, setCommentList] = React.useState([/*db에서 가져오기*/]);
+    const [commentList, setCommentList] = React.useState([
+        /*db에서 가져오기*/
+    ]);
 
     const handleXclick = (index) => {
-        const nextComment = commentList.filter((comment) => comment.key !== index);
+        const nextComment = commentList.filter(
+            (comment) => comment.index !== index
+        );
         setCommentList(nextComment);
     };
     const [nextIndex, setNextIndex] = React.useState(1);
@@ -136,6 +143,9 @@ const DetailBoard = () => {
         setCommentList(nextCommentList);
         setNextIndex(nextIndex + 1);
         setComment("");
+        //const commentCount=접속한 id의 comment개수 받아오기;
+        //commentCount++;
+        //다시 commentCount 값 보내기
     };
     return (
         <Root>
@@ -231,31 +241,37 @@ const DetailBoard = () => {
                 </Link>
             </ButtonBox>
             {/* 댓글창 */}
-            {!isModify &&
+            {!isModify && (
                 <>
-                    <ListBox>
-                        {commentList.map((comment) => (
-                            <CommentList
-                                key={comment.index}
-                                id={comment.id}
-                                comment={comment.comment}
-                                handleXclick={handleXclick}
-
-                            />
-                        ))}
-                    </ListBox>
-                    <Add>
-                        <Box left="20px" width="90%">
+                    <Footer>
+                        <CommentTitle>댓글</CommentTitle>
+                        <ListBox>
+                            {commentList.map((comment) => (
+                                <CommentList
+                                    index={comment.index}
+                                    id={comment.id}
+                                    comment={comment.comment}
+                                    handleXclick={handleXclick}
+                                />
+                            ))}
+                        </ListBox>
+                        <CommentBox>
                             <InputText
+                                text="입력하세요"
                                 getText={getText}
-                                text="댓글을 입력하세요"
                                 value={comment}
-                            />
-                        </Box>
-                        <PlusImg src={plus} onClick={handlePlusClick}></PlusImg>
-                    </Add>
+                            ></InputText>
+                            <Button
+                                width="50px"
+                                mg="5px"
+                                onClick={handlePlusClick}
+                            >
+                                입력
+                            </Button>
+                        </CommentBox>
+                    </Footer>
                 </>
-            }
+            )}
         </Root>
     );
 };

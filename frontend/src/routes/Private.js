@@ -72,7 +72,7 @@ const Private = () => {
     const [piedata, setPiedata] = React.useState([]);
 
     let post = 0;
-    let comment = 0;
+    const comment=0;//데이터 받아오기
     React.useEffect(() => {
         let initialSpdata = [];
         let initialPiedata = [];
