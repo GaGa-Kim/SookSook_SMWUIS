@@ -16,7 +16,7 @@ const XImg = styled.img`
     }
 `;
 
-const CommentList = ({handleXclick,id,comment,key}) => {
+const CommentList = ({handleXclick,id,comment,index}) => {
     
     return (
         <List>
@@ -27,7 +27,7 @@ const CommentList = ({handleXclick,id,comment,key}) => {
                 <ListText>{comment}</ListText>
             </Box>
             <Box right="20px">
-                <XImg src={x} onClick={()=>handleXclick(key)}></XImg>
+                <XImg src={x} onClick={()=>handleXclick(index)}></XImg>
             </Box>
         </List>
     );

@@ -1,13 +1,11 @@
 import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React from "react";
-
 import { Table } from "antd";
 import { Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
-
 import "../fonts/Font.css";
 
 const Block = () => {
@@ -19,13 +17,11 @@ const Block = () => {
                 <Link to="/mypage">스터디 종료</Link>
             </button>
             <button className="prbutton">
-                <Link to="/setboard_private">글 작성</Link>
+                <Link to="/setboard_private">글 작성하기</Link>
             </button>
         </section>
     );
 };
-
-
 
 const Piein = (props) => {
     return <h1 className="ptitle">{props.children}</h1>;
@@ -76,7 +72,7 @@ const Private = () => {
     const [piedata, setPiedata] = React.useState([]);
 
     let post = 0;
-    let comment = 0;
+    const comment=0;//데이터 받아오기
     React.useEffect(() => {
         let initialSpdata = [];
         let initialPiedata = [];

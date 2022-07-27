@@ -6,7 +6,7 @@ const Button=styled.button`
     border-radius:50px;
     border:none;
     padding:10px;
-    margin:0px ${(props)=>props.mg};
+    margin: ${(props)=>props.mg};
     background-color:#A2C3F4;
 
 `;
