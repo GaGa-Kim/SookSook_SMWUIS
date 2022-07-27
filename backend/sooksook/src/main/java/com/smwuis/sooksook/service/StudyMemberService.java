@@ -92,7 +92,7 @@ public class StudyMemberService {
     public List<StudyBoard> myStudy(Long studyBoardId, String email) {
         StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
-        List<StudyMember> studyList = studyMemberRepository.findByAllStudyBoardIdAndUserId(studyBoard, user);
+        List<StudyMember> studyList = studyMemberRepository.findAllByStudyBoardIdAndUserId(studyBoard, user);
         List<StudyBoard> studyBoardIdList = new ArrayList<>();
 
         for(StudyMember studyMember: studyList) {
