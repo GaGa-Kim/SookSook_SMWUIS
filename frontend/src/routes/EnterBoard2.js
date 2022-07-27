@@ -100,26 +100,25 @@ const EnterBoard2 = () => {
         setContent(e.target.area);
     };
 
-
-    const handleXclick = (index) => {
+    const [nextKey, setNextKey] = React.useState(1);
+    const handleXclick = (listKey) => {
         const nextComment = commentList.filter(
-            (comment) => comment.index !== index
+            (comment) => comment.listKey !== listKey
         );
         setCommentList(nextComment);
     };
-    const [nextIndex, setNextIndex] = React.useState(1);
 
     const getText = (text) => {
         setComment(text);
     };
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
-            index: nextIndex,
+            listKey: nextKey,
             id: id,
             comment: comment,
         });
         setCommentList(nextCommentList);
-        setNextIndex(nextIndex + 1);
+        setNextKey(nextKey + 1);
         setComment("");
     };
     const pw = "2"; //비밀게시판 비밀번호 받아오기
@@ -134,6 +133,26 @@ const EnterBoard2 = () => {
     const handleEnterClick = () => {
         //비밀번호 틀렸을 때 경고
         alert("비밀번호가 틀렸습니다.");
+    };
+    const [isRecomment, setIsRecomment] = React.useState(false);
+    let parentIndex;
+    const handleSendClick = (listKey) => {
+        setIsRecomment(true);
+        parentIndex = listKey;
+    };
+    const handleRecommentClick = () => {
+        const addRecomment = commentList.concat({
+            key: nextKey,
+            parent: parentIndex,
+            id: id,
+            comment: comment,
+        });
+        setCommentList(addRecomment);
+        setNextKey(nextKey + 1);
+        setComment("");
+    };
+    const handleCommentClick = () => {
+        setIsRecomment(false);
     };
     return (
         <Root >
@@ -209,7 +228,7 @@ const EnterBoard2 = () => {
                         <ListBox>
                             {commentList.map((comment) => (
                                 <CommentList
-                                    index={comment.index}
+                                    listKey={comment.listKey}
                                     id={comment.id}
                                     comment={comment.comment}
                                     handleXclick={handleXclick}

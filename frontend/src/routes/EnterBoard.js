@@ -75,12 +75,8 @@ const EnterBoard = () => {
         /*db에서 가져오기*/
     ]);
 
-    const handleXclick = (index) => {
-        const nextComment = commentList.filter(
-            (comment) => comment.index !== index
-        );
-        setCommentList(nextComment);
-    };
+    
+
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
@@ -108,10 +104,15 @@ const EnterBoard = () => {
         setContent(e.target.area);
     };
 
-    const [nextIndex, setNextIndex] = React.useState(1);
-
     const getText = (text) => {
         setComment(text);
+    };
+    const [nextKey, setNextKey] = React.useState(1);
+    const handleXclick = (listKey) => {
+        const nextComment = commentList.filter(
+            (comment) => comment.key !== listKey
+        );
+        setCommentList(nextComment);
     };
     const pw = "1"; //비밀게시판 비밀번호 받아오기
     const [isRightPw, setIsRightPw] = React.useState(false);
@@ -128,15 +129,35 @@ const EnterBoard = () => {
     };
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
-            index: nextIndex,
+            key: nextKey,
+            parent: null,
             id: id,
             comment: comment,
         });
         setCommentList(nextCommentList);
-        setNextIndex(nextIndex + 1);
+        setNextKey(nextKey + 1);
         setComment("");
     };
-
+    const [isRecomment, setIsRecomment] = React.useState(false);
+    let parentIndex;
+    const handleSendClick = (listKey) => {
+        setIsRecomment(true);
+        parentIndex = listKey;
+    };
+    const handleRecommentClick = () => {
+        const addRecomment = commentList.concat({
+            key: nextKey,
+            parent: parentIndex,
+            id: id,
+            comment: comment,
+        });
+        setCommentList(addRecomment);
+        setNextKey(nextKey + 1);
+        setComment("");
+    };
+    const handleCommentClick = () => {
+        setIsRecomment(false);
+    };
     return (
         <Root>
             <GlobalStyle />
@@ -206,32 +227,49 @@ const EnterBoard = () => {
                 </InputBox>
             </Main>
             <Footer>
-                        <CommentTitle>댓글</CommentTitle>
-                        <ListBox>
-                            {commentList.map((comment) => (
-                                <CommentList
-                                    index={comment.index}
-                                    id={comment.id}
-                                    comment={comment.comment}
-                                    handleXclick={handleXclick}
-                                />
-                            ))}
-                        </ListBox>
-                        <CommentBox>
-                            <InputText
-                                text="입력하세요"
-                                getText={getText}
-                                value={comment}
-                            ></InputText>
-                            <Button
-                                width="50px"
-                                mg="5px"
-                                onClick={handlePlusClick}
-                            >
-                                입력
-                            </Button>
-                        </CommentBox>
-                    </Footer>
+                <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
+                <ListBox>
+                    {commentList.map((comment) => (
+                        <CommentList
+
+                            listKey={comment.key}
+                            id={comment.id}
+                            parent={comment.parent}
+                            comment={comment.comment}
+                            handleXclick={handleXclick}
+                            handleSendClick={handleSendClick}
+                        />
+                    ))}
+                </ListBox>
+                {!isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button width="50px" mg="5px" onClick={handlePlusClick}>
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
+                {isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="대댓글을 입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button
+                            width="50px"
+                            mg="5px"
+                            onClick={handleRecommentClick}
+                        >
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
+            </Footer>
         </Root>
     );
 };

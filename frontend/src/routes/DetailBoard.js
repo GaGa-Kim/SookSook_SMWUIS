@@ -122,31 +122,51 @@ const DetailBoard = () => {
     const [commentList, setCommentList] = React.useState([
         /*db에서 가져오기*/
     ]);
-
-    const handleXclick = (index) => {
-        const nextComment = commentList.filter(
-            (comment) => comment.index !== index
-        );
-        setCommentList(nextComment);
-    };
-    const [nextIndex, setNextIndex] = React.useState(1);
-
     const getText = (text) => {
         setComment(text);
     };
+    const [nextKey, setNextKey] = React.useState(1);
+    const handleXclick = (listKey) => {
+        const nextComment = commentList.filter(
+            (comment) => comment.key !== listKey
+        );
+        setCommentList(nextComment);
+    };
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
-            index: nextIndex,
+            key: nextKey,
+            parent: null,
             id: id,
             comment: comment,
         });
         setCommentList(nextCommentList);
-        setNextIndex(nextIndex + 1);
+        setNextKey(nextKey + 1);
         setComment("");
-        //const commentCount=접속한 id의 comment개수 받아오기;
+    };
+    //const commentCount=접속한 id의 comment개수 받아오기;
         //commentCount++;
         //다시 commentCount 값 보내기
+    const [isRecomment, setIsRecomment] = React.useState(false);
+    let parentIndex;
+    const handleSendClick = (listKey) => {
+        setIsRecomment(true);
+        parentIndex = listKey;
     };
+    const handleRecommentClick = () => {
+        const addRecomment = commentList.concat({
+            key: nextKey,
+            parent: parentIndex,
+            id: id,
+            comment: comment,
+        });
+        setCommentList(addRecomment);
+        setNextKey(nextKey + 1);
+        setComment("");
+    };
+    const handleCommentClick = () => {
+        setIsRecomment(false);
+    };
+        
     return (
         <Root>
             <GlobalStyle />
@@ -244,32 +264,49 @@ const DetailBoard = () => {
             {!isModify && (
                 <>
                     <Footer>
-                        <CommentTitle>댓글</CommentTitle>
-                        <ListBox>
-                            {commentList.map((comment) => (
-                                <CommentList
-                                    index={comment.index}
-                                    id={comment.id}
-                                    comment={comment.comment}
-                                    handleXclick={handleXclick}
-                                />
-                            ))}
-                        </ListBox>
-                        <CommentBox>
-                            <InputText
-                                text="입력하세요"
-                                getText={getText}
-                                value={comment}
-                            ></InputText>
-                            <Button
-                                width="50px"
-                                mg="5px"
-                                onClick={handlePlusClick}
-                            >
-                                입력
-                            </Button>
-                        </CommentBox>
-                    </Footer>
+                <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
+                <ListBox>
+                    {commentList.map((comment) => (
+                        <CommentList
+
+                            listKey={comment.key}
+                            id={comment.id}
+                            parent={comment.parent}
+                            comment={comment.comment}
+                            handleXclick={handleXclick}
+                            handleSendClick={handleSendClick}
+                        />
+                    ))}
+                </ListBox>
+                {!isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button width="50px" mg="5px" onClick={handlePlusClick}>
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
+                {isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="대댓글을 입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button
+                            width="50px"
+                            mg="5px"
+                            onClick={handleRecommentClick}
+                        >
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
+            </Footer>
                 </>
             )}
         </Root>
