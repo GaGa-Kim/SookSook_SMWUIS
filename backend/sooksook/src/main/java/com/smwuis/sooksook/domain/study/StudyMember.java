@@ -27,8 +27,10 @@ public class StudyMember extends BaseTimeEntity {
     @JoinColumn(name = "StudyBoard_ID")
     private StudyBoard studyBoardId; // 스터디 게시판 (fk)
 
+    @Column(nullable = false)
     private int posts; // 글 작성 수
 
+    @Column(nullable = false)
     private int comments; // 댓글 작성 수
 
     @Builder

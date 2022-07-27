@@ -30,7 +30,8 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     private String department; // 학부 (강의 스터디)
     
     private String subject; // 과목
-    
+
+    @Column(length = 100, nullable = false)
     private String title; // 제목 (스터디 이름)
 
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -42,12 +43,15 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
 
     private Date period; // 기간
 
+    @Column(nullable = false)
     private String password; // 비밀번호
 
+    @Column(nullable = false)
     private boolean lecture; // 강의 스터디인지 여부 (true면 강의 스터디, false면 강의 외 스터디)
 
     private String category; // 카테고리 (강의 외 스터디)
 
+    @Column(nullable = false)
     private boolean finished = false; // 스터디 종료 여부
 
     @OneToMany(mappedBy = "studyBoardId", cascade = CascadeType.ALL, orphanRemoval = true)

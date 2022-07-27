@@ -30,6 +30,7 @@ public class StudySchedule extends BaseTimeEntity {
 
     private Date period; // 기한
 
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content; // 내용
 
     @Builder

@@ -18,11 +18,14 @@ public class StudyFiles {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudyPost_ID")
     private StudyPost studyPostId; // 게시글 (fk)
-    
+
+    @Column(nullable = false)
     private String origFileName; // 파일 원본 이름
 
+    @Column(nullable = false)
     private String fileName; // 파일 이름
-    
+
+    @Column(nullable = false)
     private String filePath; // 파일 위치
     
     @Builder
