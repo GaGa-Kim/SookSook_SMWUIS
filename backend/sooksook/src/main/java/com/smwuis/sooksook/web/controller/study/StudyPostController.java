@@ -1,14 +1,15 @@
-package com.smwuis.sooksook.web.controller;
+package com.smwuis.sooksook.web.controller.study;
 
 import com.smwuis.sooksook.domain.study.StudyFiles;
 import com.smwuis.sooksook.domain.study.StudyFilesRepository;
 import com.smwuis.sooksook.domain.study.StudyPost;
 import com.smwuis.sooksook.domain.study.StudyPostRepository;
-import com.smwuis.sooksook.service.StudyFilesService;
-import com.smwuis.sooksook.service.StudyPostService;
+import com.smwuis.sooksook.service.study.StudyFilesService;
+import com.smwuis.sooksook.service.study.StudyPostService;
 import com.smwuis.sooksook.web.dto.study.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
@@ -58,8 +59,11 @@ public class StudyPostController {
      */
     @PutMapping(value = "/studyPost")
     @ApiOperation(value = "스터디 게시글 수정 (Postman 이용)", notes = "스터디 게시글 수정 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id")
-    public Long update(@RequestParam Long id, StudyPostVO studyPostVO) throws Exception {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "게시글 id"),
+            @ApiImplicitParam(name = "email", value = "이메일"),
+    })
+    public String update(@RequestParam Long id, String email, StudyPostVO studyPostVO) throws Exception {
 
         StudyPostUpdateRequestDto updateRequestDto = StudyPostUpdateRequestDto
                 .builder()
@@ -104,19 +108,21 @@ public class StudyPostController {
                 }
             }
 
-            return studyPostService.updateWithFiles(id, updateRequestDto, addFileList);
+            return studyPostService.updateWithFiles(id, email, updateRequestDto, addFileList);
         } else {
-            return studyPostService.update(id, updateRequestDto);
+            return studyPostService.update(id, email, updateRequestDto);
         }
     }
 
     // 스터디 게시글 삭제
     @DeleteMapping(value = "/studyPost")
     @ApiOperation(value = "스터디 게시글 삭제", notes = "스터디 게시글 삭제 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id")
-    public Long delete(@RequestParam Long id) {
-        studyPostService.delete(id);
-        return id;
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "게시글 id"),
+            @ApiImplicitParam(name = "email", value = "이메일"),
+    })
+    public String delete(@RequestParam Long id, String email) {
+        return studyPostService.delete(id, email);
     }
 
     // 특정 스터디 게시판 전체 글 조회

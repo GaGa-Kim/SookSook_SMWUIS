@@ -1,16 +1,21 @@
-package com.smwuis.sooksook.service;
+package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.*;
+import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.repository.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,34 +40,60 @@ public class StudyBoardService {
 
     // 스터디 모집 게시판 글 수정
     @Transactional
-    public Long update(Long id, StudyBoardUpdateRequestDto updateRequestDto) {
+    public String update(Long id, String email, StudyBoardUpdateRequestDto updateRequestDto) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        studyBoard.update(updateRequestDto.getDepartment(),
-                updateRequestDto.getSubject(),
-                updateRequestDto.getTitle(),
-                updateRequestDto.getContent(),
-                updateRequestDto.getNumber(),
-                updateRequestDto.getOnoff(),
-                updateRequestDto.getPeriod(),
-                updateRequestDto.getPassword(),
-                updateRequestDto.isLecture(),
-                updateRequestDto.getCategory(),
-                updateRequestDto.isFinished());
-        return id;
+
+        if(user.equals(studyBoard.getUserId())) {
+            studyBoard.update(updateRequestDto.getDepartment(),
+                    updateRequestDto.getSubject(),
+                    updateRequestDto.getTitle(),
+                    updateRequestDto.getContent(),
+                    updateRequestDto.getNumber(),
+                    updateRequestDto.getOnoff(),
+                    updateRequestDto.getPeriod(),
+                    updateRequestDto.getPassword(),
+                    updateRequestDto.isLecture(),
+                    updateRequestDto.getCategory(),
+                    updateRequestDto.isFinished());
+            return "게시판 수정 완료";
+        }
+        else {
+            return "게시판 수정 실패";
+        }
+
     }
 
     // 스터디 모집 게시판 글 삭제
     @Transactional
-    public void delete(Long id) {
+    public String delete(Long id, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        studyBoardRepository.delete(studyBoard);
+
+        if(user.equals(studyBoard.getUserId())) {
+            studyBoardRepository.delete(studyBoard);
+            return "게시판 삭제 완료";
+        }
+
+        else {
+            return "게시판 삭제 실패";
+        }
     }
 
     // 스터디 종료
     @Transactional
-    public void finish(Long id) {
+    public String finish(Long id, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        studyBoard.setFinished();
+
+        if(user.equals(studyBoard.getUserId())) {
+            studyBoard.setFinished();
+            return "스터디 종료 완료";
+        }
+
+        else {
+            return "스터디 종료 실패";
+        }
     }
 
     // 스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회
@@ -180,7 +211,7 @@ public class StudyBoardService {
 
     }
 
-    // 일주일간 스터디 게시판에 글과 댓글이 많아 참여도 높은 스터디 Top 5 조회
+    // 일주일간 스터디 게시판에 글과 댓글이 많아 참여도 높은 스터디 5개 조회
     @Transactional(readOnly = true)
     public List<Map<String, Object>> hardList() {
 
@@ -209,5 +240,16 @@ public class StudyBoardService {
         } else {
             return countList.subList(0, 5);
         }
+    }
+    
+    // 스터디 모집 게시판 제목 검색
+    @Transactional
+    public List<StudyBoardResponseDto> searchBoard(String keyword, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+
+        return studyBoardRepository.findByTitleContaining(keyword, pageable)
+                .stream()
+                .map((StudyBoardResponseDto::new))
+                .collect(Collectors.toList());
     }
 }

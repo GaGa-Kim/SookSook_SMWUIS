@@ -1,14 +1,18 @@
-package com.smwuis.sooksook.web.controller;
+package com.smwuis.sooksook.web.controller.study;
 
 import com.smwuis.sooksook.domain.study.StudyBoard;
-import com.smwuis.sooksook.service.StudyBoardService;
+import com.smwuis.sooksook.service.study.StudyBoardService;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,27 +36,34 @@ public class StudyBoardController {
     // 스터디 모집 게시판 글 수정
     @PutMapping(value = "/studyBoard")
     @ApiOperation(value = "스터디 모집 게시판 글 수정", notes = "스터디 모집 게시판 글 수정 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id")
-    public Long update(@RequestParam Long id, @RequestBody StudyBoardUpdateRequestDto updateRequestDto) {
-        return studyBoardService.update(id, updateRequestDto);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "게시판 id"),
+            @ApiImplicitParam(name = "email", value = "이메일"),
+    })
+    public String update(@RequestParam Long id, String email, @RequestBody StudyBoardUpdateRequestDto updateRequestDto) {
+        return studyBoardService.update(id, email, updateRequestDto);
     }
 
     // 스터디 모집 게시판 글 삭제
     @DeleteMapping(value = "/studyBoard")
     @ApiOperation(value = "스터디 모집 게시판 글 삭제", notes = "스터디 모집 게시판 글 삭제 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id")
-    public Long delete(@RequestParam Long id) {
-        studyBoardService.delete(id);
-        return id;
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "게시판 id"),
+            @ApiImplicitParam(name = "email", value = "이메일"),
+    })
+    public String delete(@RequestParam Long id, String email) {
+        return studyBoardService.delete(id, email);
     }
 
     // 스터디 종료
     @PutMapping(value = "/studyBoard/finish")
     @ApiOperation(value = "스터디 종료", notes = "스터디 종료 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id")
-    public Long finish(@RequestParam Long id) {
-        studyBoardService.finish(id);
-        return id;
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "게시판 id"),
+            @ApiImplicitParam(name = "email", value = "이메일"),
+    })
+    public String finish(@RequestParam Long id, String email) {
+        return studyBoardService.finish(id, email);
     }
 
     // 스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회
@@ -106,5 +117,15 @@ public class StudyBoardController {
     @ApiOperation(value = "참여도 높은 스터디 5개 조회", notes = "참여도 높은 스터디 5개 조회 API")
     public List<Map<String, Object>> hardList() {
         return studyBoardService.hardList();
+    }
+
+    // 스터디 모집 게시판 제목 검색
+    @GetMapping(value = "/studyBoard/search")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "keyword", value = "검색할 키워드"),
+            @ApiImplicitParam(name = "page", value = "페이지 번호"),
+    })
+    public List<StudyBoardResponseDto> searchBoard(@RequestParam String keyword, int page) {
+        return studyBoardService.searchBoard(keyword, page);
     }
 }

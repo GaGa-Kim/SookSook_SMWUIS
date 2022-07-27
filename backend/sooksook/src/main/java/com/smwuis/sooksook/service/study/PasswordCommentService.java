@@ -1,4 +1,4 @@
-package com.smwuis.sooksook.service;
+package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.PasswordComment;
 import com.smwuis.sooksook.domain.study.PasswordCommentRepository;
@@ -45,20 +45,36 @@ public class PasswordCommentService {
 
     // 댓글 수정
     @Transactional
-    public Long update(Long id, String content) {
+    public String update(Long id, String email, String content) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
-        passwordComment.update(content);
-        return id;
+
+        if(user.equals(passwordComment.getUserId())) {
+            passwordComment.update(content);
+            return "댓글 수정 완료";
+        }
+
+        else {
+            return "댓글 수정 실패";
+        }
     }
 
     // 댓글 삭제
     @Transactional
-    public void delete(Long id) {
+    public String delete(Long id, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
-        passwordComment.remove();
 
-        List<PasswordComment> removableCommentList = findRemovableList(id);
-        passwordCommentRepository.deleteAll(removableCommentList);
+        if(user.equals(passwordComment.getUserId())) {
+            passwordComment.remove();
+
+            List<PasswordComment> removableCommentList = findRemovableList(id);
+            passwordCommentRepository.deleteAll(removableCommentList);
+            return "댓글 삭제 완료";
+        }
+        else {
+            return "댓글 삭제 실패";
+        }
     }
 
     // 댓글 전체 조회

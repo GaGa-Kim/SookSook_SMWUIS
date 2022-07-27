@@ -1,4 +1,4 @@
-package com.smwuis.sooksook.web.controller;
+package com.smwuis.sooksook.web.controller.study;
 
 import com.smwuis.sooksook.service.PostCommentService;
 import io.swagger.annotations.Api;

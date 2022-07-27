@@ -39,7 +39,7 @@ public class StudyPost extends BaseTimeEntity {
     @OneToMany(mappedBy = "studyPostId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyFiles> studyFiles = new ArrayList<>(); // 파일 리스트
 
-    @OneToMany(mappedBy = "studyPostId", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "studyPostId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyComment> studyComment = new ArrayList<>(); // 댓글 리스트
     
     @Builder

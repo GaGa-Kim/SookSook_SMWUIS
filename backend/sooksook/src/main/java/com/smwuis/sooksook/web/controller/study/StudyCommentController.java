@@ -1,6 +1,6 @@
-package com.smwuis.sooksook.web.controller;
+package com.smwuis.sooksook.web.controller.study;
 
-import com.smwuis.sooksook.service.StudyCommentService;
+import com.smwuis.sooksook.service.study.StudyCommentService;
 import com.smwuis.sooksook.web.dto.study.StudyCommentResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyCommentSaveRequestDto;
 import io.swagger.annotations.Api;
@@ -31,20 +31,23 @@ public class StudyCommentController {
     @PutMapping(value = "/studyComment")
     @ApiOperation(value = "스터디 게시글 댓글 수정", notes = "스터디 게시글 댓글 수정 API")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "id", value = "댓글 id"),
-        @ApiImplicitParam(name = "content", value = "댓글 내용")
+            @ApiImplicitParam(name = "id", value = "댓글 id"),
+            @ApiImplicitParam(name = "email", value = "이메일"),
+            @ApiImplicitParam(name = "content", value = "댓글 내용"),
     })
-    public Long update(@RequestParam Long id, String content) {
-        return studyCommentService.update(id, content);
+    public String update(@RequestParam Long id, String email, String content) {
+        return studyCommentService.update(id, email, content);
     }
     
     // 댓글 삭제
     @DeleteMapping(value = "/studyComment")
     @ApiOperation(value = "스터디 게시글 댓글 삭제", notes = "스터디 게시글 댓글 삭제 API")
-    @ApiImplicitParam(name = "id", value = "댓글 id")
-    public Long delete(@RequestParam Long id) {
-        studyCommentService.delete(id);
-        return id;
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "댓글 id"),
+            @ApiImplicitParam(name = "email", value = "이메일")
+    })
+    public String delete(@RequestParam Long id, String email) {
+        return studyCommentService.delete(id, email);
     }
     
     // 댓글 전체 조회
