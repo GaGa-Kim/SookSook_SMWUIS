@@ -1,5 +1,6 @@
 package com.smwuis.sooksook.web.controller;
 
+<<<<<<< HEAD
 import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.exception.DataNotFoundException;
 import com.smwuis.sooksook.service.UserService;
@@ -109,4 +110,19 @@ public class UserRestController {
 
         }
     }
+=======
+import com.smwuis.sooksook.service.UserService;
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Api(tags = "User Api")
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/user")
+public class UserRestController {
+
+    private final UserService userService;
+>>>>>>> ed4ca40dbc19bc4b2a0b2642a76bc97f1d9e09c0
 }
