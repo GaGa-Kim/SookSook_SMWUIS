@@ -3,7 +3,7 @@ const Root=styled.div`
   display:flex;
   flex-direction:column;
   overflow-x:hidden; 
-  overflow-y:auto;
+  overflow-y:hidden;
 `;
 
 export default Root;

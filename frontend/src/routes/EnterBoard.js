@@ -79,7 +79,8 @@ const EnterBoard = () => {
         const nextComment = commentList.filter(
             (comment) => comment.index !== index
         );
-        }
+        setCommentList(nextComment);
+    };
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
@@ -112,7 +113,19 @@ const EnterBoard = () => {
     const getText = (text) => {
         setComment(text);
     };
-
+    const pw = "1"; //비밀게시판 비밀번호 받아오기
+    const [isRightPw, setIsRightPw] = React.useState(false);
+    const getPw = (text) => {
+        if (pw === text) {
+            setIsRightPw(true);
+        } else {
+            setIsRightPw(false);
+        }
+    };
+    const handleEnterClick = () => {
+        //비밀번호 틀렸을 때 경고
+        alert("비밀번호가 틀렸습니다.");
+    };
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
             index: nextIndex,
@@ -169,40 +182,57 @@ const EnterBoard = () => {
                 <InputBox>
                     <Quest ftSize="25px">비밀번호</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputPassword />
+                        <InputPassword getPw={getPw} />
                     </Box>
                     <Box left="310px" top="7px">
-                        <Button width="50px" height="32px" mg="0px">
-                            입장
-                        </Button>
+                        {isRightPw && (
+                            <Link to={`/private/${pw}`}>
+                                <Button width="50px" height="32px" mg="0px">
+                                    입장
+                                </Button>
+                            </Link>
+                        )}
+                        {!isRightPw && (
+                            <Button
+                                width="50px"
+                                height="32px"
+                                mg="0px"
+                                onClick={handleEnterClick}
+                            >
+                                입장
+                            </Button>
+                        )}
                     </Box>
                 </InputBox>
             </Main>
             <Footer>
-                <CommentTitle>댓글</CommentTitle>
-                <ListBox>
-                    {commentList.map((comment) => (
-                        <CommentList
-                            index={comment.index}
-                            id={comment.id}
-                            comment={comment.comment}
-                            handleXclick={handleXclick}
-                        />
-                    ))}
-                </ListBox>
-                <CommentBox>
-                    <InputText
-                        text="입력하세요"
-                        getText={getText}
-                        value={comment}
-                    ></InputText>
-                    <Button width="50px" mg="5px" onClick={handlePlusClick}>
-                        입력
-                    </Button>
-                </CommentBox>
-            </Footer>
+                        <CommentTitle>댓글</CommentTitle>
+                        <ListBox>
+                            {commentList.map((comment) => (
+                                <CommentList
+                                    index={comment.index}
+                                    id={comment.id}
+                                    comment={comment.comment}
+                                    handleXclick={handleXclick}
+                                />
+                            ))}
+                        </ListBox>
+                        <CommentBox>
+                            <InputText
+                                text="입력하세요"
+                                getText={getText}
+                                value={comment}
+                            ></InputText>
+                            <Button
+                                width="50px"
+                                mg="5px"
+                                onClick={handlePlusClick}
+                            >
+                                입력
+                            </Button>
+                        </CommentBox>
+                    </Footer>
         </Root>
-        
     );
 };
 

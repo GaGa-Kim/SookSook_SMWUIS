@@ -2,7 +2,7 @@ import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React from "react";
 import { Table } from "antd";
-import { Link } from "react-router-dom";
+import { Link,useParams } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -50,10 +50,11 @@ const spcolumns = [
 
 const member = ["가송", "나송", "다송"];
 const Private = () => {
+    const pw=useParams();
     const data = [
         { key: 1, title: "스터디 규칙", name: "가송" },
         { key: 2, title: "과제제출", name: "나송" },
-    ]; /*데이터받아오기*/
+    ]; /*pw에 따라 데이터받아오기*/
     const columns = [
         {
             title: <div className="studyname">게시글</div>,

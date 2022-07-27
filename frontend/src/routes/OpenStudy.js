@@ -98,7 +98,6 @@ const Openstudy = () => {
             return;
         }
         /*db에 게시글 정보 저장*/
-
     }
     const getText = (text) => {
         setTitle(text);
