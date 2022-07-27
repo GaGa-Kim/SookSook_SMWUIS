@@ -55,6 +55,9 @@ public class StudyMember extends BaseTimeEntity {
 
     public void setStudyBoardId(StudyBoard studyBoard) {
         this.studyBoardId = studyBoard;
+
+        if(!studyBoardId.getStudyMemberList().contains(this))
+            studyBoardId.getStudyMemberList().add(this);
     }
 }
 

@@ -60,6 +60,12 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     @OneToMany(mappedBy = "studyBoardId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyPost> studyPostList = new ArrayList<>(); // 스터디 게시글 리스트
 
+    @OneToMany(mappedBy = "studyBoardId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudySchedule> studyScheduleList= new ArrayList<>(); // 스터디 스케줄 리스트
+
+    @OneToMany(mappedBy = "studyBoardId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyMember> studyMemberList = new ArrayList<>(); // 스터디 부원 리스트
+
     @Builder
     public StudyBoard(User userId, String department, String subject, String title, String content,
                       Long number, String onoff, Date period, String password, boolean lecture, String category, boolean finished) {
@@ -113,6 +119,22 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
 
         if(studyPost.getStudyBoardId() != this) {
             studyPost.setStudyBoardId(this);
+        }
+    }
+
+    public void addStudySchedule(StudySchedule studySchedule) {
+        this.studyScheduleList.add(studySchedule);
+
+        if(studySchedule.getStudyBoardId() != this) {
+            studySchedule.setStudyBoardId(this);
+        }
+    }
+
+    public void addStudyMember(StudyMember studyMember) {
+        this.studyMemberList.add(studyMember);
+
+        if(studyMember.getStudyBoardId() != this) {
+            studyMember.setStudyBoardId(this);
         }
     }
 }

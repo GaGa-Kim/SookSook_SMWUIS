@@ -25,9 +25,11 @@ public class StudyScheduleService {
     // 스터디 게시판 스케줄 추가
     @Transactional
     public Long save(StudyScheduleSaveRequestDto saveRequestDto) {
+        StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         StudySchedule studySchedule = saveRequestDto.toEntity();
-        studySchedule.setStudyBoardId(studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다.")));
+        studySchedule.setStudyBoardId(studyBoard);
         studySchedule.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
+        studyBoard.addStudySchedule(studyScheduleRepository.save(studySchedule));
 
         return studyScheduleRepository.save(studySchedule).getId();
     }
