@@ -45,9 +45,9 @@ public class StudyBoardService {
                 updateRequestDto.getOnoff(),
                 updateRequestDto.getPeriod(),
                 updateRequestDto.getPassword(),
-                updateRequestDto.getLecture(),
+                updateRequestDto.isLecture(),
                 updateRequestDto.getCategory(),
-                updateRequestDto.getFinished());
+                updateRequestDto.isFinished());
         return id;
     }
 
@@ -56,6 +56,13 @@ public class StudyBoardService {
     public void delete(Long id) {
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         studyBoardRepository.delete(studyBoard);
+    }
+
+    // 스터디 종료
+    @Transactional
+    public void finish(Long id) {
+        StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
+        studyBoard.setFinished();
     }
 
     // 스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회

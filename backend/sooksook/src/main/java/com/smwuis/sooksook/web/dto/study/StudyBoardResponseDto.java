@@ -40,13 +40,13 @@ public class StudyBoardResponseDto {
     private String password;
 
     @ApiModelProperty(example = "강의 스터디인지 강의 외 스터디인지")
-    private Boolean lecture;
+    private boolean lecture;
 
     @ApiModelProperty(example = "카테고리")
     private String category;
 
     @ApiModelProperty(example = "스터디 종료 여부")
-    private Boolean finished;
+    private boolean finished;
 
     public StudyBoardResponseDto(StudyBoard studyBoard) {
         this.email = studyBoard.getUserId().getEmail();
@@ -59,8 +59,8 @@ public class StudyBoardResponseDto {
         this.onoff = studyBoard.getOnoff();
         this.period = studyBoard.getPeriod();
         this.password = studyBoard.getPassword();
-        this.lecture = studyBoard.getLecture();
+        this.lecture = studyBoard.isFinished();
         this.category = studyBoard.getCategory();
-        this.finished = studyBoard.getFinished();
+        this.finished = studyBoard.isFinished();
     }
 }

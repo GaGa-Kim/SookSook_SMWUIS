@@ -30,7 +30,7 @@ public class StudyBoardController {
     }
 
     // 스터디 모집 게시판 글 수정
-    @PutMapping(value = "/studyBoard/")
+    @PutMapping(value = "/studyBoard")
     @ApiOperation(value = "스터디 모집 게시판 글 수정", notes = "스터디 모집 게시판 글 수정 API")
     @ApiImplicitParam(name = "id", value = "게시글 id")
     public Long update(@RequestParam Long id, @RequestBody StudyBoardUpdateRequestDto updateRequestDto) {
@@ -43,6 +43,15 @@ public class StudyBoardController {
     @ApiImplicitParam(name = "id", value = "게시글 id")
     public Long delete(@RequestParam Long id) {
         studyBoardService.delete(id);
+        return id;
+    }
+
+    // 스터디 종료
+    @PutMapping(value = "/studyBoard/finish")
+    @ApiOperation(value = "스터디 종료", notes = "스터디 종료 API")
+    @ApiImplicitParam(name = "id", value = "게시글 id")
+    public Long finish(@RequestParam Long id) {
+        studyBoardService.finish(id);
         return id;
     }
 

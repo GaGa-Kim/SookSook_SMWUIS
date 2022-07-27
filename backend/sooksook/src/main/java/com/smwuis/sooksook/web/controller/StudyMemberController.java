@@ -1,5 +1,6 @@
 package com.smwuis.sooksook.web.controller;
 
+import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.service.StudyMemberService;
 import com.smwuis.sooksook.web.dto.study.StudyMemberListResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyMemberSaveRequestDto;
@@ -23,7 +24,7 @@ public class StudyMemberController {
     // 스터디 참여
     @PostMapping(value = "/studyMember")
     @ApiOperation(value = "스터디 게시판 참여", notes = "스터디 게시판 참여 API")
-    public Boolean join(@RequestBody StudyMemberSaveRequestDto saveRequestDto) {
+    public String join(@RequestBody StudyMemberSaveRequestDto saveRequestDto) {
         return studyMemberService.join(saveRequestDto);
     }
 
@@ -41,7 +42,20 @@ public class StudyMemberController {
     // 스터디 부원 정보 (부원, 글 작성 수, 댓글 수)
     @GetMapping(value = "/studyMember")
     @ApiOperation(value = "스터디 게시판 부원 정보 조회", notes = "스터디 게시판 부원 정보 조회 API")
+    @ApiImplicitParam(name = "id", value = "스터디 게시판 id")
     public List<StudyMemberListResponseDto> allList(@RequestParam Long studyBoardId) {
         return studyMemberService.findByAllByStudyBoardId(studyBoardId);
     }
+
+    // 내가 참여 중인 스터디
+    @GetMapping(value = "/studyMember/myStudy")
+    @ApiOperation(value = "내가 참여 중인 스터디 조회", notes = "내가 참여 중인 스터디 조회 API")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id"),
+            @ApiImplicitParam(name = "email", value = "이메일")
+    })
+    public List<StudyBoard> myStudy(@RequestParam Long studyBoardId, String email) {
+        return studyMemberService.myStudy(studyBoardId, email);
+    }
+
 }

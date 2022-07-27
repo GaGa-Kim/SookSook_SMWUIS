@@ -44,11 +44,11 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
 
     private String password; // 비밀번호
 
-    private Boolean lecture; // 강의 스터디인지 여부 (true면 강의 스터디, false면 강의 외 스터디)
+    private boolean lecture; // 강의 스터디인지 여부 (true면 강의 스터디, false면 강의 외 스터디)
 
     private String category; // 카테고리 (강의 외 스터디)
 
-    private Boolean finished; // 스터디 종료 여부
+    private boolean finished = false; // 스터디 종료 여부
 
     @OneToMany(mappedBy = "studyBoardId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PasswordComment> passwordComments = new ArrayList<>(); // 비밀댓글 리스트
@@ -58,7 +58,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
 
     @Builder
     public StudyBoard(User userId, String department, String subject, String title, String content,
-                      Long number, String onoff, Date period, String password, Boolean lecture, String category, Boolean finished) {
+                      Long number, String onoff, Date period, String password, boolean lecture, String category, boolean finished) {
         this.userId = userId;
         this.department = department;
         this.subject = subject;
@@ -74,7 +74,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     }
 
     public StudyBoard update(String department, String subject, String title, String content,
-                             Long number, String onoff, Date period, String password, Boolean lecture, String category, Boolean finished) {
+                             Long number, String onoff, Date period, String password, boolean lecture, String category, boolean finished) {
         this.department = department;
         this.subject = subject;
         this.title = title;
@@ -87,6 +87,10 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
         this.category = category;
         this.finished = finished;
         return this;
+    }
+
+    public void setFinished() {
+        this.finished = true;
     }
 
     public void setUser(User user) {
