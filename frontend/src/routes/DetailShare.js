@@ -86,7 +86,7 @@ const PlusImg = styled.img`
         height: 27px;
     }
 `;
-const DetailBoard = () => {
+const DetailShare = () => {
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
@@ -141,8 +141,8 @@ const DetailBoard = () => {
         <Root>
             <GlobalStyle />
             <Logo />
-            <ColorBox height="90px">
-                <Title>{dataKey}</Title>
+            <ColorBox height="85px">
+                <Title>자료공유 게시판</Title>
             </ColorBox>
             <Main>
                 <InputBox>
@@ -218,13 +218,13 @@ const DetailBoard = () => {
                     </>
                 )}
                 {isModify && isShow && (
-                    <Link to="/private">
+                    <Link to="/share">
                         <Button width="70px" mg="30px">
                             업로드
                         </Button>
                     </Link>
                 )}
-                <Link to="/private">
+                <Link to="/share">
                     <Button width="70px" mg="30px">
                         목록
                     </Button>
@@ -260,4 +260,4 @@ const DetailBoard = () => {
     );
 };
 
-export default DetailBoard;
+export default DetailShare;

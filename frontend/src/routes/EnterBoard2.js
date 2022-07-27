@@ -76,7 +76,7 @@ const CommentBox = styled.div`
     justify-content: space-around;
 `;
 
-const EnterBoard = () => {
+const EnterBoard2 = () => {
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
@@ -126,7 +126,6 @@ const EnterBoard = () => {
         setNextIndex(nextIndex + 1);
         setComment("");
     };
-
     return (
         <Root >
             <GlobalStyle />
@@ -136,9 +135,9 @@ const EnterBoard = () => {
             </ColorBox>
             <Main>
                 <InputBox>
-                    <Quest ftSize="25px">학부</Quest>
+                    <Quest ftSize="25px">카테고리</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputText text="ICT융합공학부" disable="true" />
+                        <InputText text="제2 외국어" disable="true" />
                     </Box>
                 </InputBox>
                 <InputBox>
@@ -181,6 +180,7 @@ const EnterBoard = () => {
                     </Box>
                 </InputBox>
             </Main>
+
             <Footer>
                 <Quest ftSize="17px">댓글</Quest>
                 <CommentBox>
@@ -190,8 +190,8 @@ const EnterBoard = () => {
                     </Button>
                 </CommentBox>
             </Footer>
+
         </Root>
     );
 };
-
-export default EnterBoard;
+export default EnterBoard2;

@@ -120,7 +120,7 @@ const Openstudy2 = () => {
             </ColorBox>
             <Main>
                 <InputBox>
-                    <Quest>대학</Quest>
+                    <Quest>카테고리</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <Select>
                             <option>토익/토플</option>
@@ -138,7 +138,7 @@ const Openstudy2 = () => {
                 <InputBox >
                     <Quest>이름</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputText text="입력하세요" getText={getText} />
+                        <InputText text="입력하세요" getUser={getUser} />
                     </Box>
                 </InputBox>
                 <InputBox>
@@ -153,7 +153,7 @@ const Openstudy2 = () => {
                         <InputText text="입력하세요" getText={getText} />
                     </Box>
                 </InputBox>
-                <InputBox mgBot="75px">
+                <InputBox mgBot="70px">
                     <Quest>내용</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <InputArea area="입력하세요" bg="#F0F0F0" getArea={getArea} />

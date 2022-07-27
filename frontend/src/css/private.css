@@ -13,13 +13,14 @@
 
 .prbutton {
     border-color: transparent;
-    float: right;
     margin-right: 25px;
+    float: right;
     border-radius: 10px;
     background-color: white;
     font-weight: bold;
     font-size: 17px;
 }
+
 
 .prbutton:hover {
     border-color: navy;
@@ -33,15 +34,15 @@
 
 .chart {
     padding: 10px;
-    width:500px;
+    width: 500px;
     height: auto;
     background-color: #f0f3f9;
     border-radius: 20px;
-    margin:10px 0px 10px 0px;
+    margin: 10px 0px 10px 0px;
 }
 
 .pie {
-    margin:10px;
+    margin: 10px;
     height: 240px;
 }
 
@@ -56,13 +57,14 @@
 .studyname {
     padding-right: 300px;
 }
-.hp{
+
+.hp {
     display: flex;
     justify-content: center;
 }
 
 .spchart {
-    margin:30px 10px 0px 10px;
+    margin: 30px 10px 0px 10px;
     width: 500px;
     height: 280px;
 }
@@ -73,5 +75,5 @@
     background-color: white;
     font-weight: bold;
     font-size: 16px;
-    margin-left: 16px;
+    margin: 0px 860px 0px 16px;
 }
