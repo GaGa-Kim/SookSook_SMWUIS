@@ -52,10 +52,11 @@ public class StudyScheduleController {
         return id;
     }
 
-    // 스터디 게시판 스케줄 전체 리스트 조회
+    // 스터디 게시판 스케줄 전체 리스트 아이디 조회
     @GetMapping(value = "/studySchedules/all")
-    @ApiOperation(value = "스터디 게시판 스케줄 리스트 전체 조회", notes = "스터디 게시판 스케줄 리스트 전체 조회 API")
-    public List<StudySchedule> allList(@RequestParam Long studyBoardId) {
+    @ApiOperation(value = "스터디 게시판 스케줄 리스트 전체 아이디 조회", notes = "스터디 게시판 스케줄 리스트 전체 아이디 조회 API")
+    @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
+    public List<Long> allList(@RequestParam Long studyBoardId) {
         return studyScheduleService.allList(studyBoardId);
     }
 

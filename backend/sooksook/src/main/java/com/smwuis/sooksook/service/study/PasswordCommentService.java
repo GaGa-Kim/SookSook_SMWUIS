@@ -5,7 +5,7 @@ import com.smwuis.sooksook.domain.study.PasswordCommentRepository;
 import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.domain.study.StudyBoardRepository;
 import com.smwuis.sooksook.domain.user.User;
-import com.smwuis.sooksook.repository.UserRepository;
+import com.smwuis.sooksook.domain.user.UserRepository;
 import com.smwuis.sooksook.web.dto.study.PasswordCommentResponseDto;
 import com.smwuis.sooksook.web.dto.study.PasswordCommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;

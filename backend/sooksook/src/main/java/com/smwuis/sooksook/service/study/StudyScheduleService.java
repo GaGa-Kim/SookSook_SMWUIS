@@ -4,7 +4,7 @@ import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.domain.study.StudyBoardRepository;
 import com.smwuis.sooksook.domain.study.StudySchedule;
 import com.smwuis.sooksook.domain.study.StudyScheduleRepository;
-import com.smwuis.sooksook.repository.UserRepository;
+import com.smwuis.sooksook.domain.user.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleUpdateRequestDto;
@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,11 +54,19 @@ public class StudyScheduleService {
         studyScheduleRepository.delete(studySchedule);
     }
 
-    // 스터디 게시판 스케줄 전체 조회
+    // 스터디 게시판 스케줄 아이디 전체 조회
     @Transactional
-    public List<StudySchedule> allList(Long studyBoardId) {
+    public List<Long> allList(Long studyBoardId) {
         StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        return studyScheduleRepository.findByStudyBoardId(studyBoard);
+        List<StudySchedule> studyScheduleList = studyScheduleRepository.findByStudyBoardId(studyBoard);
+        List<Long> studyScheduleIdList = new ArrayList<>();
+
+        for(StudySchedule studySchedule: studyScheduleList) {
+            studyScheduleIdList.add(studySchedule.getId());
+        }
+
+        return studyScheduleIdList;
+
     }
     
     // 스터디 게시판 스케줄 개별 조회

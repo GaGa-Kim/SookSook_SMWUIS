@@ -20,7 +20,7 @@ public class StudySchedule extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 기본키
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn (name = "User_ID")
     private User userId; // 작성자 (fk)
 

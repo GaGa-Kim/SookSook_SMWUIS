@@ -2,7 +2,7 @@ package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.*;
 import com.smwuis.sooksook.domain.user.User;
-import com.smwuis.sooksook.repository.UserRepository;
+import com.smwuis.sooksook.domain.user.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
@@ -98,8 +98,11 @@ public class StudyBoardService {
 
     // 스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회
     @Transactional
-    public List<StudyBoard> studyList(Boolean lecture) {
-        return studyBoardRepository.findByLecture(lecture);
+    public List<StudyBoardResponseDto> studyList(Boolean lecture) {
+        return studyBoardRepository.findByLecture(lecture)
+                .stream()
+                .map(StudyBoardResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     // 스터디 모집 게시판 글 상세 조회
@@ -111,14 +114,20 @@ public class StudyBoardService {
 
     // 스터디 게시판 강의 스터디 학부 별 검색
     @Transactional
-    public List<StudyBoard> departmentList(String department) {
-        return studyBoardRepository.findByLectureAndDepartment(true, department);
+    public List<StudyBoardResponseDto> departmentList(String department) {
+        return studyBoardRepository.findByLectureAndDepartment(true, department)
+                .stream()
+                .map(StudyBoardResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     // 스터디 게시판 강의 외 스터디 카테고리 별 검색
     @Transactional
-    public List<StudyBoard> categoryList(String category) {
-        return studyBoardRepository.findByLectureAndCategory(false, category);
+    public List<StudyBoardResponseDto> categoryList(String category) {
+        return studyBoardRepository.findByLectureAndCategory(false, category)
+                .stream()
+                .map(StudyBoardResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     // 일주일간 게시판에 달린 댓글 갯수
@@ -194,7 +203,7 @@ public class StudyBoardService {
         Long count = 0L;
 
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        List<StudyPost> studyPostList = studyPostRepository.findByStudyBoardId(studyBoard);
+        List<StudyPost> studyPostList = studyPostRepository.findAllByStudyBoardId(studyBoard);
 
         List<Long> studyCommentList = new ArrayList<>();
 

@@ -70,7 +70,7 @@ public class StudyBoardController {
     @GetMapping(value = "/studyBoards/list")
     @ApiOperation(value = "스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회", notes = "스터디 모집 게시판 강의 스터디 / 강의 외 스터디 글 전체 리스트 조회 API")
     @ApiImplicitParam(name = "lecture", value = "true면 스터디 게시판, false면 스터디 외 게시판")
-    public List<StudyBoard> studyList(@RequestParam Boolean lecture) {
+    public List<StudyBoardResponseDto> studyList(@RequestParam Boolean lecture) {
         return studyBoardService.studyList(lecture);
     }
 
@@ -86,7 +86,7 @@ public class StudyBoardController {
     @GetMapping(value = "/studyBoards/department")
     @ApiOperation(value = "스터디 모집 게시판 강의 스터디 학부 별 리스트 조회", notes = "스터디 모집 게시판 강의 스터디 학부 별 리스트 조회 API")
     @ApiImplicitParam(name = "department", value = "학부 이름")
-    public List<StudyBoard> departmentList(@RequestParam String department) {
+    public List<StudyBoardResponseDto> departmentList(@RequestParam String department) {
         return studyBoardService.departmentList(department);
     }
 
@@ -94,7 +94,7 @@ public class StudyBoardController {
     @GetMapping(value = "/studyBoards/category")
     @ApiOperation(value = "스터디 모집 게시판 강의 외 스터디 카테고리 별 리스트 조회", notes = "스터디 모집 게시판 강의 외 스터디 카테고리 별 리스트 조회 API")
     @ApiImplicitParam(name = "category", value = "카테고리")
-    public List<StudyBoard> categoryList(@RequestParam String category) {
+    public List<StudyBoardResponseDto> categoryList(@RequestParam String category) {
         return studyBoardService.categoryList(category);
     }
 
@@ -121,6 +121,7 @@ public class StudyBoardController {
 
     // 스터디 모집 게시판 제목 검색
     @GetMapping(value = "/studyBoard/search")
+    @ApiOperation(value = "스터디 모집 게시판 제목 검색", notes = "스터디 모집 게시판 제목 검색 API")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword", value = "검색할 키워드"),
             @ApiImplicitParam(name = "page", value = "페이지 번호"),

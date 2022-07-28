@@ -5,7 +5,7 @@ import com.smwuis.sooksook.domain.study.StudyBoardRepository;
 import com.smwuis.sooksook.domain.study.StudyMember;
 import com.smwuis.sooksook.domain.study.StudyMemberRepository;
 import com.smwuis.sooksook.domain.user.User;
-import com.smwuis.sooksook.repository.UserRepository;
+import com.smwuis.sooksook.domain.user.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyMemberListResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyMemberSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -26,27 +26,19 @@ public class StudyMemberService {
 
     // 스터디 참여
     @Transactional
-    public String join(StudyMemberSaveRequestDto saveRequestDto) {
-        User user = userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
-        StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyBoard, user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
-
-        // 이미 가입한 멤버라면
-        if (studyMember.getUserId().getEmail() == saveRequestDto.getEmail()) {
-            return "이미 가입한 멤버입니다.";
-        }
+    public Boolean join(Long boardId, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+        StudyBoard studyBoard = studyBoardRepository.findById(boardId).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
 
         // 가입하지 않은 멤버라면
+        if (studyMemberRepository.findByStudyBoardIdAndUserId(studyBoard, user) == null) {
+
+            return false;
+        }
+
+        // 가입한 멤버라면
         else {
-            Boolean join = password(saveRequestDto);
-
-            if (join) {
-                return "스터디에 가입했습니다.";
-            }
-
-            else {
-                return "비밀번호가 틀려 스터디 가입에 실패했습니다.";
-            }
+            return true;
         }
     }
 
@@ -55,7 +47,7 @@ public class StudyMemberService {
     public Boolean password(StudyMemberSaveRequestDto saveRequestDto) {
         StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
 
-        if(studyBoard.getPassword() == saveRequestDto.getPassword()) {
+        if(studyBoard.getPassword().equals(saveRequestDto.getPassword())) {
             StudyMember joinMember = saveRequestDto.toEntity();
             joinMember.setStudyBoardId(studyBoard);
             joinMember.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
@@ -90,14 +82,13 @@ public class StudyMemberService {
 
     // 내가 참여 중인 스터디
     @Transactional(readOnly = true)
-    public List<StudyBoard> myStudy(Long studyBoardId, String email) {
-        StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
+    public List<Long> myStudy(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
-        List<StudyMember> studyList = studyMemberRepository.findAllByStudyBoardIdAndUserId(studyBoard, user);
-        List<StudyBoard> studyBoardIdList = new ArrayList<>();
+        List<StudyMember> studyList = studyMemberRepository.findAllByUserId(user);
+        List<Long> studyBoardIdList = new ArrayList<>();
 
         for(StudyMember studyMember: studyList) {
-            studyBoardIdList.add(studyMember.getStudyBoardId());
+            studyBoardIdList.add(studyMember.getStudyBoardId().getId());
         }
 
         return studyBoardIdList;

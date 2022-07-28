@@ -15,7 +15,7 @@ public class StudyFiles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 기본키
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "StudyPost_ID")
     private StudyPost studyPostId; // 게시글 (fk)
 
