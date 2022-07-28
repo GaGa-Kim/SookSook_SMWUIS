@@ -18,6 +18,7 @@ public class StudySchedule extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "StudySchedule_ID")
     private Long id; // 기본키
 
     @ManyToOne

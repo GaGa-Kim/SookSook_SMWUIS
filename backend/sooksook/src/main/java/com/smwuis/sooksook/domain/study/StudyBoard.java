@@ -103,7 +103,11 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     }
 
     public void setFinished() {
-        this.finished = true;
+        this.finished = !this.finished;
+    }
+
+    public void setLecture(boolean lecture) {
+        this.lecture = lecture;
     }
 
     public void setUser(User user) {

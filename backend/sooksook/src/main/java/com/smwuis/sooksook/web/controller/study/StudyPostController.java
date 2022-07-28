@@ -39,10 +39,10 @@ public class StudyPostController {
     private final StudyFilesRepository studyFilesRepository;
     private final StudyFilesService studyFilesService;
 
-    // 스터디 게시글 작성
-    @PostMapping(value = "/studyPost", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "스터디 게시글 작성 (Postman 이용)", notes = "스터디 게시글 작성 API")
-    public Long save(StudyPostVO studyPostVO) throws Exception {
+    // 스터디 게시판 게시글 작성
+    @PostMapping(value = "/studyPost/lecture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "스터디 게시판 게시글 작성 (Postman 이용)", notes = "스터디 게시판 게시글 작성 API")
+    public Long lectureSave(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
                 .email(studyPostVO.getEmail())
@@ -50,7 +50,63 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
-        return studyPostService.save(saveRequestDto, studyPostVO.getFiles());
+        return studyPostService.lectureSave(saveRequestDto, studyPostVO.getFiles());
+    }
+
+    // 스터디 외 게시판 게시글 작성
+    @PostMapping(value = "/studyPost/notLecture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "스터디 외 게시판 게시글 작성 (Postman 이용)", notes = "스터디 외 게시판 게시글 작성 API")
+    public Long notLectureSave(StudyPostVO studyPostVO) throws Exception {
+        StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
+                .builder()
+                .email(studyPostVO.getEmail())
+                .studyBoardId(studyPostVO.getStudyBoardId())
+                .title(studyPostVO.getTitle())
+                .content(studyPostVO.getContent())
+                .build();
+        return studyPostService.NotLectureSave(saveRequestDto, studyPostVO.getFiles());
+    }
+
+    // 자료 공유 게시글 작성
+    @PostMapping(value = "/studyPost/share", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "자료 공유 게시글 작성 (Postman 이용)", notes = "자료 공유 게시글 작성 API")
+    public Long shareSave(StudyPostVO studyPostVO) throws Exception {
+        StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
+                .builder()
+                .email(studyPostVO.getEmail())
+                .studyBoardId(studyPostVO.getStudyBoardId())
+                .title(studyPostVO.getTitle())
+                .content(studyPostVO.getContent())
+                .build();
+        return studyPostService.shareSave(saveRequestDto, studyPostVO.getFiles());
+    }
+
+    // 판매/나눔 게시글 작성
+    @PostMapping(value = "/studyPost/sell", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "판매/나눔 게시글 작성 (Postman 이용)", notes = "판매/나눔 게시글 작성 API")
+    public Long sellSave(StudyPostVO studyPostVO) throws Exception {
+        StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
+                .builder()
+                .email(studyPostVO.getEmail())
+                .studyBoardId(studyPostVO.getStudyBoardId())
+                .title(studyPostVO.getTitle())
+                .content(studyPostVO.getContent())
+                .build();
+        return studyPostService.sellSave(saveRequestDto, studyPostVO.getFiles());
+    }
+
+    // 질문 게시글 작성
+    @PostMapping(value = "/studyPost/question", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "질문 게시글 작성 (Postman 이용)", notes = "질문 게시글 작성 API")
+    public Long questionSave(StudyPostVO studyPostVO) throws Exception {
+        StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
+                .builder()
+                .email(studyPostVO.getEmail())
+                .studyBoardId(studyPostVO.getStudyBoardId())
+                .title(studyPostVO.getTitle())
+                .content(studyPostVO.getContent())
+                .build();
+        return studyPostService.questionSave(saveRequestDto, studyPostVO.getFiles());
     }
 
     // 스터디 게시글 수정
@@ -132,6 +188,14 @@ public class StudyPostController {
     @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
     public List<Long> allList(@RequestParam Long studyBoardId) {
         return studyPostService.allList(studyBoardId);
+    }
+
+    // 카테고리 별 게시글 리스트 조회
+    @GetMapping(value = "/studyPosts/category")
+    @ApiOperation(value = "스터디 게시판 게시글 아이디 리스트 전체 조회", notes = "스터디 게시판 게시글 아이디 리스트 전체 조회 API")
+    @ApiImplicitParam(name = "category", value = "카테고리")
+    public List<Long> findByCategory(@RequestParam String category) {
+        return studyPostService.findByCategory(category);
     }
 
     // 스터디 게시글 상세 조회

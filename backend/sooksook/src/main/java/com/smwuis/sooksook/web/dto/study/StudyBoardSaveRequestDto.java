@@ -39,9 +39,6 @@ public class StudyBoardSaveRequestDto {
     @ApiModelProperty(example = "비밀번호")
     private String password;
 
-    @ApiModelProperty(example = "true")
-    private boolean lecture;
-
     @ApiModelProperty(example = "카테고리")
     private String category;
 
@@ -50,7 +47,7 @@ public class StudyBoardSaveRequestDto {
 
     @Builder
     public StudyBoardSaveRequestDto(String email, String department, String subject, String title, String content,
-                      Long number, String onoff, Date period, String password, boolean lecture, String category, boolean finished) {
+                      Long number, String onoff, Date period, String password, String category, boolean finished) {
         this.email = email;
         this.department = department;
         this.subject = subject;
@@ -60,7 +57,6 @@ public class StudyBoardSaveRequestDto {
         this.onoff = onoff;
         this.period = period;
         this.password = password;
-        this.lecture = lecture;
         this.category = category;
         this.finished = finished;
     }
@@ -75,7 +71,6 @@ public class StudyBoardSaveRequestDto {
                 .onoff(onoff)
                 .period(period)
                 .password(password)
-                .lecture(lecture)
                 .category(category)
                 .finished(finished)
                 .build();

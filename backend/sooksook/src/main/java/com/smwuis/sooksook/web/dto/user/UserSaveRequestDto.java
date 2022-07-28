@@ -47,7 +47,7 @@ public class UserSaveRequestDto {
                 .password(password)
                 .introduction(introduction)
                 .points(0)
-                .rating("새싹등급")
+                .rating("새싹 등급")
                 .build();
     }
 

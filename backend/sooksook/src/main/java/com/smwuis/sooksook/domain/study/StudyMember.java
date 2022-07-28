@@ -17,6 +17,7 @@ public class StudyMember extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "StudyMember_ID")
     private Long id; // 기본키
 
     @ManyToOne

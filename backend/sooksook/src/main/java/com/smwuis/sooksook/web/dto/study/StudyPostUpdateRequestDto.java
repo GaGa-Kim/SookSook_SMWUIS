@@ -15,10 +15,14 @@ public class StudyPostUpdateRequestDto {
     @ApiModelProperty(example = "내용")
     private String content;
 
+    @ApiModelProperty(example = "카테고리")
+    private String category;
+
     @Builder
-    public StudyPostUpdateRequestDto(String title, String content) {
+    public StudyPostUpdateRequestDto(String title, String content, String category) {
         this.title = title;
         this.content = content;
+        this.category = category;
     }
 
 }

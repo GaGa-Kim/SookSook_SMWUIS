@@ -25,28 +25,79 @@ public class StudyPostService {
     private final UserRepository userRepository;
     private final StudyMemberRepository studyMemberRepository;
 
-    // 스터디 게시글 작성
+    // 스터디 게시판 게시글 작성
     @Transactional
-    public Long save(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files) throws Exception {
-        StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
+    public Long lectureSave(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files) throws Exception {
+        return save(saveRequestDto, files, "스터디 게시판 게시글");
+    }
+
+    // 스터디 외 게시판 게시글 작성
+    @Transactional
+    public Long NotLectureSave(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files) throws Exception {
+        return save(saveRequestDto, files, "스터디 외 게시판 게시글");
+    }
+
+    // 자료 공유 게시글 작성
+    @Transactional
+    public Long shareSave(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files) throws Exception {
+        return save(saveRequestDto, files, "자료 공유 게시글");
+    }
+    
+    // 판매/나눔 게시글 작성
+    @Transactional
+    public Long sellSave(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files) throws Exception {
+        return save(saveRequestDto, files, "판매/나눔 게시글");
+    }
+    
+    // 질문 게시글 작성
+    @Transactional
+    public Long questionSave(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files) throws Exception {
+        return save(saveRequestDto, files, "질문 게시글");
+    }
+    
+    // 게시글 저장
+    @Transactional
+    public Long save(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files, String category) throws Exception {
         User user = userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
-        StudyPost studyPost = saveRequestDto.toEntity();
-        studyPost.setStudyBoardId(studyBoard);
-        studyPost.setUser(user);
-        studyBoard.addStudyPost(studyPostRepository.save(studyPost));
+        // 스터디 게시판 게시글이 아닐 경우
+        if(saveRequestDto.getStudyBoardId() == null) {
+            StudyPost studyPost = saveRequestDto.toEntity();
+            studyPost.setUser(user);
+            studyPost.setCategory(category);
+            user.updatePoints(user.getPoints());
 
-        StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyBoard, user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
-        studyMember.updatePost(studyMember.getPosts());
+            List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
 
-        List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
-
-        if(!filesList.isEmpty()) {
-            for(StudyFiles studyFiles: filesList) {
-                studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+            if(!filesList.isEmpty()) {
+                for(StudyFiles studyFiles: filesList) {
+                    studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+                }
             }
+            return studyPostRepository.save(studyPost).getId();
         }
-        return studyPostRepository.save(studyPost).getId();
+
+        // 스터디 게시판 게시글일 경우
+        else {
+            StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
+            StudyPost studyPost = saveRequestDto.toEntity();
+            studyPost.setStudyBoardId(studyBoard);
+            studyPost.setUser(user);
+            studyPost.setCategory(category);
+            studyBoard.addStudyPost(studyPostRepository.save(studyPost));
+
+            StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyBoard, user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
+            studyMember.updatePost(studyMember.getPosts());
+
+            List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
+
+            if(!filesList.isEmpty()) {
+                for(StudyFiles studyFiles: filesList) {
+                    studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+                }
+            }
+            return studyPostRepository.save(studyPost).getId();
+        }
     }
     
     // 스터디 게시글 수정 - 첨부파일 없을 때
@@ -57,7 +108,8 @@ public class StudyPostService {
 
         if(user.equals(studyPost.getUserId())) {
             studyPost.update(updateRequestDto.getTitle(),
-                    updateRequestDto.getContent());
+                    updateRequestDto.getContent(),
+                    updateRequestDto.getCategory());
             return "게시글 수정 완료";
         }
 
@@ -81,7 +133,8 @@ public class StudyPostService {
                 }
             }
             studyPost.update(updateRequestDto.getTitle(),
-                    updateRequestDto.getContent());
+                    updateRequestDto.getContent(),
+                    updateRequestDto.getCategory());
             return "게시글 수정 완료";
         }
 
@@ -125,6 +178,21 @@ public class StudyPostService {
     public StudyPostResponseDto findById(Long id, List<Long> fileId) {
         StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
         return new StudyPostResponseDto(studyPost, fileId);
+    }
+
+    // 카테고리 별 게시글 리스트 조회
+    @Transactional
+    public List<Long> findByCategory(String category) {
+        List<StudyPost> studyPostList = studyPostRepository.findByCategory(category);
+
+        List<Long> studyPostIdList = new ArrayList<>();
+
+        for (StudyPost studyPost: studyPostList) {
+            studyPostIdList.add(studyPost.getId());
+        }
+
+        return studyPostIdList;
+
     }
 }
 

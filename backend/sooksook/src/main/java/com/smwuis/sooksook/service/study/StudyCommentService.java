@@ -33,8 +33,14 @@ public class StudyCommentService {
         studyComment.setUser(user);
         studyPost.addStudyComment(studyCommentRepository.save(studyComment));
 
-        StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyPost.getStudyBoardId(), user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
-        studyMember.updateComments(studyMember.getComments());
+        if(studyPost.getStudyBoardId() == null) {
+            user.updatePoints(user.getPoints());
+        }
+
+        if(studyPost.getStudyBoardId() != null) {
+            StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyPost.getStudyBoardId(), user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
+            studyMember.updateComments(studyMember.getComments());
+        }
 
         Long id = studyCommentRepository.save(studyComment).getId();
 
