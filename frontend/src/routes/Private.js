@@ -14,7 +14,7 @@ const Block = () => {
             <button className="upcome">다가오는 스터디 일정</button>
             <button className="qrbutton">[7/21] 3주차 과제 제출</button>
             <button className="prbutton">
-                <Link to="/mypage">스터디 종료</Link>
+                <Link to="/membergrade">스터디 종료</Link>
             </button>
             <button className="prbutton">
                 <Link to="/setboard_private">글 작성하기</Link>
