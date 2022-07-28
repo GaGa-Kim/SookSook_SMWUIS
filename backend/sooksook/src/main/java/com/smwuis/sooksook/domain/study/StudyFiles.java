@@ -13,6 +13,7 @@ public class StudyFiles {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "StudyFile_ID")
     private Long id; // 기본키
 
     @ManyToOne

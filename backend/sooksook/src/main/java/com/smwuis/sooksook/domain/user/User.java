@@ -72,7 +72,11 @@ public class User extends BaseTimeEntity {
         this.points = points + 1;
 
         if (this.points >= 100) {
-            updateRating("눈송 등급");
+            updateRating("눈송이 등급");
+        }
+
+        if (this.points >= 200) {
+            updateRating("퀸송이 등급");
         }
     }
 

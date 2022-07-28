@@ -30,10 +30,20 @@ public class StudyBoardService {
     private final LocalDate startDatetime = LocalDate.now();
     private final LocalDate endDatetime = LocalDate.now().plusDays(7);
 
-    // 스터디 모집 게시판 글 작성
+    // 강의 스터디 모집 게시판 글 작성
     @Transactional
-    public Long save(StudyBoardSaveRequestDto saveRequestDto) {
+    public Long saveLecture(StudyBoardSaveRequestDto saveRequestDto) {
         StudyBoard studyBoard = saveRequestDto.toEntity();
+        studyBoard.setLecture(true);
+        studyBoard.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
+        return studyBoardRepository.save(studyBoard).getId();
+    }
+
+    // 강의 외 스터디 모집 게시판 글 작성
+    @Transactional
+    public Long saveNotLecture(StudyBoardSaveRequestDto saveRequestDto) {
+        StudyBoard studyBoard = saveRequestDto.toEntity();
+        studyBoard.setLecture(false);
         studyBoard.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
         return studyBoardRepository.save(studyBoard).getId();
     }

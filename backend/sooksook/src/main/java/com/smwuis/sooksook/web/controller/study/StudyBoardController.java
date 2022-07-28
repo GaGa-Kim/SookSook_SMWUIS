@@ -26,11 +26,18 @@ public class StudyBoardController {
 
     private final StudyBoardService studyBoardService;
 
-    // 스터디 모집 게시판 글 작성
-    @PostMapping(value = "/studyBoard")
-    @ApiOperation(value = "스터디 모집 게시판 글 작성", notes = "스터디 모집 게시판 글 작성 API")
-    public Long save(@RequestBody StudyBoardSaveRequestDto saveRequestDto) {
-        return studyBoardService.save(saveRequestDto);
+    // 강의 스터디 모집 게시판 글 작성
+    @PostMapping(value = "/studyBoard/lecture")
+    @ApiOperation(value = "강의 스터디 모집 게시판 글 작성", notes = "강의 스터디 모집 게시판 글 작성 API")
+    public Long saveLecture(@RequestBody StudyBoardSaveRequestDto saveRequestDto) {
+        return studyBoardService.saveLecture(saveRequestDto);
+    }
+
+    // 강의 외 스터디 모집 게시판 글 작성
+    @PostMapping(value = "/studyBoard/notLecture")
+    @ApiOperation(value = "강의 외 스터디 모집 게시판 글 작성", notes = "강의 외 스터디 모집 게시판 글 작성 API")
+    public Long saveNotLecture(@RequestBody StudyBoardSaveRequestDto saveRequestDto) {
+        return studyBoardService.saveNotLecture(saveRequestDto);
     }
 
     // 스터디 모집 게시판 글 수정
