@@ -4,7 +4,6 @@ import com.smwuis.sooksook.domain.user.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
-
 @Getter
 public class UserResponseDto {
 

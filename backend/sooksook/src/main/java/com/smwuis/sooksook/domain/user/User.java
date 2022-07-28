@@ -6,6 +6,9 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @ToString
 @Getter
@@ -42,6 +45,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String rating; // 등급
 
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserSchedule> userScheduleList = new ArrayList<>(); // 스케줄 리스트
+
     @Builder
     public User(String name, String loginId, String email, String nickname, String password, String introduction, int points, String rating) {
         this.name = name;
@@ -72,5 +78,13 @@ public class User extends BaseTimeEntity {
 
     public void updateRating(String rating) {
         this.rating = rating;
+    }
+
+    public void addUserScheduleList(UserSchedule userSchedule) {
+        this.userScheduleList.add(userSchedule);
+
+        if(userSchedule.getUserId() != this) {
+            userSchedule.setUser(this);
+        }
     }
 }
