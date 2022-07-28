@@ -7,7 +7,7 @@ import GlobalStyle from "./components/GlobalStyle";
 import Logo from "./components/Logo.js";
 import Cstudy from "./components/Cstudy.js";
 import Drop1 from "./components/Drop1.js";
-
+import Root from './components/Root';
 const Board1 = () => {
 
 
@@ -44,17 +44,17 @@ const Board1 = () => {
     ];
 
     return (
-        <>
+        <Root>
             <GlobalStyle />
             <Logo />
-            <div className="block" style={{ display: "flex" }}>
+            <div className="block">
                 <Drop1 />
                 <Cstudy />
             </div>
             <section className="table">
                 <Table columns={columns} dataSource={data} />;
             </section>
-        </>)
+        </Root>)
 };
 
 export default Board1;

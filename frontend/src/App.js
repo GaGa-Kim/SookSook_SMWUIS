@@ -40,7 +40,7 @@ function App() {
         <Route path="/setboard_share" element={<SetBoardShare />}></Route>
         <Route path="/board1" element={<Board1 />}></Route>
         <Route path="/board2" element={<Board2 />}></Route>
-        <Route path="/private:pw" element={<Private />}></Route>
+        <Route path="/private/:pw" element={<Private />}></Route>
         <Route path="/detailboard/:key" element={<DetailBoard />}></Route>
         <Route path="/detailshare/:key" element={<DetailShare />}></Route>
         <Route path="/sell" element={<Sell />}></Route>

@@ -16,7 +16,6 @@ import CommentList from "./components/CommentList";
 import "../fonts/Font.css";
 import { Input } from "antd";
 import { Link, useParams, useLocation } from "react-router-dom";
-import React from "react";
 
 const Title = styled.div`
     position: absolute;
@@ -76,16 +75,12 @@ const EnterBoard = () => {
         /*db에서 가져오기*/
     ]);
 
-    const handleXclick = (index) => {
-        const nextComment = commentList.filter(
-            (comment) => comment.index !== index
-        );
+    
 
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
-    //현재 로그인 중인 id 받기
-    const id = "가송";
+
     //게시글 정보 db에서 key 값이 dataKey인 정보 받아오기
     const [title, setTitle] = React.useState(dataKey);
     const [content, setContent] = React.useState(dataKey);
@@ -108,30 +103,61 @@ const EnterBoard = () => {
     const onChangeArea = (e) => {
         setContent(e.target.area);
     };
-    const [comment, setComment] = React.useState("");
-    const [commentList, setCommentList] = React.useState([/*db에서 가져오기*/]);
-
-    const handleXclick = (index) => {
-        const nextComment = commentList.filter((comment) => comment.key !== index);
-        setCommentList(nextComment);
-    };
-    const [nextIndex, setNextIndex] = React.useState(1);
 
     const getText = (text) => {
         setComment(text);
     };
-
+    const [nextKey, setNextKey] = React.useState(1);
+    const handleXclick = (listKey) => {
+        const nextComment = commentList.filter(
+            (comment) => comment.key !== listKey
+        );
+        setCommentList(nextComment);
+    };
+    const pw = "1"; //비밀게시판 비밀번호 받아오기
+    const [isRightPw, setIsRightPw] = React.useState(false);
+    const getPw = (text) => {
+        if (pw === text) {
+            setIsRightPw(true);
+        } else {
+            setIsRightPw(false);
+        }
+    };
+    const handleEnterClick = () => {
+        //비밀번호 틀렸을 때 경고
+        alert("비밀번호가 틀렸습니다.");
+    };
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
-            index: nextIndex,
+            key: nextKey,
+            parent: null,
             id: id,
             comment: comment,
         });
         setCommentList(nextCommentList);
-        setNextIndex(nextIndex + 1);
+        setNextKey(nextKey + 1);
         setComment("");
     };
-
+    const [isRecomment, setIsRecomment] = React.useState(false);
+    let parentIndex;
+    const handleSendClick = (listKey) => {
+        setIsRecomment(true);
+        parentIndex = listKey;
+    };
+    const handleRecommentClick = () => {
+        const addRecomment = commentList.concat({
+            key: nextKey,
+            parent: parentIndex,
+            id: id,
+            comment: comment,
+        });
+        setCommentList(addRecomment);
+        setNextKey(nextKey + 1);
+        setComment("");
+    };
+    const handleCommentClick = () => {
+        setIsRecomment(false);
+    };
     return (
         <Root>
             <GlobalStyle />
@@ -177,40 +203,74 @@ const EnterBoard = () => {
                 <InputBox>
                     <Quest ftSize="25px">비밀번호</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputPassword />
+                        <InputPassword getPw={getPw} />
                     </Box>
                     <Box left="310px" top="7px">
-                        <Button width="50px" height="32px" mg="0px">
-                            입장
-                        </Button>
+                        {isRightPw && (
+                            <Link to={`/private/${pw}`}>
+                                <Button width="50px" height="32px" mg="0px">
+                                    입장
+                                </Button>
+                            </Link>
+                        )}
+                        {!isRightPw && (
+                            <Button
+                                width="50px"
+                                height="32px"
+                                mg="0px"
+                                onClick={handleEnterClick}
+                            >
+                                입장
+                            </Button>
+                        )}
                     </Box>
                 </InputBox>
             </Main>
             <Footer>
-                <CommentTitle>댓글</CommentTitle>
+                <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
                 <ListBox>
                     {commentList.map((comment) => (
                         <CommentList
-                            index={comment.index}
+
+                            listKey={comment.key}
                             id={comment.id}
+                            parent={comment.parent}
                             comment={comment.comment}
                             handleXclick={handleXclick}
+                            handleSendClick={handleSendClick}
                         />
                     ))}
                 </ListBox>
-                <CommentBox>
-                    <InputText
-                        text="입력하세요"
-                        getText={getText}
-                        value={comment}
-                    ></InputText>
-                    <Button width="50px" mg="5px" onClick={handlePlusClick}>
-                        입력
-                    </Button>
-                </CommentBox>
+                {!isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button width="50px" mg="5px" onClick={handlePlusClick}>
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
+                {isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="대댓글을 입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button
+                            width="50px"
+                            mg="5px"
+                            onClick={handleRecommentClick}
+                        >
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
             </Footer>
         </Root>
-        
     );
 };
 

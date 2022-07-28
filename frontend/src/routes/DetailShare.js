@@ -67,25 +67,29 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const Add = styled.div`
+const Footer = styled.div`
     width: 100%;
-    height: 60px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: "DoHyeon";
+`;
+const CommentBox = styled.div`
+    height: 40px;
+    margin: 5px 10px;
+    display: flex;
+    justify-content: space-around;
+`;
+const CommentTitle = styled.div`
+    width: 100%;
+    padding:10px 0px 7px 35px;
     display: flex;
     align-items: center;
-    margin-bottom:10px;
+    font-size: 17px;
+    border-bottom: thin solid #c1daff;
+    background-color:#c1daff;
 `;
-const PlusImg = styled.img`
-    width: 25px;
-    height: 25px;
-    position: absolute;
-    right: 22px;
 
-    &:hover {
-        width: 27px;
-        height: 27px;
-    }
-`;
 const DetailShare = () => {
     const { key } = useParams();
     const location = useLocation();
@@ -118,24 +122,49 @@ const DetailShare = () => {
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([/*db에서 가져오기*/]);
 
-    const handleXclick = (index) => {
-        const nextComment = commentList.filter((comment) => comment.key !== index);
-        setCommentList(nextComment);
-    };
-    const [nextIndex, setNextIndex] = React.useState(1);
-
     const getText = (text) => {
         setComment(text);
     };
+    const [nextKey, setNextKey] = React.useState(1);
+    const handleXclick = (listKey) => {
+        const nextComment = commentList.filter(
+            (comment) => comment.key !== listKey
+        );
+        setCommentList(nextComment);
+    };
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
-            index: nextIndex,
+            key: nextKey,
+            parent: null,
             id: id,
             comment: comment,
         });
         setCommentList(nextCommentList);
-        setNextIndex(nextIndex + 1);
+        setNextKey(nextKey + 1);
         setComment("");
+    };
+    //const commentCount=접속한 id의 comment개수 받아오기;
+        //commentCount++;
+        //다시 commentCount 값 보내기
+    const [isRecomment, setIsRecomment] = React.useState(false);
+    let parentIndex;
+    const handleSendClick = (listKey) => {
+        setIsRecomment(true);
+        parentIndex = listKey;
+    };
+    const handleRecommentClick = () => {
+        const addRecomment = commentList.concat({
+            key: nextKey,
+            parent: parentIndex,
+            id: id,
+            comment: comment,
+        });
+        setCommentList(addRecomment);
+        setNextKey(nextKey + 1);
+        setComment("");
+    };
+    const handleCommentClick = () => {
+        setIsRecomment(false);
     };
     return (
         <Root>
@@ -232,29 +261,50 @@ const DetailShare = () => {
             </ButtonBox>
             {/* 댓글창 */}
             {!isModify &&
-                <>
-                    <ListBox>
-                        {commentList.map((comment) => (
-                            <CommentList
-                                key={comment.index}
-                                id={comment.id}
-                                comment={comment.comment}
-                                handleXclick={handleXclick}
+                <Footer>
+                <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
+                <ListBox>
+                    {commentList.map((comment) => (
+                        <CommentList
 
-                            />
-                        ))}
-                    </ListBox>
-                    <Add>
-                        <Box left="20px" width="90%">
-                            <InputText
-                                getText={getText}
-                                text="댓글을 입력하세요"
-                                value={comment}
-                            />
-                        </Box>
-                        <PlusImg src={plus} onClick={handlePlusClick}></PlusImg>
-                    </Add>
-                </>
+                            listKey={comment.key}
+                            id={comment.id}
+                            parent={comment.parent}
+                            comment={comment.comment}
+                            handleXclick={handleXclick}
+                            handleSendClick={handleSendClick}
+                        />
+                    ))}
+                </ListBox>
+                {!isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button width="50px" mg="5px" onClick={handlePlusClick}>
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
+                {isRecomment && (
+                    <CommentBox>
+                        <InputText
+                            text="대댓글을 입력하세요"
+                            getText={getText}
+                            value={comment}
+                        ></InputText>
+                        <Button
+                            width="50px"
+                            mg="5px"
+                            onClick={handleRecommentClick}
+                        >
+                            입력
+                        </Button>
+                    </CommentBox>
+                )}
+            </Footer>
             }
         </Root>
     );

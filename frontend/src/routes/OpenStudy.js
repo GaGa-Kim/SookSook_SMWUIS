@@ -98,7 +98,6 @@ const Openstudy = () => {
             return;
         }
         /*db에 게시글 정보 저장*/
-
     }
     const getText = (text) => {
         setTitle(text);
@@ -122,7 +121,7 @@ const Openstudy = () => {
             </ColorBox>
             <Main>
                 <InputBox>
-                    <Quest>대학</Quest>
+                    <Quest>학부</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <Select>
                             <option>문과대학</option>
