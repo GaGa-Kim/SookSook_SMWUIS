@@ -45,6 +45,7 @@ public class StudyPostController {
     public Long save(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
+                .email(studyPostVO.getEmail())
                 .studyBoardId(studyPostVO.getStudyBoardId())
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
@@ -125,11 +126,11 @@ public class StudyPostController {
         return studyPostService.delete(id, email);
     }
 
-    // 특정 스터디 게시판 전체 글 조회
+    // 특정 스터디 게시판 전체 글 아이디 조회
     @GetMapping(value = "/studyPosts/all")
-    @ApiOperation(value = "스터디 게시판 게시글 리스트 전체 조회", notes = "스터디 게시판 게시글 리스트 전체 조회 API")
+    @ApiOperation(value = "스터디 게시판 게시글 아이디 리스트 전체 조회", notes = "스터디 게시판 게시글 아이디 리스트 전체 조회 API")
     @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
-    public List<StudyPost> allList(@RequestParam Long studyBoardId) {
+    public List<Long> allList(@RequestParam Long studyBoardId) {
         return studyPostService.allList(studyBoardId);
     }
 

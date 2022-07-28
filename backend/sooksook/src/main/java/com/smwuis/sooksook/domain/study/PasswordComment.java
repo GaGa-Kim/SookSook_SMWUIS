@@ -22,11 +22,11 @@ public class PasswordComment extends BaseTimeEntity {
     @Column(name = "PasswordComment_ID")
     private Long id; // 기본키
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn (name = "User_ID")
     private User userId; // 작성자 (fk)
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "StudyBoard_ID")
     private StudyBoard studyBoardId; // 게시판 (fk)
 

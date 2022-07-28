@@ -1,77 +1,90 @@
 package com.smwuis.sooksook.domain.user;
 
 import com.smwuis.sooksook.domain.BaseTimeEntity;
-import com.smwuis.sooksook.web.dto.user.UserSignUpForm;
-import com.smwuis.sooksook.web.dto.user.UserUpdateForm;
+
+import javax.persistence.*;
+
+import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 
 @Entity
+@ToString
 @Getter
-@DynamicInsert
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id", unique = true)
-    private Long id;    // 시스템의 데이터 아이디 (회원 id X)
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<UserSchedule> userScheduleList;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "User_ID")
+    private Long id; // 기본키
 
     @Column(nullable = false)
-    private String name;
-
-    @Email
-    @Column(nullable = false)
-    private String email;
+    private String name; // 이름
 
     @Column(nullable = false)
-    private String nickname;
-
-    @Setter
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = true)
-    private String introduction;
+    private String loginId; // 아이디
 
     @Column(nullable = false)
-    @ColumnDefault("0")
-    private Long points;
+    private String email; // 이메일
 
     @Column(nullable = false)
-    @ColumnDefault("0")
-    private String rating;
-    public User(UserSignUpForm form) {
-        this.name = form.getName();
-        this.email = form.getEmail();
-        this.nickname = form.getNickname();
-        this.password = form.getPassword();
-        this.introduction = form.getIntroduction();
+    private String nickname; // 닉네임
+
+    @Column(nullable = false)
+    private String password; // 비밀번호
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String introduction; // 한 줄 소개글
+
+    @Column(nullable = false)
+    private int points; // 포인트
+
+    @Column(nullable = false)
+    private String rating; // 등급
+
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserSchedule> userScheduleList = new ArrayList<>(); // 스케줄 리스트
+    
+    @Builder
+    public User(String name, String loginId, String email, String nickname, String password, String introduction, int points, String rating) {
+        this.name = name;
+        this.loginId = loginId;
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.introduction = introduction;
+        this.points = points;
+        this.rating = rating;
     }
 
-    public User update(UserUpdateForm form) {
-        this.name = form.getName();
-        this.nickname = form.getNickname();
-        this.introduction = form.getIntroduction();
+    public User update(String name, String nickname, String password, String introduction) {
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+        this.introduction = introduction;
         return this;
+    }
+
+    public void updatePoints(int points) {
+        this.points = points + 1;
+
+        if (this.points >= 100) {
+            updateRating("눈송 등급");
+        }
+    }
+
+    public void updateRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void addUserScheduleList(UserSchedule userSchedule) {
+        this.userScheduleList.add(userSchedule);
+
+        if(userSchedule.getUserId() != this) {
+            userSchedule.setUser(this);
+        }
     }
 }

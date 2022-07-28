@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyPostSaveRequestDto {
 
-    @ApiModelProperty(example = "작성자 이메일")
+    @ApiModelProperty(example = "이메일")
     private String email;
 
-    @ApiModelProperty(example = "스터디 게시판 id")
+    @ApiModelProperty(example = "1")
     private Long studyBoardId;
 
     @ApiModelProperty(example = "제목")

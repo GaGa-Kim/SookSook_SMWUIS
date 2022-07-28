@@ -1,7 +1,0 @@
-package com.smwuis.sooksook.repository;
-
-import com.smwuis.sooksook.domain.post.Post;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface PostRepository extends JpaRepository<Post, Long> {
-}

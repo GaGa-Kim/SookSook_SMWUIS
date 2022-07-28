@@ -2,7 +2,7 @@ package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.*;
 import com.smwuis.sooksook.domain.user.User;
-import com.smwuis.sooksook.repository.UserRepository;
+import com.smwuis.sooksook.domain.user.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyCommentResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyCommentSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class StudyCommentService {
         StudyComment studyComment = saveRequestDto.toEntity();
         studyComment.setStudyPost(studyPost);
         studyComment.setUser(user);
+        studyPost.addStudyComment(studyCommentRepository.save(studyComment));
 
         StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyPost.getStudyBoardId(), user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
         studyMember.updateComments(studyMember.getComments());

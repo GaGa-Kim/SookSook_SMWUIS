@@ -1,5 +1,7 @@
 package com.smwuis.sooksook.domain.study;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.smwuis.sooksook.domain.BaseTimeEntity;
 import com.smwuis.sooksook.domain.user.User;
 import lombok.Builder;
@@ -16,6 +18,7 @@ import java.util.List;
 @ToString
 @Getter
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
 
     @Id
@@ -23,7 +26,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     @Column(name = "StudyBoard_ID")
     private Long id; // 기본키
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn (name = "User_ID")
     private User userId; // 작성자 (fk)
 

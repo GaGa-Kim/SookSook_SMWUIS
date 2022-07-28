@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class StudyBoardSaveRequestDto {
 
-    @ApiModelProperty(example = "작성자 이메일")
+    @ApiModelProperty(example = "이메일")
     private String email;
 
     @ApiModelProperty(example = "학부")

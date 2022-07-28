@@ -21,11 +21,22 @@ public class StudyMemberController {
 
     private final StudyMemberService studyMemberService;
 
+    // 스터디 게시판 비밀번호 확인 및 스터디 가입
+    @PostMapping(value = "/studyMember/password")
+    @ApiOperation(value = "스터디 게시판 비밀번호 확인 및 스터디 가입", notes = "스터디 게시판 비밀번호 확인 및 스터디 가입 API")
+    public Boolean password(@RequestBody StudyMemberSaveRequestDto saveRequestDto) {
+        return studyMemberService.password(saveRequestDto);
+    }
+
     // 스터디 참여
     @PostMapping(value = "/studyMember")
     @ApiOperation(value = "스터디 게시판 참여", notes = "스터디 게시판 참여 API")
-    public String join(@RequestBody StudyMemberSaveRequestDto saveRequestDto) {
-        return studyMemberService.join(saveRequestDto);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id"),
+            @ApiImplicitParam(name = "email", value = "이메일")
+    })
+    public Boolean join(@RequestParam Long studyBoardId, String email) {
+        return studyMemberService.join(studyBoardId, email);
     }
 
     // 스터디 탈퇴
@@ -42,7 +53,7 @@ public class StudyMemberController {
     // 스터디 부원 정보 (부원, 글 작성 수, 댓글 수)
     @GetMapping(value = "/studyMember")
     @ApiOperation(value = "스터디 게시판 부원 정보 조회", notes = "스터디 게시판 부원 정보 조회 API")
-    @ApiImplicitParam(name = "id", value = "스터디 게시판 id")
+    @ApiImplicitParam(name = "studyBoardId", value = "스터디 게시판 id")
     public List<StudyMemberListResponseDto> allList(@RequestParam Long studyBoardId) {
         return studyMemberService.findByAllByStudyBoardId(studyBoardId);
     }
@@ -50,12 +61,9 @@ public class StudyMemberController {
     // 내가 참여 중인 스터디
     @GetMapping(value = "/studyMember/myStudy")
     @ApiOperation(value = "내가 참여 중인 스터디 조회", notes = "내가 참여 중인 스터디 조회 API")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id"),
-            @ApiImplicitParam(name = "email", value = "이메일")
-    })
-    public List<StudyBoard> myStudy(@RequestParam Long studyBoardId, String email) {
-        return studyMemberService.myStudy(studyBoardId, email);
+    @ApiImplicitParam(name = "email", value = "이메일")
+    public List<Long> myStudy(@RequestParam String email) {
+        return studyMemberService.myStudy(email);
     }
 
 }

@@ -1,6 +1,7 @@
-package com.smwuis.sooksook.web.dto.study;
+package com.smwuis.sooksook.web.dto.user;
 
-import com.smwuis.sooksook.domain.study.StudySchedule;
+
+import com.smwuis.sooksook.domain.user.UserSchedule;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,31 +11,27 @@ import java.util.Date;
 
 @Getter
 @NoArgsConstructor
-public class StudyScheduleSaveRequestDto {
+public class UserScheduleRequestDto {
 
     @ApiModelProperty(example = "이메일")
     private String email;
 
-    @ApiModelProperty(example = "1")
-    private Long studyBoardId;
-
-    @ApiModelProperty(example = "2022-07-16")
+    @ApiModelProperty(example = "2022-07-28")
     private Date period;
 
     @ApiModelProperty(example = "내용")
     private String content;
 
     @Builder
-    public StudyScheduleSaveRequestDto(String email, Long studyBoardId, Date period, String content) {
+    public UserScheduleRequestDto(String email, Date period, String content) {
         this.email = email;
-        this.studyBoardId = studyBoardId;
         this.period = period;
         this.content = content;
     }
 
-    public StudySchedule toEntity() {
-        return StudySchedule.builder()
-                .period(period)
+    public UserSchedule toEntity() {
+        return UserSchedule.builder().
+                period(period)
                 .content(content)
                 .build();
     }

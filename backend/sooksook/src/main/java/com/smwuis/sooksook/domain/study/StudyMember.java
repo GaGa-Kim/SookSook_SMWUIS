@@ -19,7 +19,7 @@ public class StudyMember extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 기본키
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn (name = "User_ID")
     private User userId; // 작성자 (fk)
 
@@ -42,11 +42,11 @@ public class StudyMember extends BaseTimeEntity {
     }
 
     public void updatePost(int posts) {
-        this.posts = posts++;
+        this.posts = posts + 1;
     }
 
     public void updateComments(int comments) {
-        this.comments = comments++;
+        this.comments = comments + 1;
     }
 
     public void setUser(User user) {

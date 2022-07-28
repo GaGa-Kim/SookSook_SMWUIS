@@ -1,39 +1,58 @@
 package com.smwuis.sooksook.domain.user;
 
 import com.smwuis.sooksook.domain.BaseTimeEntity;
-import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
+@ToString
 @Getter
-@Setter
 @NoArgsConstructor
-@Table(name = "user_schedule")
 public class UserSchedule extends BaseTimeEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_schedule_id" , unique = true)
-    private Long id;    // 시스템의 데이터 아이디 (회원 id X)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // 기본키
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "User_ID")
+    private User userId; // 작성자 (fk)
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
+    @Column(nullable = false)
+    private Date period; // 기한
 
-    @Column(columnDefinition = "TEXT" , nullable = false)
-    private String contents;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String content; // 내용
+
+    @Column(nullable = false)
+    private boolean finish = false; // 완료 유무
+
+    @Builder
+    public UserSchedule(Date period, String content, boolean finish) {
+        this.period = period;
+        this.content = content;
+        this.finish = finish;
+    }
+
+    public UserSchedule update(Date period, String content) {
+        this.period = period;
+        this.content = content;
+        return this;
+    }
+
+    public void updateFinish() {
+        this.finish = !this.finish;
+    }
+
+    public void setUser(User user) {
+        this.userId = user;
+
+        if(!userId.getUserScheduleList().contains(this))
+            user.getUserScheduleList().add(this);
+    }
 }

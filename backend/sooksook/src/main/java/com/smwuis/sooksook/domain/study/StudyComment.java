@@ -22,11 +22,11 @@ public class StudyComment extends BaseTimeEntity {
     @Column(name = "StudyComment_ID")
     private Long id; // 기본키
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn (name = "User_ID")
     private User userId; // 작성자 (fk)
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "StudyPost_ID")
     private StudyPost studyPostId; // 게시글 (fk)
 

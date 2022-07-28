@@ -2,8 +2,7 @@ package com.smwuis.sooksook.service.study;
 
 import com.smwuis.sooksook.domain.study.*;
 import com.smwuis.sooksook.domain.user.User;
-import com.smwuis.sooksook.repository.UserRepository;
-import com.smwuis.sooksook.service.study.FileHandler;
+import com.smwuis.sooksook.domain.user.UserRepository;
 import com.smwuis.sooksook.web.dto.study.StudyPostResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyPostSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyPostUpdateRequestDto;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -106,11 +106,18 @@ public class StudyPostService {
         }
     }
     
-    // 특정 스터디 게시판 전체 글 조회
+    // 특정 스터디 게시판 전체 글 아이디 조회
     @Transactional
-    public List<StudyPost> allList(Long studyBoardId) {
+    public List<Long> allList(Long studyBoardId) {
         StudyBoard studyBoard = studyBoardRepository.findById(studyBoardId).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        return studyPostRepository.findByStudyBoardId(studyBoard);
+        List<StudyPost> studyPostList = studyPostRepository.findAllByStudyBoardId(studyBoard);
+        List<Long> studyPostIdList = new ArrayList<>();
+
+        for (StudyPost studyPost: studyPostList) {
+            studyPostIdList.add(studyPost.getId());
+        }
+
+        return studyPostIdList;
     }
     
     // 스터디 게시글 상세 조회
