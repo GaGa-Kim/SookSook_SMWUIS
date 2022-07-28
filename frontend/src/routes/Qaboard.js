@@ -19,7 +19,7 @@ const columns = [
         title: <div className="studyname">스터디 명</div>,
         dataIndex: "title",
         key: "key",
-        render: (text) => <Link to="" >{text}</Link>
+        render: (text, { key }) => <Link to={`/detailqa/${key}`} state={{ key: key }}>{text}</Link>
     },
 
     {
