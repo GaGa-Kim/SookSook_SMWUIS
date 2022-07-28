@@ -1,5 +1,6 @@
 package com.smwuis.sooksook.domain.user;
 
+import com.smwuis.sooksook.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Date;
 @ToString
 @Getter
 @NoArgsConstructor
-public class UserSchedule {
+public class UserSchedule extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

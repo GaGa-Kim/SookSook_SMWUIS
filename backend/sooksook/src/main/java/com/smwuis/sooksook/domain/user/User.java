@@ -47,7 +47,7 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserSchedule> userScheduleList = new ArrayList<>(); // 스케줄 리스트
-
+    
     @Builder
     public User(String name, String loginId, String email, String nickname, String password, String introduction, int points, String rating) {
         this.name = name;
