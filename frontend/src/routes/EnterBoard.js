@@ -1,4 +1,5 @@
 import React from "react";
+import ReactModal from "react-modal";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -14,7 +15,7 @@ import Logo from "./components/Logo";
 import ListBox from "./components/ListBox";
 import CommentList from "./components/CommentList";
 import "../fonts/Font.css";
-import { Input } from "antd";
+import { Input, Modal } from "antd";
 import { Link, useParams, useLocation } from "react-router-dom";
 
 const Title = styled.div`
@@ -75,8 +76,6 @@ const EnterBoard = () => {
         /*db에서 가져오기*/
     ]);
 
-    
-
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
@@ -123,10 +122,23 @@ const EnterBoard = () => {
             setIsRightPw(false);
         }
     };
+    const [isOpen, setIsOpen] = React.useState(false);
+    //입장버튼눌렀을때
     const handleEnterClick = () => {
-        //비밀번호 틀렸을 때 경고
-        alert("비밀번호가 틀렸습니다.");
+        //멤버라면 바로 입장
+        setIsOpen(true);
     };
+    //모달에서 입력버튼 눌렀을때
+    const handleModalEnterClick=()=>{
+        setIsOpen(false);
+        //비밀번호 틀렸을 때 경고
+        if(!isRightPw){
+            alert("비밀번호가 틀렸습니다.");
+        }
+    }
+    const handleRequestCloseFunc=()=>{
+        setIsOpen(false);
+    }
     const handlePlusClick = () => {
         const nextCommentList = commentList.concat({
             key: nextKey,
@@ -201,28 +213,17 @@ const EnterBoard = () => {
                     <Quest ftSize="25px">단기</Quest>
                 </InputBox>
                 <InputBox>
-                    <Quest ftSize="25px">비밀번호</Quest>
-                    <Box width="200px" left="100px" top="7px">
-                        <InputPassword getPw={getPw} />
-                    </Box>
-                    <Box left="310px" top="7px">
-                        {isRightPw && (
-                            <Link to={`/private/${pw}`}>
-                                <Button width="50px" height="32px" mg="0px">
-                                    입장
-                                </Button>
-                            </Link>
-                        )}
-                        {!isRightPw && (
-                            <Button
-                                width="50px"
-                                height="32px"
-                                mg="0px"
-                                onClick={handleEnterClick}
-                            >
-                                입장
-                            </Button>
-                        )}
+                    
+                    <Box left="130px" top="7px">
+                        <Button
+                            width="100px"
+                            height="32px"
+                            mg="0px"
+                            onClick={handleEnterClick}
+                        >
+                            입장
+                        </Button>
+                        
                     </Box>
                 </InputBox>
             </Main>
@@ -231,7 +232,6 @@ const EnterBoard = () => {
                 <ListBox>
                     {commentList.map((comment) => (
                         <CommentList
-
                             listKey={comment.key}
                             id={comment.id}
                             parent={comment.parent}
@@ -270,6 +270,53 @@ const EnterBoard = () => {
                     </CommentBox>
                 )}
             </Footer>
+            <ReactModal
+                            isOpen={isOpen}
+                            onRequestClose={handleRequestCloseFunc}
+                            style={{
+                                overlay: {
+                                    width:"100%",
+                                    height:"100%",
+                                    fontFamily: "DoHyeon",
+                                    
+                                    
+                                },
+                                content: {
+                                    width: "300px",
+                                    height: "300px",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent:"center",
+                                    alignItems:"center",
+                                    position: "fixed",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)"
+                                },
+                            }}
+                        >
+                            <Quest ftSize="25px">비밀번호</Quest>
+                            <div style={{margin:"10px"}}>
+                            <InputPassword getPw={getPw} />
+                            </div>
+                            {isRightPw && (
+                            <Link to={`/private/${pw}`}>
+                                <Button width="50px" height="32px" mg="0px">
+                                입력
+                                </Button>
+                                </Link>
+                                )}
+                                {!isRightPw && (
+                                    <Button
+                                    width="50px"
+                                    height="32px"
+                                    mg="0px"
+                                    onClick={handleModalEnterClick}
+                                    >
+                                    입력
+                                    </Button>
+                                )}
+                        </ReactModal>
         </Root>
     );
 };
