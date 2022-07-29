@@ -20,8 +20,9 @@ public class UserRating extends BaseTimeEntity {
     @Column(name = "UserRating_ID")
     private Long id; // 기본키
 
-    @Column(nullable = false)
-    private String receiverEmail; // 별점 받는 사람
+    @ManyToOne
+    @JoinColumn (name = "User_ID")
+    private User receiverEmail; // 별점 받는 사람
 
     @Column(nullable = false)
     private String giverEmail; // 별점 주는 사람
@@ -39,8 +40,7 @@ public class UserRating extends BaseTimeEntity {
     private float score; // 평가 별점
 
     @Builder
-    public UserRating(String receiverEmail, String giverEmail, Long studyBoardId, String subject, String contents, float score) {
-        this.receiverEmail = receiverEmail;
+    public UserRating(String giverEmail, Long studyBoardId, String subject, String contents, float score) {
         this.giverEmail = giverEmail;
         this.studyBoardId = studyBoardId;
         this.subject = subject;
@@ -52,6 +52,13 @@ public class UserRating extends BaseTimeEntity {
         this.contents = contents;
         this.score = score;
         return this;
+    }
+
+    public void setReceiverEmail(User user) {
+        this.receiverEmail = user;
+
+        if(!receiverEmail.getUserRatingList().contains(this))
+            user.getUserRatingList().add(this);
     }
 }
 

@@ -1,7 +1,9 @@
 package com.smwuis.sooksook.service.user;
 
+import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.domain.user.UserRating;
 import com.smwuis.sooksook.domain.user.UserRatingRepository;
+import com.smwuis.sooksook.domain.user.UserRepository;
 import com.smwuis.sooksook.web.dto.user.UserRatingResponseDto;
 import com.smwuis.sooksook.web.dto.user.UserRatingTotalResponseDto;
 import com.smwuis.sooksook.web.dto.user.UserRatingSaveRequestDto;
@@ -18,11 +20,15 @@ import java.util.stream.Collectors;
 public class UserRatingService {
     
     private final UserRatingRepository userRatingRepository;
+    private final UserRepository userRepository;
 
     // 유저 평가 생성
     @Transactional
     public UserRatingResponseDto save(UserRatingSaveRequestDto saveRequestDto) {
+        User user = userRepository.findByEmail(saveRequestDto.getReceiverEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         UserRating userRating = saveRequestDto.toEntity();
+        userRating.setReceiverEmail(user);
+        user.addUserRatingList(userRatingRepository.save(userRating));
         userRatingRepository.save(userRating);
 
         return new UserRatingResponseDto(userRating);
@@ -59,7 +65,8 @@ public class UserRatingService {
     // 나의 모든 유저 평가 조회
     @Transactional(readOnly = true)
     public List<UserRatingResponseDto> findMyRating(String email) {
-        return (userRatingRepository.findByReceiverEmail(email))
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+        return (userRatingRepository.findByReceiverEmail(user))
                 .stream()
                 .map(UserRatingResponseDto::new)
                 .collect(Collectors.toList());
@@ -76,7 +83,8 @@ public class UserRatingService {
     // 유저 평가 스터디 종합 조회
     @Transactional(readOnly = true)
     public UserRatingTotalResponseDto findRatingWithStudyBoard(String email, Long studyBoardId) {
-        List<UserRating> userRatingList = userRatingRepository.findByReceiverEmailAndStudyBoardId(email, studyBoardId);
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+        List<UserRating> userRatingList = userRatingRepository.findByReceiverEmailAndStudyBoardId(user, studyBoardId);
         List<String> contents = new ArrayList<>();
 
         float score = 0;

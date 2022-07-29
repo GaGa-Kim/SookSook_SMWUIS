@@ -30,7 +30,7 @@ public class UserRatingResponseDto {
 
     public UserRatingResponseDto(UserRating userRating) {
         this.id = userRating.getId();
-        this.receiverEmail = userRating.getReceiverEmail();
+        this.receiverEmail = userRating.getReceiverEmail().getEmail();
         this.giverEmail = userRating.getGiverEmail();
         this.subject = userRating.getSubject();
         this.studyBoardId = userRating.getStudyBoardId();

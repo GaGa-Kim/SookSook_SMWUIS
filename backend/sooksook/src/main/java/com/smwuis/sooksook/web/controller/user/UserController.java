@@ -44,9 +44,9 @@ public class UserController {
         return ResponseEntity.ok().body(userService.updatePassword(email, oldPassword, newPassword));
     }
 
-    // 유저 삭제
+    // 유저 탈퇴
     @DeleteMapping("/user")
-    @ApiOperation(value = "유저 삭제", notes = "유저 삭제 API")
+    @ApiOperation(value = "유저 탈퇴", notes = "유저 탈퇴 API")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "유저 id", example = "1", required = true),
             @ApiImplicitParam(name = "email", value = "이메일", example = "이메일", required = true)

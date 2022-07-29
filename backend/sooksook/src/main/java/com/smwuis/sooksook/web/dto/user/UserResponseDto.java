@@ -39,12 +39,13 @@ public class UserResponseDto {
     @ApiModelProperty(notes = "등급", example = "새싹 등급")
     private String rating;
 
-    public UserResponseDto(User user) {
+    public UserResponseDto(User user, String origPassword) {
         this.id = user.getId();
         this.name = user.getName();
         this.loginId = user.getLoginId();
         this.email = user.getEmail();
         this.nickname = user.getNickname();
+        this.origPassword = origPassword;
         this.password = user.getPassword();
         this.introduction = user.getIntroduction();
         this.points = user.getPoints();
