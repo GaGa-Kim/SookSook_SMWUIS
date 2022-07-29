@@ -16,6 +16,8 @@ import Share from './routes/Share';
 import Qaboard from './routes/Qaboard';
 import DetailBoard from './routes/DetailBoard'
 import DetailShare from './routes/DetailShare'
+import DetailSell from './routes/DetailSell'
+import DetailQa from './routes/DetailQa'
 import SetBoardQa from './routes/SetBoardQa';
 import SetBoardSell from './routes/SetBoardSell';
 import SetBoardShare from './routes/SetBoardShare';
@@ -43,6 +45,8 @@ function App() {
         <Route path="/private/:pw" element={<Private />}></Route>
         <Route path="/detailboard/:key" element={<DetailBoard />}></Route>
         <Route path="/detailshare/:key" element={<DetailShare />}></Route>
+        <Route path="/detailsell/:key" element={<DetailSell />}></Route>
+        <Route path="/detailqa/:key" element={<DetailQa />}></Route>
         <Route path="/sell" element={<Sell />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/join" element={<Join />}></Route>

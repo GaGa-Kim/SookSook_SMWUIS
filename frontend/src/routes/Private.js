@@ -2,7 +2,7 @@ import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React from "react";
 import { Table } from "antd";
-import { Link,useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -10,11 +10,11 @@ import "../fonts/Font.css";
 
 const Block = () => {
     return (
-        <section>
+        <section className="block">
             <button className="upcome">다가오는 스터디 일정</button>
             <button className="qrbutton">[7/21] 3주차 과제 제출</button>
             <button className="prbutton">
-                <Link to="/mypage">스터디 종료</Link>
+                <Link to="/membergrade">스터디 종료</Link>
             </button>
             <button className="prbutton">
                 <Link to="/setboard_private">글 작성하기</Link>
@@ -50,7 +50,7 @@ const spcolumns = [
 
 const member = ["가송", "나송", "다송"];
 const Private = () => {
-    const pw=useParams();
+    const pw = useParams();
     const data = [
         { key: 1, title: "스터디 규칙", name: "가송" },
         { key: 2, title: "과제제출", name: "나송" },
@@ -73,7 +73,7 @@ const Private = () => {
     const [piedata, setPiedata] = React.useState([]);
 
     let post = 0;
-    const comment=0;//데이터 받아오기
+    const comment = 0;//데이터 받아오기
     React.useEffect(() => {
         let initialSpdata = [];
         let initialPiedata = [];
@@ -115,9 +115,7 @@ const Private = () => {
         >
             <GlobalStyle />
             <Logo />
-            <section className="block">
-                <Block />
-            </section>
+            <Block />
             <section className="chart">
                 <Piein>스터디 참여율</Piein>
                 <div className="hp">

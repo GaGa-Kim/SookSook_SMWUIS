@@ -1,11 +1,21 @@
 .aclogin {
-    margin-right: 300px;
-    margin-top: 30px;
+    width: 50%;
+    height: 240px;
+    float: center;
+    margin-left: 23%;
+    margin-top: 4.5%;
+    padding-top: 20px;
+    font-size: 17px;
+    background-color: rgb(245, 242, 242);
+    border-radius: 30px;
+    font-family: "DoHyeon";
 }
 
 .header {
-    margin: 65px 290px 0px 270px;
-    font-size: 15px;
-    color: grey;
+    margin: 20px 30px 30px 15px;
     font-weight: bold;
+}
+
+.form {
+    margin-right: 20%
 }

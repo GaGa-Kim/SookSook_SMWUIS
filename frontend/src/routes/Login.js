@@ -10,6 +10,7 @@ import Header from "./components/Header.js";
 import Id from "./components/Id.js";
 import Pw from "./components/Pw.js";
 import Lgbutton from "./components/Lgbutton.js";
+
 const App = () => {
     const onFinish = (values) => {
         console.log("Success:", values);
@@ -24,9 +25,9 @@ const App = () => {
             <GlobalStyle />
             <Logo />
             <Block />
-            <Header text="로그인" />
             <div className="aclogin">
-                <Form
+                <Header text="로그인" />
+                <Form className="form"
                     name="basic"
                     labelCol={{
                         span: 8
