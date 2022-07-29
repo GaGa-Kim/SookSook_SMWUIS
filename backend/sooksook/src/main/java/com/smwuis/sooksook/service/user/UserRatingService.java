@@ -1,13 +1,10 @@
 package com.smwuis.sooksook.service.user;
 
-import com.smwuis.sooksook.domain.study.StudyBoardRepository;
 import com.smwuis.sooksook.domain.user.UserRating;
 import com.smwuis.sooksook.domain.user.UserRatingRepository;
-import com.smwuis.sooksook.domain.user.UserRepository;
-import com.smwuis.sooksook.web.dto.user.UserRatingListResponseDto;
 import com.smwuis.sooksook.web.dto.user.UserRatingResponseDto;
+import com.smwuis.sooksook.web.dto.user.UserRatingTotalResponseDto;
 import com.smwuis.sooksook.web.dto.user.UserRatingSaveRequestDto;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,49 +21,61 @@ public class UserRatingService {
 
     // 유저 평가 생성
     @Transactional
-    public Long save(UserRatingSaveRequestDto saveRequestDto) {
+    public UserRatingResponseDto save(UserRatingSaveRequestDto saveRequestDto) {
         UserRating userRating = saveRequestDto.toEntity();
+        userRatingRepository.save(userRating);
 
-        return userRatingRepository.save(userRating).getId();
+        return new UserRatingResponseDto(userRating);
     }
     
     // 유저 평가 수정
     @Transactional
-    public Long update(Long id, String contents, float score) {
+    public UserRatingResponseDto update(Long id, String email, String contents, float score) {
         UserRating userRating = userRatingRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저 평가가 없습니다."));
-        userRating.update(contents, score);
 
-        return userRating.getId();
+        if(userRating.getGiverEmail().equals(email)) {
+            userRating.update(contents, score);
+            return new UserRatingResponseDto(userRating);
+        }
+        else {
+            throw new RuntimeException("유저 평가 수정에 실패했습니다.");
+        }
     }
     
     // 유저 평가 삭제
     @Transactional
-    public Long delete(Long id) {
+    public Boolean delete(Long id, String email) {
         UserRating userRating = userRatingRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저 평가가 없습니다."));
-        userRatingRepository.delete(userRating);
-        return userRating.getId();
+        
+        if(userRating.getGiverEmail().equals(email)) {
+            userRatingRepository.delete(userRating);
+            return true;
+        }
+        else {
+            throw new RuntimeException("유저 평가 삭제에 실패했습니다.");
+        }
     }
     
     // 나의 모든 유저 평가 조회
-    @Transactional
-    public List<UserRatingListResponseDto> findMyRating(String email) {
+    @Transactional(readOnly = true)
+    public List<UserRatingResponseDto> findMyRating(String email) {
         return (userRatingRepository.findByReceiverEmail(email))
                 .stream()
-                .map(UserRatingListResponseDto::new)
+                .map(UserRatingResponseDto::new)
                 .collect(Collectors.toList());
     }
 
     // 유저 평가 상세 조회
-    @Transactional
-    public UserRatingListResponseDto findRating(Long id) {
+    @Transactional(readOnly = true)
+    public UserRatingResponseDto findRating(Long id) {
         UserRating userRating = userRatingRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저 평가가 없습니다."));
-        return new UserRatingListResponseDto(userRating);
+        return new UserRatingResponseDto(userRating);
 
     }
 
     // 유저 평가 스터디 종합 조회
-    @Transactional
-    public UserRatingResponseDto findRatingWithStudyBoard(String email, Long studyBoardId) {
+    @Transactional(readOnly = true)
+    public UserRatingTotalResponseDto findRatingWithStudyBoard(String email, Long studyBoardId) {
         List<UserRating> userRatingList = userRatingRepository.findByReceiverEmailAndStudyBoardId(email, studyBoardId);
         List<String> contents = new ArrayList<>();
 
@@ -80,6 +89,6 @@ public class UserRatingService {
         float averageScore = score / userRatingList.size();
         String formattedScore = String.format("%.1f", averageScore);
 
-        return new UserRatingResponseDto(userRatingList.get(0), contents, formattedScore);
+        return new UserRatingTotalResponseDto(userRatingList.get(0), contents, formattedScore);
     }
 }

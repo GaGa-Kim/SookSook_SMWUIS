@@ -1,14 +1,12 @@
 package com.smwuis.sooksook.web.controller.user;
 
 import com.smwuis.sooksook.service.user.UserRatingService;
-import com.smwuis.sooksook.web.dto.user.UserRatingListResponseDto;
 import com.smwuis.sooksook.web.dto.user.UserRatingResponseDto;
+import com.smwuis.sooksook.web.dto.user.UserRatingTotalResponseDto;
 import com.smwuis.sooksook.web.dto.user.UserRatingSaveRequestDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,54 +22,57 @@ public class UserRatingController {
     // 유저 평가 생성
     @PostMapping("/userRating")
     @ApiOperation(value = "유저 평가 등록", notes = "유저 평가 등록 API")
-    public Long save(@RequestBody UserRatingSaveRequestDto saveRequestDto) {
-        return userRatingService.save(saveRequestDto);
+    public ResponseEntity<UserRatingResponseDto> save(@RequestBody UserRatingSaveRequestDto saveRequestDto) {
+        return ResponseEntity.ok().body(userRatingService.save(saveRequestDto));
     }
 
     // 유저 평가 수정
     @PutMapping("/userRating")
     @ApiOperation(value = "유저 평가 수정", notes = "유저 평가 수정 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "유저 평가 id"),
-            @ApiImplicitParam(name = "contents", value = "평가 내용"),
-            @ApiImplicitParam(name = "score", value = "평가 별점")
+            @ApiImplicitParam(name = "id", value = "유저 평가 id", example = "1", required = true),
+            @ApiImplicitParam(name = "email", value = "이메일", example = "이메일", required = true),
+            @ApiImplicitParam(name = "contents", value = "평가 내용", example = "성실해요", required = true),
+            @ApiImplicitParam(name = "score", value = "평가 별점", example = "4.0", required = true)
     })
-    public Long update(@RequestParam Long id, String contents, float score) {
-        return userRatingService.update(id, contents, score);
+    public ResponseEntity<UserRatingResponseDto> update(@RequestParam Long id, String email, String contents, float score) {
+        return ResponseEntity.ok().body(userRatingService.update(id, email, contents, score));
     }
 
     // 유저 평가 삭제
     @DeleteMapping("/userRating")
     @ApiOperation(value = "유저 평가 삭제", notes = "유저 평가 삭제 API")
-    @ApiImplicitParam(name = "id", value = "유저 평가 id")
-    public Long delete(@RequestParam Long id) {
-        return userRatingService.delete(id);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "유저 평가 id", example = "1", required = true),
+            @ApiImplicitParam(name = "email", value = "이메일", example = "이메일", required = true),
+    })    public ResponseEntity<Boolean> delete(@RequestParam Long id, String email) {
+        return ResponseEntity.ok().body(userRatingService.delete(id, email));
     }
 
     // 나의 모든 유저 평가 조회
-    @GetMapping("/userRating/myAll")
-    @ApiOperation(value = "나의 모든 유저 평가 조회", notes = "나의 모든 유저 평가 조회 API")
-    @ApiImplicitParam(name = "email", value = "이메일")
-    public List<UserRatingListResponseDto> findMyRating(@RequestParam String email) {
-        return userRatingService.findMyRating(email);
+    @GetMapping("/userRating/myInfo")
+    @ApiOperation(value = "나에 대한 모든 유저 평가 조회 전체 조회", notes = "나에 대한 모든 유저 평가 조회 전체 조회 API")
+    @ApiImplicitParam(name = "email", value = "이메일", example = "이메일", required = true)
+    public ResponseEntity<List<UserRatingResponseDto>> findMyRating(@RequestParam String email) {
+        return ResponseEntity.ok().body(userRatingService.findMyRating(email));
     }
 
     // 유저 평가 상세 조회
-    @GetMapping("/userRating/all")
-    @ApiOperation(value = "유저 평가 상세 조회", notes = "유저 평가 상세 조회 API")
-    @ApiImplicitParam(name = "id", value = "유저 평가 id")
-    public UserRatingListResponseDto findRating(@RequestParam Long id) {
-        return userRatingService.findRating(id);
+    @GetMapping("/userRating/info")
+    @ApiOperation(value = "유저 평가 id로 유저 평가 하나 상세 조회", notes = "유저 평가 id로 유저 평가 하나 상세 조회 API")
+    @ApiImplicitParam(name = "id", value = "유저 평가 id", example = "1", required = true)
+    public ResponseEntity<UserRatingResponseDto> findRating(@RequestParam Long id) {
+        return ResponseEntity.ok().body(userRatingService.findRating(id));
     }
 
     // 유저 평가 스터디별 종합 조회
-    @GetMapping("/userRating/subject")
-    @ApiOperation(value = "나의 스터디별 평가 조회", notes = "나의 스터디별 평가 조회 API")
+    @GetMapping("/userRating/total")
+    @ApiOperation(value = "스터디 게시판 id로 나의 스터디 총 평가 조회", notes = "스터디 게시판 id로 나의 스터디 총 평가 조회 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "email", value = "이메일"),
-            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id"),
+            @ApiImplicitParam(name = "email", value = "이메일", example = "이메일", required = true),
+            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id", example = "1", required = true),
     })
-    public UserRatingResponseDto findRatingWithStudyBoard(@RequestParam String email, Long studyBoardId) {
-        return userRatingService.findRatingWithStudyBoard(email, studyBoardId);
+    public ResponseEntity<UserRatingTotalResponseDto> findRatingWithStudyBoard(@RequestParam String email, Long studyBoardId) {
+        return ResponseEntity.ok().body(userRatingService.findRatingWithStudyBoard(email, studyBoardId));
     }
 }

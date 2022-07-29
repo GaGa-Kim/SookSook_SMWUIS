@@ -13,13 +13,13 @@ import java.util.Date;
 @NoArgsConstructor
 public class UserScheduleRequestDto {
 
-    @ApiModelProperty(example = "이메일")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
     private String email;
 
-    @ApiModelProperty(example = "2022-07-28")
+    @ApiModelProperty(notes = "기한", example = "2022-07-28")
     private Date period;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용", required = true)
     private String content;
 
     @Builder

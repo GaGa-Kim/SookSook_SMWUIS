@@ -24,7 +24,6 @@ public class UserSchedule extends BaseTimeEntity {
     @JoinColumn(name = "User_ID")
     private User userId; // 작성자 (fk)
 
-    @Column(nullable = false)
     private Date period; // 기한
 
     @Column(columnDefinition = "TEXT", nullable = false)

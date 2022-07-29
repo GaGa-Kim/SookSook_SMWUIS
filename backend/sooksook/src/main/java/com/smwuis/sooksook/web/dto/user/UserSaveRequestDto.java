@@ -10,22 +10,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserSaveRequestDto {
 
-    @ApiModelProperty(example = "이름")
+    @ApiModelProperty(notes = "이름", example = "이름", required = true)
     private String name;
 
-    @ApiModelProperty(example = "아이디")
+    @ApiModelProperty(notes = "아이디", example = "아이디", required = true)
     private String loginId;
 
-    @ApiModelProperty(example = "이메일")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
     private String email;
 
-    @ApiModelProperty(example = "닉네임")
+    @ApiModelProperty(notes = "닉네임", example = "닉네임", required = true)
     private String nickname;
 
-    @ApiModelProperty(example = "비밀번호")
+    @ApiModelProperty(notes = "비밀번호", example = "비밀번호", required = true)
     private String password;
 
-    @ApiModelProperty(example = "한 줄 소개글")
+    @ApiModelProperty(notes = "한 줄 소개글", example = "한 줄 소개글")
     private String introduction;
 
     @Builder

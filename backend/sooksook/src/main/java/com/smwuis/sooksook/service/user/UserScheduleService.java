@@ -22,43 +22,62 @@ public class UserScheduleService {
 
     // 스케줄 등록
     @Transactional
-    public Long save(UserScheduleRequestDto requestDto) {
+    public UserScheduleResponseDto save(UserScheduleRequestDto requestDto) {
         User user = userRepository.findByEmail(requestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         UserSchedule userSchedule = requestDto.toEntity();
         userSchedule.setUser(user);
         user.addUserScheduleList(userScheduleRepository.save(userSchedule));
+        userScheduleRepository.save(userSchedule);
 
-        return userScheduleRepository.save(userSchedule).getId();
+        return new UserScheduleResponseDto(userSchedule);
     }
 
     // 스케줄 수정
     @Transactional
-    public Long update(Long id, UserScheduleRequestDto requestDto) {
+    public UserScheduleResponseDto update(Long id, UserScheduleRequestDto requestDto) {
         UserSchedule userSchedule = userScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저 스케줄이 없습니다."));
-        userSchedule.update(requestDto.getPeriod(),
-                requestDto.getContent());
 
-        return userSchedule.getId();
+        if(userSchedule.getUserId().getEmail().equals(requestDto.getEmail())) {
+            userSchedule.update(requestDto.getPeriod(),
+                    requestDto.getContent());
+
+            return new UserScheduleResponseDto(userSchedule);
+        }
+        else {
+            throw new RuntimeException("유저 스케줄 수정에 실패했습니다.");
+        }
     }
 
     // 스케줄 삭제
     @Transactional
-    public Long delete(Long id) {
+    public Boolean delete(Long id, String email) {
         UserSchedule userSchedule = userScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저 스케줄이 없습니다."));
-        userScheduleRepository.delete(userSchedule);
-        return userSchedule.getId();
+        
+        if(userSchedule.getUserId().getEmail().equals(email)) {
+            userScheduleRepository.delete(userSchedule);
+            return true;
+        }
+        else {
+            throw new RuntimeException("유저 스케줄 삭제에 실패했습니다.");
+        }
     }
     
     // 스케줄 완료 체크
     @Transactional
-    public Long finish(Long id) {
+    public UserScheduleResponseDto finish(Long id, String email) {
         UserSchedule userSchedule = userScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저 스케줄이 없습니다."));
-        userSchedule.updateFinish();
-        return userSchedule.getId();
+
+        if(userSchedule.getUserId().getEmail().equals(email)) {
+            userSchedule.updateFinish();
+            return new UserScheduleResponseDto(userSchedule);
+        }
+        else {
+            throw new RuntimeException("유저 스케줄 삭제에 실패했습니다.");
+        }
     }
     
     // 나의 스케줄 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UserScheduleResponseDto> findMySchedule(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
@@ -69,7 +88,7 @@ public class UserScheduleService {
     }
 
     // 스케줄 상세 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public UserScheduleResponseDto findSchedule(Long id) {
         UserSchedule userSchedule = userScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저 스케줄이 없습니다."));
         return new UserScheduleResponseDto(userSchedule);
