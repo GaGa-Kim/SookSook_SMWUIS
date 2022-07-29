@@ -22,9 +22,9 @@ const App = () => {
             <GlobalStyle />
             <Logo />
             <Block />
-            <Header text="회원가입" />
             <div className="join">
-                <Form {...formItemLayout}>
+                <Header text="회원가입" />
+                <Form {...formItemLayout} className="form">
                     <Id />
                     <Pw />
                     <Form.Item

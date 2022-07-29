@@ -129,14 +129,14 @@ const EnterBoard = () => {
         setIsOpen(true);
     };
     //모달에서 입력버튼 눌렀을때
-    const handleModalEnterClick=()=>{
+    const handleModalEnterClick = () => {
         setIsOpen(false);
         //비밀번호 틀렸을 때 경고
-        if(!isRightPw){
+        if (!isRightPw) {
             alert("비밀번호가 틀렸습니다.");
         }
     }
-    const handleRequestCloseFunc=()=>{
+    const handleRequestCloseFunc = () => {
         setIsOpen(false);
     }
     const handlePlusClick = () => {
@@ -213,7 +213,7 @@ const EnterBoard = () => {
                     <Quest ftSize="25px">단기</Quest>
                 </InputBox>
                 <InputBox>
-                    
+
                     <Box left="130px" top="7px">
                         <Button
                             width="100px"
@@ -223,7 +223,7 @@ const EnterBoard = () => {
                         >
                             입장
                         </Button>
-                        
+
                     </Box>
                 </InputBox>
             </Main>
@@ -271,52 +271,52 @@ const EnterBoard = () => {
                 )}
             </Footer>
             <ReactModal
-                            isOpen={isOpen}
-                            onRequestClose={handleRequestCloseFunc}
-                            style={{
-                                overlay: {
-                                    width:"100%",
-                                    height:"100%",
-                                    fontFamily: "DoHyeon",
-                                    
-                                    
-                                },
-                                content: {
-                                    width: "300px",
-                                    height: "300px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent:"center",
-                                    alignItems:"center",
-                                    position: "fixed",
-                                    top: "50%",
-                                    left: "50%",
-                                    transform: "translate(-50%, -50%)"
-                                },
-                            }}
-                        >
-                            <Quest ftSize="25px">비밀번호</Quest>
-                            <div style={{margin:"10px"}}>
-                            <InputPassword getPw={getPw} />
-                            </div>
-                            {isRightPw && (
-                            <Link to={`/private/${pw}`}>
-                                <Button width="50px" height="32px" mg="0px">
-                                입력
-                                </Button>
-                                </Link>
-                                )}
-                                {!isRightPw && (
-                                    <Button
-                                    width="50px"
-                                    height="32px"
-                                    mg="0px"
-                                    onClick={handleModalEnterClick}
-                                    >
-                                    입력
-                                    </Button>
-                                )}
-                        </ReactModal>
+                isOpen={isOpen}
+                onRequestClose={handleRequestCloseFunc}
+                style={{
+                    overlay: {
+                        width: "100%",
+                        height: "100%",
+                        fontFamily: "DoHyeon",
+
+
+                    },
+                    content: {
+                        width: "300px",
+                        height: "300px",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        position: "fixed",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)"
+                    },
+                }}
+            >
+                <Quest ftSize="25px">비밀번호</Quest>
+                <div style={{ margin: "10px" }}>
+                    <InputPassword getPw={getPw} />
+                </div>
+                {isRightPw && (
+                    <Link to={`/private/${pw}`}>
+                        <Button width="50px" height="32px" mg="0px">
+                            입력
+                        </Button>
+                    </Link>
+                )}
+                {!isRightPw && (
+                    <Button
+                        width="50px"
+                        height="32px"
+                        mg="0px"
+                        onClick={handleModalEnterClick}
+                    >
+                        입력
+                    </Button>
+                )}
+            </ReactModal>
         </Root>
     );
 };
