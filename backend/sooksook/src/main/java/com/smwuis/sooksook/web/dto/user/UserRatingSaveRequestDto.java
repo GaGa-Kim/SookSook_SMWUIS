@@ -40,7 +40,6 @@ public class UserRatingSaveRequestDto {
 
     public UserRating toEntity() {
         return UserRating.builder()
-                .receiverEmail(receiverEmail)
                 .giverEmail(giverEmail)
                 .studyBoardId(studyBoardId)
                 .subject(subject)

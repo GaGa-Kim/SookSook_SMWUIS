@@ -45,11 +45,17 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String rating; // 등급
 
+    @Column(nullable = false)
+    private boolean withdraw = false; // 탈퇴 여부
+
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserSchedule> userScheduleList = new ArrayList<>(); // 스케줄 리스트
+
+    @OneToMany(mappedBy = "receiverEmail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserRating> userRatingList = new ArrayList<>(); // 평가 리스트
     
     @Builder
-    public User(String name, String loginId, String email, String nickname, String password, String introduction, int points, String rating) {
+    public User(String name, String loginId, String email, String nickname, String password, String introduction, int points, String rating, boolean withdraw) {
         this.name = name;
         this.loginId = loginId;
         this.email = email;
@@ -58,6 +64,7 @@ public class User extends BaseTimeEntity {
         this.introduction = introduction;
         this.points = points;
         this.rating = rating;
+        this.withdraw = withdraw;
     }
 
     public User update(String name, String nickname, String introduction) {
@@ -65,6 +72,11 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
         this.introduction = introduction;
         return this;
+    }
+
+    public void setWithdraw() {
+        this.withdraw = true;
+        this.nickname = "탈퇴한 회원";
     }
 
     public User updatePassword(String password) {
@@ -93,6 +105,14 @@ public class User extends BaseTimeEntity {
 
         if(userSchedule.getUserId() != this) {
             userSchedule.setUser(this);
+        }
+    }
+
+    public void addUserRatingList(UserRating userRating) {
+        this.userRatingList.add(userRating);
+
+        if(userRating.getReceiverEmail() != this) {
+            userRating.setReceiverEmail(this);
         }
     }
 }
