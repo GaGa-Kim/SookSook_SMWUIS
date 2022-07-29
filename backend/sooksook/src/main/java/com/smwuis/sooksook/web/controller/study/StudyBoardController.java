@@ -2,6 +2,7 @@ package com.smwuis.sooksook.web.controller.study;
 
 import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.service.study.StudyBoardService;
+import com.smwuis.sooksook.web.dto.study.SearchResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -125,14 +127,11 @@ public class StudyBoardController {
         return ResponseEntity.ok().body(studyBoardService.hardList());
     }
 
-    // 스터디 모집 게시판 제목 검색
+    // 스터디 모집 게시판 및 게시글 제목 검색
     @GetMapping(value = "/studyBoard/search")
-    @ApiOperation(value = "스터디 모집 게시판 제목 검색", notes = "스터디 모집 게시판 제목 검색 API")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "keyword", value = "검색할 키워드", example = "제목"),
-            @ApiImplicitParam(name = "page", value = "페이지 번호", example = "0"),
-    })
-    public ResponseEntity<List<StudyBoardResponseDto>> searchBoard(@RequestParam String keyword, int page) {
-        return ResponseEntity.ok().body(studyBoardService.searchBoard(keyword, page));
+    @ApiOperation(value = "스터디 모집 게시판 및 게시글 제목 검색", notes = "스터디 모집 게시판 및 게시글 제목 검색 API")
+    @ApiImplicitParam(name = "keyword", value = "검색할 키워드", example = "제목")
+    public ResponseEntity<List<SearchResponseDto>> searchKeyword(@RequestParam String keyword) {
+        return ResponseEntity.ok().body(studyBoardService.searchKeyword(keyword));
     }
 }

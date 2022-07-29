@@ -1,12 +1,15 @@
 package com.smwuis.sooksook.service.study;
 
+import com.smwuis.sooksook.domain.BaseTimeEntity;
 import com.smwuis.sooksook.domain.study.*;
 import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.domain.user.UserRepository;
+import com.smwuis.sooksook.web.dto.study.SearchResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -250,14 +253,25 @@ public class StudyBoardService {
         }
     }
     
-    // 스터디 모집 게시판 제목 검색
+    // 스터디 모집 게시판 및 게시글 제목 검색
     @Transactional
-    public List<StudyBoardResponseDto> searchBoard(String keyword, int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+    public List<SearchResponseDto> searchKeyword(String keyword) {
+        List<StudyBoard> studyBoardList = studyBoardRepository.findByTitleContaining(keyword);
+        List<StudyPost> studyPostList = studyPostRepository.findByTitleContaining(keyword);
+        List<SearchResponseDto> searchResponseDtoList = new ArrayList<>();
 
-        return studyBoardRepository.findByTitleContaining(keyword, pageable)
+        for(StudyBoard studyBoard: studyBoardList) {
+            searchResponseDtoList.add(new SearchResponseDto(studyBoard));
+        }
+
+        for(StudyPost studyPost : studyPostList) {
+            searchResponseDtoList.add(new SearchResponseDto(studyPost));
+        }
+
+
+        return searchResponseDtoList
                 .stream()
-                .map((StudyBoardResponseDto::new))
+                .sorted(Comparator.comparing(SearchResponseDto::getCreatedDate))
                 .collect(Collectors.toList());
     }
 }

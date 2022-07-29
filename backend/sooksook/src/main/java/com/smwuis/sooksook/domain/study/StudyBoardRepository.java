@@ -11,5 +11,5 @@ public interface StudyBoardRepository extends JpaRepository<StudyBoard, Long> {
     List<StudyBoard> findByLectureAndDepartment(boolean lecture, String department);
     List<StudyBoard> findByLectureAndCategory(boolean lecture, String category);
     List<StudyBoard> findTop5ByOrderByIdDesc();
-    Page<StudyBoard> findByTitleContaining(String keyword, Pageable pageable);
+    List<StudyBoard> findByTitleContaining(String keyword);
 }
