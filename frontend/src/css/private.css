@@ -1,7 +1,9 @@
 .block {
+    display: flex;
     background-color: #c1daff;
     width: 100%;
     padding: 12px 10px 8px 10px;
+    justify-content: space-between;
 }
 
 .upcome {
@@ -13,7 +15,7 @@
 
 .prbutton {
     border-color: transparent;
-    margin-right: 25px;
+    margin-right: 10px;
     float: right;
     border-radius: 10px;
     background-color: white;
@@ -24,7 +26,7 @@
 
 .prbutton:hover {
     border-color: navy;
-    transition: border-color 1s;
+    transition: border-color 0.5s;
 }
 
 .prbutton a,
