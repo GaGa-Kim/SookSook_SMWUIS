@@ -36,7 +36,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String password; // 비밀번호
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String introduction; // 한 줄 소개글
 
     @Column(nullable = false)
@@ -60,11 +60,15 @@ public class User extends BaseTimeEntity {
         this.rating = rating;
     }
 
-    public User update(String name, String nickname, String password, String introduction) {
+    public User update(String name, String nickname, String introduction) {
         this.name = name;
         this.nickname = nickname;
-        this.password = password;
         this.introduction = introduction;
+        return this;
+    }
+
+    public User updatePassword(String password) {
+        this.password = password;
         return this;
     }
 

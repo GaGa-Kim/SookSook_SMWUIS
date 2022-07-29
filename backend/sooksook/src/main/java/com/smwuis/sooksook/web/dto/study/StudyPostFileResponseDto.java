@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class StudyPostFileResponseDto {
 
-    @ApiModelProperty(example = "파일 원본 이름")
+    @ApiModelProperty(notes = "파일 원본 이름", example = "파일 원본 이름")
     private String origFileName;
 
-    @ApiModelProperty(example = "파일 이름")
+    @ApiModelProperty(notes = "파일 이름", example = "파일 이름")
     private String fileName;
 
-    @ApiModelProperty(example = "파일 위치")
+    @ApiModelProperty(notes = "파일 위치", example = "파일 위치")
     private String filePath;
 
     @Builder

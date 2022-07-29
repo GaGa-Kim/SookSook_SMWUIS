@@ -87,7 +87,7 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
     }
 
     public StudyBoard update(String department, String subject, String title, String content,
-                             Long number, String onoff, Date period, String password, boolean lecture, String category, boolean finished) {
+                             Long number, String onoff, Date period, String password, boolean lecture, String category) {
         this.department = department;
         this.subject = subject;
         this.title = title;
@@ -98,7 +98,6 @@ public class StudyBoard extends BaseTimeEntity { // 스터디 모집 게시판
         this.password = password;
         this.lecture = lecture;
         this.category = category;
-        this.finished = finished;
         return this;
     }
 

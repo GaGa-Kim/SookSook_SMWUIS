@@ -9,23 +9,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserUpdateRequestDto {
 
-    @ApiModelProperty(example = "이름")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
+    private String email;
+
+    @ApiModelProperty(notes = "이름", example = "이름", required = true)
     private String name;
 
-    @ApiModelProperty(example = "닉네임")
+    @ApiModelProperty(notes = "닉네임", example = "닉네임", required = true)
     private String nickname;
 
-    @ApiModelProperty(example = "비밀번호")
-    private String password;
-
-    @ApiModelProperty(example = "한 줄 소개글")
+    @ApiModelProperty(notes = "한 줄 소개글", example = "한 줄 소개글", required = true)
     private String introduction;
 
     @Builder
-    public UserUpdateRequestDto(String name, String nickname, String password, String introduction) {
+    public UserUpdateRequestDto(String email, String name, String nickname, String introduction) {
+        this.email = email;
         this.name = name;
         this.nickname = nickname;
-        this.password = password;
         this.introduction = introduction;
     }
 }

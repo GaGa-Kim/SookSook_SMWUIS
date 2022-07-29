@@ -11,10 +11,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class StudyScheduleUpdateRequestDto {
 
-    @ApiModelProperty(example = "2022-07-17")
+    @ApiModelProperty(notes = "기한", example = "2022-07-29")
     private Date period;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용")
     private String content;
 
     @Builder

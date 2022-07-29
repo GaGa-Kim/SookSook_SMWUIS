@@ -1,12 +1,15 @@
 package com.smwuis.sooksook.service.study;
 
+import com.smwuis.sooksook.domain.BaseTimeEntity;
 import com.smwuis.sooksook.domain.study.*;
 import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.domain.user.UserRepository;
+import com.smwuis.sooksook.web.dto.study.SearchResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,26 +35,19 @@ public class StudyBoardService {
 
     // 강의 스터디 모집 게시판 글 작성
     @Transactional
-    public Long saveLecture(StudyBoardSaveRequestDto saveRequestDto) {
+    public StudyBoardResponseDto save(StudyBoardSaveRequestDto saveRequestDto, boolean tf) {
         StudyBoard studyBoard = saveRequestDto.toEntity();
-        studyBoard.setLecture(true);
+        studyBoard.setLecture(tf);
         studyBoard.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
-        return studyBoardRepository.save(studyBoard).getId();
-    }
-
-    // 강의 외 스터디 모집 게시판 글 작성
-    @Transactional
-    public Long saveNotLecture(StudyBoardSaveRequestDto saveRequestDto) {
-        StudyBoard studyBoard = saveRequestDto.toEntity();
-        studyBoard.setLecture(false);
-        studyBoard.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
-        return studyBoardRepository.save(studyBoard).getId();
+        studyBoardRepository.save(studyBoard);
+        
+        return new StudyBoardResponseDto(studyBoard);
     }
 
     // 스터디 모집 게시판 글 수정
     @Transactional
-    public String update(Long id, String email, StudyBoardUpdateRequestDto updateRequestDto) {
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+    public StudyBoardResponseDto update(Long id, StudyBoardUpdateRequestDto updateRequestDto) {
+        User user = userRepository.findByEmail(updateRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
 
         if(user.equals(studyBoard.getUserId())) {
@@ -64,45 +60,41 @@ public class StudyBoardService {
                     updateRequestDto.getPeriod(),
                     updateRequestDto.getPassword(),
                     updateRequestDto.isLecture(),
-                    updateRequestDto.getCategory(),
-                    updateRequestDto.isFinished());
-            return "게시판 수정 완료";
+                    updateRequestDto.getCategory());
+            return new StudyBoardResponseDto(studyBoard);
         }
         else {
-            return "게시판 수정 실패";
+            throw new RuntimeException("스터디 게시판 수정에 실패했습니다.");
         }
-
     }
 
     // 스터디 모집 게시판 글 삭제
     @Transactional
-    public String delete(Long id, String email) {
+    public Boolean delete(Long id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
 
         if(user.equals(studyBoard.getUserId())) {
             studyBoardRepository.delete(studyBoard);
-            return "게시판 삭제 완료";
+            return true;
         }
-
         else {
-            return "게시판 삭제 실패";
+            throw new RuntimeException("스터디 게시판 삭제에 실패했습니다.");
         }
     }
 
     // 스터디 종료
     @Transactional
-    public String finish(Long id, String email) {
+    public Boolean finish(Long id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
 
         if(user.equals(studyBoard.getUserId())) {
             studyBoard.setFinished();
-            return "스터디 종료 완료";
+            return true;
         }
-
         else {
-            return "스터디 종료 실패";
+            throw new RuntimeException("스터디 종료에 실패했습니다.");
         }
     }
 
@@ -141,7 +133,7 @@ public class StudyBoardService {
     }
 
     // 일주일간 게시판에 달린 댓글 갯수
-    @Transactional
+    @Transactional(readOnly = true)
     public Long countPasswordComments(Long id){
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         return passwordCommentRepository.countByCreatedDateBetweenAndStudyBoardId(startDatetime, endDatetime, studyBoard);
@@ -157,7 +149,7 @@ public class StudyBoardService {
         for (StudyBoard studyBoard: studyBoardList) {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
-            map.put("id", studyBoard.getId());
+            map.put("studyBoardId", studyBoard.getId());
             map.put("countComment", countPasswordComments(studyBoard.getId()));
 
             countList.add(map);
@@ -188,7 +180,7 @@ public class StudyBoardService {
         for (StudyBoard studyBoard: studyBoardList) {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
-            map.put("id", studyBoard.getId());
+            map.put("studyBoardId", studyBoard.getId());
 
             newList.add(map);
         }
@@ -201,14 +193,14 @@ public class StudyBoardService {
     }
 
     // 일주일간 게시판에 달린 게시글 갯수
-    @Transactional
+    @Transactional(readOnly = true)
     public Long countStudyPosts(Long id) {
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
         return studyPostRepository.countByCreatedDateBetweenAndStudyBoardId(startDatetime, endDatetime, studyBoard);
     }
 
     // 일주일간 게시판의 게시글에 달린 댓글 갯수
-    @Transactional
+    @Transactional(readOnly = true)
     public Long countStudyComments(Long id){
         Long count = 0L;
 
@@ -240,7 +232,7 @@ public class StudyBoardService {
         for (StudyBoard studyBoard: studyBoardList) {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
-            map.put("id", studyBoard.getId());
+            map.put("studyBoardId", studyBoard.getId());
             map.put("countPostsAndComment", countStudyPosts(studyBoard.getId()) + countStudyComments(studyBoard.getId()));
 
             countList.add(map);
@@ -261,14 +253,25 @@ public class StudyBoardService {
         }
     }
     
-    // 스터디 모집 게시판 제목 검색
+    // 스터디 모집 게시판 및 게시글 제목 검색
     @Transactional
-    public List<StudyBoardResponseDto> searchBoard(String keyword, int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+    public List<SearchResponseDto> searchKeyword(String keyword) {
+        List<StudyBoard> studyBoardList = studyBoardRepository.findByTitleContaining(keyword);
+        List<StudyPost> studyPostList = studyPostRepository.findByTitleContaining(keyword);
+        List<SearchResponseDto> searchResponseDtoList = new ArrayList<>();
 
-        return studyBoardRepository.findByTitleContaining(keyword, pageable)
+        for(StudyBoard studyBoard: studyBoardList) {
+            searchResponseDtoList.add(new SearchResponseDto(studyBoard));
+        }
+
+        for(StudyPost studyPost : studyPostList) {
+            searchResponseDtoList.add(new SearchResponseDto(studyPost));
+        }
+
+
+        return searchResponseDtoList
                 .stream()
-                .map((StudyBoardResponseDto::new))
+                .sorted(Comparator.comparing(SearchResponseDto::getCreatedDate))
                 .collect(Collectors.toList());
     }
 }

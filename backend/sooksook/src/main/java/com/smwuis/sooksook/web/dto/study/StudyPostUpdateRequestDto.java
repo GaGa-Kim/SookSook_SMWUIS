@@ -9,17 +9,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyPostUpdateRequestDto {
 
-    @ApiModelProperty(example = "제목")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
+    private String email;
+
+    @ApiModelProperty(notes = "이메일", example = "제목")
     private String title;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용")
     private String content;
 
-    @ApiModelProperty(example = "카테고리")
+    @ApiModelProperty(notes = "카테고리", example = "강의 스터디 게시글")
     private String category;
 
     @Builder
-    public StudyPostUpdateRequestDto(String title, String content, String category) {
+    public StudyPostUpdateRequestDto(String email, String title, String content, String category) {
+        this.email = email;
         this.title = title;
         this.content = content;
         this.category = category;

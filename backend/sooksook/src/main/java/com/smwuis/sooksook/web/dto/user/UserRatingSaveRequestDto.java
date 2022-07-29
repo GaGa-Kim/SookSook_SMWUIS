@@ -10,22 +10,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRatingSaveRequestDto {
 
-    @ApiModelProperty(example = "별점 받는 사람 이메일")
+    @ApiModelProperty(notes = "별점 받는 사람 이메일", example = "이메일", required = true)
     private String receiverEmail;
 
-    @ApiModelProperty(example = "별점 주는 사람 이메일")
+    @ApiModelProperty(notes = "별점 주는 사람 이메일", example = "이메일1", required = true)
     private String giverEmail;
 
-    @ApiModelProperty(example = "1")
+    @ApiModelProperty(notes = "스터디 게시판 id", example = "1", required = true)
     private Long studyBoardId;
 
-    @ApiModelProperty(example = "과목 이름")
+    @ApiModelProperty(notes = "과목명", example = "과목명", required = true)
     private String subject;
 
-    @ApiModelProperty(example = "평가 내용")
+    @ApiModelProperty(notes = "평가 내용", example = "성실해요", required = true)
     private String contents; 
 
-    @ApiModelProperty(example = "4.5")
+    @ApiModelProperty(notes = "평가 별점", example = "4.5", required = true)
     private float score;
 
     @Builder

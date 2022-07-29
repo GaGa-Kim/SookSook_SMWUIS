@@ -11,26 +11,34 @@ import java.util.List;
 @Setter
 public class PasswordCommentResponseDto {
 
-    @ApiModelProperty(example = "작성자 이메일")
+    @ApiModelProperty(notes = "비밀댓글 기본키", example = "1")
+    private Long id;
+
+    @ApiModelProperty(notes = "작성자 이메일", example = "이메일")
     private String email;
 
-    @ApiModelProperty(example = "작성자 닉네임")
+    @ApiModelProperty(notes = "스터디 게시판 id", example = "1")
+    private Long studyBoardId;
+
+    @ApiModelProperty(notes = "닉네임", example = "닉네임")
     private String nickname;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용")
     private String content;
 
-    @ApiModelProperty(example = "상위 댓글 번호")
+    @ApiModelProperty(notes = "상위 댓글 번호", example = "1")
     private Long upIndex;
 
-    @ApiModelProperty(example = "자식 댓글 id")
+    @ApiModelProperty(notes = "자식 댓글 번호", example = "[1, 2, 3]")
     private List<Long> childList;
 
-    @ApiModelProperty(example = "댓글 삭제 여부")
-    private boolean isRemoved = false;
+    @ApiModelProperty(notes = "댓글 삭제 여부", example = "false")
+    private boolean isRemoved;
 
     public PasswordCommentResponseDto(PasswordComment passwordComment) {
+        this.id = passwordComment.getId();
         this.email = passwordComment.getUserId().getEmail();
+        this.studyBoardId = passwordComment.getStudyBoardId().getId();
         this.nickname = passwordComment.getUserId().getNickname();
         this.content = passwordComment.getContent();
         this.upIndex = passwordComment.getUpIndex();

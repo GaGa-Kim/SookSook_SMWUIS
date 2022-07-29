@@ -10,18 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyCommentSaveRequestDto {
 
-    @ApiModelProperty(example = "이메일")
+    @ApiModelProperty(notes = "작성자 이메일", example = "이메일", required = true)
     private String email;
 
-    @ApiModelProperty(example = "1")
+    @ApiModelProperty(notes = "게시글 id", example = "1", required = true)
     private Long studyPostId;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용", required = true)
     private String content;
 
-    @ApiModelProperty(example = "상위 댓글 id")
+    @ApiModelProperty(notes = "상위 댓글 번호", example = "null", required = true)
     private Long upIndex;
-
 
     @Builder
     public StudyCommentSaveRequestDto(String email, Long studyPostId, String content, Long upIndex) {

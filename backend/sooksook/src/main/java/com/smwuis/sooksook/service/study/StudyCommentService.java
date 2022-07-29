@@ -24,7 +24,7 @@ public class StudyCommentService {
 
     // 댓글 작성
     @Transactional
-    public Long save(StudyCommentSaveRequestDto saveRequestDto) {
+    public StudyCommentResponseDto save(StudyCommentSaveRequestDto saveRequestDto) {
         StudyPost studyPost = studyPostRepository.findById(saveRequestDto.getStudyPostId()).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
         User user = userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
@@ -49,28 +49,27 @@ public class StudyCommentService {
             studyCommentParent.getChildList().add(id);
         }
 
-        return id;
+        return new StudyCommentResponseDto(studyComment);
     }
     
     // 댓글 수정
     @Transactional
-    public String update(Long id, String email, String content) {
+    public StudyCommentResponseDto update(Long id, String email, String content) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyComment studyComment = studyCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
 
         if(user.equals(studyComment.getUserId())) {
             studyComment.update(content);
-            return "댓글 수정 완료";
+            return new StudyCommentResponseDto(studyComment);
         }
-
         else {
-            return "댓글 수정 실패";
+            throw new RuntimeException("댓글 수정에 실패했습니다.");
         }
     }
 
     // 댓글 삭제
     @Transactional
-    public String delete(Long id, String email) {
+    public Boolean delete(Long id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyComment studyComment = studyCommentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
 
@@ -79,11 +78,10 @@ public class StudyCommentService {
 
             List<StudyComment> removableCommentList = findRemovableList(id);
             studyCommentRepository.deleteAll(removableCommentList);
-            return "댓글 삭제 완료";
+            return true;
         }
-
         else {
-            return "댓글 삭제 실패";
+            throw new RuntimeException("댓글 삭제에 실패했습니다.");
         }
     }
 

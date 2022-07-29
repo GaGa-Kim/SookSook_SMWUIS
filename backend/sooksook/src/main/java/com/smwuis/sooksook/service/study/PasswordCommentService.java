@@ -26,54 +26,52 @@ public class PasswordCommentService {
 
     // 댓글 작성
     @Transactional
-    public Long save(PasswordCommentSaveRequestDto saveRequestDto) {
+    public PasswordCommentResponseDto save(PasswordCommentSaveRequestDto saveRequestDto) {
         StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
+
         PasswordComment passwordComment = saveRequestDto.toEntity();
         passwordComment.setStudyBoard(studyBoard);
         passwordComment.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
         studyBoard.addPasswordComments(passwordCommentRepository.save(passwordComment));
-
-        Long id = passwordCommentRepository.save(passwordComment).getId();
-
+        
         if (saveRequestDto.getUpIndex() != null) {
             PasswordComment passwordCommentParent = passwordCommentRepository.findById(saveRequestDto.getUpIndex()).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
-            passwordCommentParent.getChildList().add(id);
+            passwordCommentParent.getChildList().add(passwordCommentRepository.save(passwordComment).getId());
         }
 
-        return id;
+        return new PasswordCommentResponseDto(passwordComment);
     }
 
     // 댓글 수정
     @Transactional
-    public String update(Long id, String email, String content) {
+    public PasswordCommentResponseDto update(Long id, String email, String content) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
 
         if(user.equals(passwordComment.getUserId())) {
             passwordComment.update(content);
-            return "댓글 수정 완료";
+            return new PasswordCommentResponseDto(passwordComment);
         }
 
         else {
-            return "댓글 수정 실패";
+            throw new RuntimeException("댓글 수정에 실패했습니다.");
         }
     }
 
     // 댓글 삭제
     @Transactional
-    public String delete(Long id, String email) {
+    public Boolean delete(Long id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
 
         if(user.equals(passwordComment.getUserId())) {
             passwordComment.remove();
-
             List<PasswordComment> removableCommentList = findRemovableList(id);
             passwordCommentRepository.deleteAll(removableCommentList);
-            return "댓글 삭제 완료";
+            return true;
         }
         else {
-            return "댓글 삭제 실패";
+            throw new RuntimeException("댓글 삭제에 실패했습니다.");
         }
     }
 
@@ -85,7 +83,6 @@ public class PasswordCommentService {
         return passwordCommentRepository.findAllByStudyBoardIdAndUpIndex(studyBoard, null)
                 .stream()
                 .map(PasswordCommentResponseDto::new)
-                // .peek(passwordCommentResponseDto -> passwordCommentResponseDto.setContent("비밀댓글입니다."))
                 .collect(Collectors.toList());
     }
 

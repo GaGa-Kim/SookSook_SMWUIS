@@ -21,7 +21,7 @@ public class UserService {
 
     // 유저 생성 (회원가입)
     @Transactional
-    public Long signup(UserSaveRequestDto saveRequestDto) {
+    public UserResponseDto signup(UserSaveRequestDto saveRequestDto) {
 
         if(userRepository.findByEmailOrLoginId(saveRequestDto.getEmail(), saveRequestDto.getLoginId()) == null) {
             User singUser = User.builder()
@@ -34,10 +34,9 @@ public class UserService {
                     .points(0)
                     .rating("새싹등급")
                     .build();
-
-            return userRepository.save(singUser).getId();
+            userRepository.save(singUser);
+            return new UserResponseDto(singUser);
         }
-
         else {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
@@ -45,35 +44,45 @@ public class UserService {
     
     // 유저 수정
     @Transactional
-    public String update(Long id, String email, UserUpdateRequestDto updateRequestDto) {
+    public UserResponseDto update(Long id, UserUpdateRequestDto updateRequestDto) {
         User user = userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
-        if(user.getEmail().equals(email)) {
+        if(user.getEmail().equals(updateRequestDto.getEmail())) {
             user.update(updateRequestDto.getName(),
                     updateRequestDto.getNickname(),
-                    passwordEncoder.encode(updateRequestDto.getPassword()),
                     updateRequestDto.getIntroduction());
-
-            return "유저 수정 완료";
+            return new UserResponseDto(user);
         }
-
         else {
-            return "유저 수정 실패";
+            throw new RuntimeException("유저 수정에 실패했습니다.");
+        }
+    }
+    
+    // 유저 비밀번호 수정
+    @Transactional
+    public UserResponseDto updatePassword(String email, String oldPassword, String newPassword) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+
+        if(user.getPassword().equals(oldPassword)) {
+            user.updatePassword(passwordEncoder.encode(newPassword));
+            return new UserResponseDto(user);
+        }
+        else {
+            throw new RuntimeException("유저 비밀번호 수정에 실패했습니다.");
         }
     }
     
     // 유저 삭제
     @Transactional
-    public String delete(Long id, String email) {
+    public Boolean delete(Long id, String email) {
         User user = userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
         if(user.getEmail().equals(email)) {
             userRepository.delete(user);
-            return "유저 삭제 완료";
+            return true;
         }
-
         else {
-            return "유저 삭제 실패";
+            throw new RuntimeException("유저 삭제에 실패했습니다.");
         }
     }
 
@@ -85,13 +94,11 @@ public class UserService {
         if(user == null || !passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("로그인에 실패했습니다.");
         }
-
         return new UserResponseDto(user);
     }
 
-
     // 유저 정보 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public UserResponseDto findUser(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         return new UserResponseDto(user);
