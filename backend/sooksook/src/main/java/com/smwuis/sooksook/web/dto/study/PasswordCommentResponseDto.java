@@ -11,11 +11,14 @@ import java.util.List;
 @Setter
 public class PasswordCommentResponseDto {
 
-    @ApiModelProperty(notes = "기본키", example = "1")
+    @ApiModelProperty(notes = "비밀댓글 기본키", example = "1")
     private Long id;
 
     @ApiModelProperty(notes = "작성자 이메일", example = "이메일")
     private String email;
+
+    @ApiModelProperty(notes = "스터디 게시판 id", example = "1")
+    private Long studyBoardId;
 
     @ApiModelProperty(notes = "닉네임", example = "닉네임")
     private String nickname;
@@ -33,7 +36,9 @@ public class PasswordCommentResponseDto {
     private boolean isRemoved;
 
     public PasswordCommentResponseDto(PasswordComment passwordComment) {
+        this.id = passwordComment.getId();
         this.email = passwordComment.getUserId().getEmail();
+        this.studyBoardId = passwordComment.getStudyBoardId().getId();
         this.nickname = passwordComment.getUserId().getNickname();
         this.content = passwordComment.getContent();
         this.upIndex = passwordComment.getUpIndex();

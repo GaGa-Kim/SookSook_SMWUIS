@@ -10,11 +10,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "StudySchedule API (스터디 스케줄 정보 API)")
+@Api(tags = "StudySchedule API (스터디 게시판 스케줄 정보 API)")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -25,50 +26,46 @@ public class StudyScheduleController {
     // 스터디 게시판 스케줄 추가
     @PostMapping(value = "/studySchedule")
     @ApiOperation(value = "스터디 게시판 스케줄 작성", notes = "스터디 게시판 스케줄 작성 API")
-    public Long save(@RequestBody StudyScheduleSaveRequestDto saveRequestDto) {
-        return studyScheduleService.save(saveRequestDto);
+    public ResponseEntity<StudyScheduleResponseDto> save(@RequestBody StudyScheduleSaveRequestDto saveRequestDto) {
+        return ResponseEntity.ok().body(studyScheduleService.save(saveRequestDto));
     }
 
     // 스터디 게시판 스케줄 수정
     @PutMapping(value = "/studySchedule")
     @ApiOperation(value = "스터디 게시판 스케줄 수정", notes = "스터디 게시판 스케줄 수정 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "스케줄 id"),
-            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
+            @ApiImplicitParam(name = "id", value = "스케줄 id", example = "1"),
+            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id", example = "1")
     })
-    public Long update(@RequestParam Long id, Long studyBoardId, @RequestBody StudyScheduleUpdateRequestDto updateDto) {
-        return studyScheduleService.update(id, studyBoardId, updateDto);
+    public ResponseEntity<StudyScheduleResponseDto> update(@RequestParam Long id, Long studyBoardId, @RequestBody StudyScheduleUpdateRequestDto updateDto) {
+        return ResponseEntity.ok().body(studyScheduleService.update(id, studyBoardId, updateDto));
     }
 
     // 스터디 게시판 스케줄 삭제
     @DeleteMapping(value = "studySchedule")
     @ApiOperation(value = "스터디 게시판 스케줄 삭제", notes = "스터디 게시판 스케줄 삭제 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "스케줄 id"),
-            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
+            @ApiImplicitParam(name = "id", value = "스케줄 id", example = "1"),
+            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id", example = "1")
     })
-    public Long delete(@RequestParam Long id, Long studyBoardId) {
-        studyScheduleService.delete(id, studyBoardId);
-        return id;
+    public ResponseEntity<Boolean> delete(@RequestParam Long id, Long studyBoardId) {
+        return ResponseEntity.ok().body(studyScheduleService.delete(id, studyBoardId));
     }
 
-    // 스터디 게시판 스케줄 전체 리스트 아이디 조회
+    // 스터디 게시판 스케줄 전체 리스트 조회
     @GetMapping(value = "/studySchedules/all")
-    @ApiOperation(value = "스터디 게시판 스케줄 리스트 전체 아이디 조회", notes = "스터디 게시판 스케줄 리스트 전체 아이디 조회 API")
-    @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
-    public List<Long> allList(@RequestParam Long studyBoardId) {
-        return studyScheduleService.allList(studyBoardId);
+    @ApiOperation(value = "게시판 id로 스터디 게시판 스케줄 리스트 전체 조회", notes = "게시판 id로 스터디 게시판 스케줄 리스트 전체 조회 API")
+    @ApiImplicitParam(name = "studyBoardId", value = "게시판 id", example = "1")
+    public ResponseEntity<List<StudyScheduleResponseDto>> allList(@RequestParam Long studyBoardId) {
+        return ResponseEntity.ok().body(studyScheduleService.allList(studyBoardId));
     }
 
     // 스터디 게시판 스케줄 개별 조회
     @GetMapping(value = "/studySchedule")
-    @ApiOperation(value = "스터디 게시판 스케줄 상세 조회", notes = "스터디 게시판 스케줄 상세 조회 API")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "스케줄 id"),
-            @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
-    })
-    public StudyScheduleResponseDto view(@RequestParam Long id, Long studyBoardId) {
-        return studyScheduleService.findByIdAndStudyBoardId(id, studyBoardId);
+    @ApiOperation(value = "스케줄 id로 스터디 게시판 스케줄 상세 조회", notes = "스케줄 id로 스터디 게시판 스케줄 상세 조회")
+    @ApiImplicitParam(name = "id", value = "스케줄 id", example = "1")
+    public ResponseEntity<StudyScheduleResponseDto> view(@RequestParam Long id) {
+        return ResponseEntity.ok().body(studyScheduleService.findByIdAndStudyBoardId(id));
     }
 
 }

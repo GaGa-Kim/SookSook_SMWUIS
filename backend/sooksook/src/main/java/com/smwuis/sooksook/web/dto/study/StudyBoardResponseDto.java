@@ -9,45 +9,46 @@ import java.util.Date;
 @Getter
 public class StudyBoardResponseDto {
 
+    @ApiModelProperty(notes = "스터디 게시판 기본키", example = "1")
     private Long id;
 
-    @ApiModelProperty(example = "작성자 이메일")
+    @ApiModelProperty(notes = "이메일", example = "이메일")
     private String email;
 
-    @ApiModelProperty(example = "작성자 닉네임")
+    @ApiModelProperty(notes = "닉네임", example = "닉네임")
     private String nickname;
 
-    @ApiModelProperty(example = "학부")
+    @ApiModelProperty(notes = "강의 스터디 게시판 학부", example = "학부")
     private String department;
 
-    @ApiModelProperty(example = "과목")
+    @ApiModelProperty(notes = "과목명", example = "과목명")
     private String subject;
 
-    @ApiModelProperty(example = "제목")
+    @ApiModelProperty(notes = "제목", example = "제목")
     private String title;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용")
     private String content;
 
-    @ApiModelProperty(example = "인원")
+    @ApiModelProperty(notes = "인원", example = "4")
     private Long number;
 
-    @ApiModelProperty(example = "온/오프라인")
+    @ApiModelProperty(notes = "온/오프라인", example = "온라인")
     private String onoff;
 
-    @ApiModelProperty(example = "기간")
+    @ApiModelProperty(notes = "기간", example = "2022-07-29")
     private Date period;
 
-    @ApiModelProperty(example = "비밀번호")
+    @ApiModelProperty(notes = "비밀번호", example = "비밀번호")
     private String password;
 
-    @ApiModelProperty(example = "강의 스터디인지 강의 외 스터디인지")
-    private boolean lecture;
+    @ApiModelProperty(notes = "강의 스터디인지 강의 외 스터디인지", example = "강의 스터디")
+    private String lecture;
 
-    @ApiModelProperty(example = "카테고리")
+    @ApiModelProperty(notes = "강의 외 게시판 카테고리", example = "카테고리")
     private String category;
 
-    @ApiModelProperty(example = "스터디 종료 여부")
+    @ApiModelProperty(notes = "스터디 종료 여부", example = "false")
     private boolean finished;
 
     public StudyBoardResponseDto(StudyBoard studyBoard) {
@@ -62,8 +63,17 @@ public class StudyBoardResponseDto {
         this.onoff = studyBoard.getOnoff();
         this.period = studyBoard.getPeriod();
         this.password = studyBoard.getPassword();
-        this.lecture = studyBoard.isFinished();
+        this.lecture = setLecture(studyBoard);
         this.category = studyBoard.getCategory();
         this.finished = studyBoard.isFinished();
+    }
+
+    public String setLecture(StudyBoard studyBoard) {
+        if(studyBoard.isLecture()) {
+            return "강의 스터디";
+        }
+        else {
+            return  "강의 외 스터디";
+        }
     }
 }

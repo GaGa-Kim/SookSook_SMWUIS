@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PasswordCommentSaveRequestDto {
 
-    @ApiModelProperty(notes = "이메일", example = "이메일")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
     private String email;
 
-    @ApiModelProperty(notes = "스터디 게시판 id", example = "1")
+    @ApiModelProperty(notes = "스터디 게시판 id", example = "1", required = true)
     private Long studyBoardId;
 
-    @ApiModelProperty(notes = "내용", example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용", required = true)
     private String content;
 
-    @ApiModelProperty(notes = "상위 댓글 id (상위 댓글이 없으면 공백)", example = "1")
+    @ApiModelProperty(notes = "상위 댓글 id (상위 댓글이 없으면 공백)", example = "null", required = true)
     private Long upIndex;
 
     @Builder

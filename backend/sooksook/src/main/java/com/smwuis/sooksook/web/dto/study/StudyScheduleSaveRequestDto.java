@@ -12,16 +12,16 @@ import java.util.Date;
 @NoArgsConstructor
 public class StudyScheduleSaveRequestDto {
 
-    @ApiModelProperty(example = "이메일")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
     private String email;
 
-    @ApiModelProperty(example = "1")
+    @ApiModelProperty(notes = "스터디 게시판 id", example = "1", required = true)
     private Long studyBoardId;
 
-    @ApiModelProperty(example = "2022-07-16")
+    @ApiModelProperty(notes = "기한", example = "2022-07-29")
     private Date period;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용", required = true)
     private String content;
 
     @Builder

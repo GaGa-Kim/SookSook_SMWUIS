@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-@Api(tags = "StudyPostController API (스터디 게시글 API)")
+@Api(tags = "StudyPostController API (게시글 API)")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -39,10 +39,10 @@ public class StudyPostController {
     private final StudyFilesRepository studyFilesRepository;
     private final StudyFilesService studyFilesService;
 
-    // 스터디 게시판 게시글 작성
+    // 강의 스터디 게시글 작성
     @PostMapping(value = "/studyPost/lecture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "스터디 게시판 게시글 작성 (Postman 이용)", notes = "스터디 게시판 게시글 작성 API")
-    public Long lectureSave(StudyPostVO studyPostVO) throws Exception {
+    @ApiOperation(value = "강의 스터디 게시글 작성 (Postman 이용)", notes = "강의 스터디 게시글 작성 API")
+    public ResponseEntity<StudyPostResponseDto> lectureSave(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
                 .email(studyPostVO.getEmail())
@@ -50,13 +50,13 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
-        return studyPostService.lectureSave(saveRequestDto, studyPostVO.getFiles());
+        return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "강의 스터디 게시글"));
     }
 
     // 스터디 외 게시판 게시글 작성
     @PostMapping(value = "/studyPost/notLecture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "스터디 외 게시판 게시글 작성 (Postman 이용)", notes = "스터디 외 게시판 게시글 작성 API")
-    public Long notLectureSave(StudyPostVO studyPostVO) throws Exception {
+    @ApiOperation(value = "강의 외 스터디 게시글 작성 (Postman 이용)", notes = "강의 외 스터디 게시글 작성 API")
+    public ResponseEntity<StudyPostResponseDto> notLectureSave(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
                 .email(studyPostVO.getEmail())
@@ -64,13 +64,13 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
-        return studyPostService.NotLectureSave(saveRequestDto, studyPostVO.getFiles());
+        return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "강의 외 스터디 게시글"));
     }
 
     // 자료 공유 게시글 작성
     @PostMapping(value = "/studyPost/share", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "자료 공유 게시글 작성 (Postman 이용)", notes = "자료 공유 게시글 작성 API")
-    public Long shareSave(StudyPostVO studyPostVO) throws Exception {
+    public ResponseEntity<StudyPostResponseDto> shareSave(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
                 .email(studyPostVO.getEmail())
@@ -78,13 +78,13 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
-        return studyPostService.shareSave(saveRequestDto, studyPostVO.getFiles());
+        return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "자료 공유 게시글"));
     }
 
     // 판매/나눔 게시글 작성
     @PostMapping(value = "/studyPost/sell", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "판매/나눔 게시글 작성 (Postman 이용)", notes = "판매/나눔 게시글 작성 API")
-    public Long sellSave(StudyPostVO studyPostVO) throws Exception {
+    public ResponseEntity<StudyPostResponseDto> sellSave(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
                 .email(studyPostVO.getEmail())
@@ -92,13 +92,13 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
-        return studyPostService.sellSave(saveRequestDto, studyPostVO.getFiles());
+        return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "판매/나눔 게시글"));
     }
 
     // 질문 게시글 작성
     @PostMapping(value = "/studyPost/question", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "질문 게시글 작성 (Postman 이용)", notes = "질문 게시글 작성 API")
-    public Long questionSave(StudyPostVO studyPostVO) throws Exception {
+    public ResponseEntity<StudyPostResponseDto> questionSave(StudyPostVO studyPostVO) throws Exception {
         StudyPostSaveRequestDto saveRequestDto = StudyPostSaveRequestDto
                 .builder()
                 .email(studyPostVO.getEmail())
@@ -106,7 +106,7 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
-        return studyPostService.questionSave(saveRequestDto, studyPostVO.getFiles());
+        return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "질문 게시글"));
     }
 
     // 스터디 게시글 수정
@@ -115,12 +115,9 @@ public class StudyPostController {
       첨부파일이 없을 경우, 원래의 첨부파일 유지
      */
     @PutMapping(value = "/studyPost")
-    @ApiOperation(value = "스터디 게시글 수정 (Postman 이용)", notes = "스터디 게시글 수정 API")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "게시글 id"),
-            @ApiImplicitParam(name = "email", value = "이메일"),
-    })
-    public String update(@RequestParam Long id, String email, StudyPostVO studyPostVO) throws Exception {
+    @ApiOperation(value = "게시글 수정 (Postman 이용)", notes = "게시글 수정 API")
+    @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
+    public ResponseEntity<StudyPostResponseDto> update(@RequestParam Long id, StudyPostVO studyPostVO) throws Exception {
 
         StudyPostUpdateRequestDto updateRequestDto = StudyPostUpdateRequestDto
                 .builder()
@@ -164,38 +161,38 @@ public class StudyPostController {
                     }
                 }
             }
+            return ResponseEntity.ok().body(studyPostService.updateWithFiles(id, updateRequestDto, addFileList));
 
-            return studyPostService.updateWithFiles(id, email, updateRequestDto, addFileList);
         } else {
-            return studyPostService.update(id, email, updateRequestDto);
+            return ResponseEntity.ok().body(studyPostService.update(id, updateRequestDto));
         }
     }
 
     // 스터디 게시글 삭제
     @DeleteMapping(value = "/studyPost")
-    @ApiOperation(value = "스터디 게시글 삭제", notes = "스터디 게시글 삭제 API")
+    @ApiOperation(value = "게시글 삭제", notes = "게시글 삭제 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "게시글 id"),
-            @ApiImplicitParam(name = "email", value = "이메일"),
+            @ApiImplicitParam(name = "id", value = "게시글 id", example = "1"),
+            @ApiImplicitParam(name = "email", value = "이메일", example = "이메일"),
     })
-    public String delete(@RequestParam Long id, String email) {
-        return studyPostService.delete(id, email);
+    public ResponseEntity<Boolean> delete(@RequestParam Long id, String email) {
+        return ResponseEntity.ok().body(studyPostService.delete(id, email));
     }
 
-    // 특정 스터디 게시판 전체 글 아이디 조회
-    @GetMapping(value = "/studyPosts/all")
-    @ApiOperation(value = "스터디 게시판 게시글 아이디 리스트 전체 조회", notes = "스터디 게시판 게시글 아이디 리스트 전체 조회 API")
-    @ApiImplicitParam(name = "studyBoardId", value = "게시판 id")
-    public List<Long> allList(@RequestParam Long studyBoardId) {
-        return studyPostService.allList(studyBoardId);
+    // 특정 스터디 게시판 전체 글 아이디 리스트 조회
+    @GetMapping(value = "/studyPosts/studyList")
+    @ApiOperation(value = "게시판 id로 특정 스터디 게시판 전체 글 아이디 리스트 조회", notes = "게시판 id로 특정 스터디 게시판 전체 글 아이디 리스트 조회 API")
+    @ApiImplicitParam(name = "studyBoardId", value = "게시판 id", example = "1")
+    public ResponseEntity<List<Long>> allList(@RequestParam Long studyBoardId) {
+        return ResponseEntity.ok().body(studyPostService.allList(studyBoardId));
     }
 
-    // 카테고리 별 게시글 리스트 조회
+    // 카테고리 별 게시글 아이디 리스트 조회
     @GetMapping(value = "/studyPosts/category")
-    @ApiOperation(value = "스터디 게시판 게시글 아이디 리스트 전체 조회", notes = "스터디 게시판 게시글 아이디 리스트 전체 조회 API")
-    @ApiImplicitParam(name = "category", value = "카테고리")
-    public List<Long> findByCategory(@RequestParam String category) {
-        return studyPostService.findByCategory(category);
+    @ApiOperation(value = "카테고리 별 게시글 아이디 리스트 조회", notes = "카테고리 별 게시글 아이디 리스트 조회 API")
+    @ApiImplicitParam(name = "category", value = "카테고리 (강의 스터디 게시글, 강의 외 스터디 게시글, 질문 게시글, 자료 공유 게시글, 판매/나눔 게시글)", example = "카테고리")
+    public ResponseEntity<List<Long>> findByCategory(@RequestParam String category) {
+        return ResponseEntity.ok().body(studyPostService.findByCategory(category));
     }
 
     // 스터디 게시글 상세 조회
@@ -205,10 +202,10 @@ public class StudyPostController {
         이미지가 아닌 파일이라면 파일 다운로드를 조회해서 글에 첨부
         
      */
-    @GetMapping(value = "/studyPost")
-    @ApiOperation(value = "스터디 게시판 게시글 상세 조회", notes = "스터디 게시판 게시글 상세 조회 API")
-    @ApiImplicitParam(name = "id", value = "게시글 id")
-    public StudyPostResponseDto view(@RequestParam Long id) {
+    @GetMapping(value = "/studyPost/info")
+    @ApiOperation(value = "게시글 상세 조회", notes = "게시글 상세 조회 API")
+    @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
+    public ResponseEntity<StudyPostResponseDto> view(@RequestParam Long id) {
 
         List<StudyFileIdResponseDto> studyFileIdResponseDtoList = studyFilesService.findAllByStudyPost(id);
         List<Long> fileId = new ArrayList<>();
@@ -217,15 +214,15 @@ public class StudyPostController {
             fileId.add(studyFileIdResponseDto.getFileId());
         }
 
-        return studyPostService.findById(id, fileId);
+        return ResponseEntity.ok().body(studyPostService.findById(id, fileId));
     }
 
     // 파일 정보 조회
     @GetMapping("/studyPost/fileInfo")
-    @ApiOperation(value = "파일 정보 조회", notes = "파일 정보 조회 API")
-    @ApiImplicitParam(name = "id", value = "파일 id")
-    public StudyPostFileResponseDto findById(@RequestParam Long id) {
-        return studyFilesService.findByFileId(id);
+    @ApiOperation(value = "이미지/파일 정보 조회", notes = "이미지/파일 정보 조회 API")
+    @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
+    public ResponseEntity<StudyPostFileResponseDto> findById(@RequestParam Long id) {
+        return ResponseEntity.ok().body(studyFilesService.findByFileId(id));
     }
 
     // 파일 이미지 ByteArray 조회
@@ -233,8 +230,8 @@ public class StudyPostController {
             value = "/studyPost/fileImageByte",
             produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
     )
-    @ApiOperation(value = "게시글 이미지 ByteArray 조회", notes = "게시글 이미지 ByteArray 조회 API")
-    @ApiImplicitParam(name = "id", value = "파일 id")
+    @ApiOperation(value = "이미지 ByteArray 조회", notes = "이미지 ByteArray 조회 API")
+    @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
     public ResponseEntity<String> getImageByte(@RequestParam Long id) throws IOException {
         StudyPostFileResponseDto studyPostFileResponseDto = studyFilesService.findByFileId(id);
         String absolutePath
@@ -246,15 +243,15 @@ public class StudyPostController {
         String encodedString = Base64.getEncoder().encodeToString(imageByteArray);
         imageStream.close();
 
-        return new ResponseEntity<>(encodedString, HttpStatus.OK);
+        return ResponseEntity.ok().body(encodedString);
     }
 
     // 파일 이미지 출력
     @GetMapping(value = "/studyPost/fileImage",
             produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
     )
-    @ApiOperation(value = "게시글 이미지 출력", notes = "게시글 이미지 출력 API")
-    @ApiImplicitParam(name = "id", value = "파일 id")
+    @ApiOperation(value = "이미지 출력", notes = "이미지 출력 API")
+    @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
     public ResponseEntity<byte[]> getImage(@RequestParam Long id) throws IOException {
         StudyPostFileResponseDto studyPostFileResponseDto = studyFilesService.findByFileId(id);
         String absolutePath
@@ -265,13 +262,13 @@ public class StudyPostController {
         byte[] imageByteArray = IOUtils.toByteArray(imageStream);
         imageStream.close();
 
-        return new ResponseEntity<>(imageByteArray, HttpStatus.OK);
+        return ResponseEntity.ok().body(imageByteArray);
     }
 
     @GetMapping("/studyPost/fileDownload")
-    @ApiOperation(value = "게시글 파일 다운로드", notes = "게시글 파일 다운로드 API")
-    @ApiImplicitParam(name = "id", value = "파일 id")
-    public byte[] downloadFiles(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response) {
+    @ApiOperation(value = "이미지/파일 다운로드", notes = "이미지/파일 다운로드 API")
+    @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
+    public ResponseEntity<byte[]> downloadFiles(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response) {
 
         StudyFiles studyFiles = studyFilesRepository.findById(id).orElse(null);
 
@@ -292,6 +289,6 @@ public class StudyPostController {
             e.printStackTrace();
         }
 
-        return down;
+        return ResponseEntity.ok().body(down);
     }
 }

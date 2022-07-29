@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyMemberSaveRequestDto {
 
-    @ApiModelProperty(example = "이메일")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
     private String email ;
 
-    @ApiModelProperty(example = "1")
+    @ApiModelProperty(notes = "스터디 게시판 id", example = "1", required = true)
     private Long studyBoardId;
 
-    @ApiModelProperty(example = "비밀번호")
+    @ApiModelProperty(notes = "비밀번호", example = "비밀번호", required = true)
     private String password;
 
     @Builder

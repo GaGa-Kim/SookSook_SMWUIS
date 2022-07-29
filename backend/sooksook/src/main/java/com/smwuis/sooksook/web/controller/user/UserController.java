@@ -27,12 +27,9 @@ public class UserController {
     // 유저 수정
     @PutMapping("/user")
     @ApiOperation(value = "유저 수정", notes = "유저 수정 API")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "유저 id", example = "1", required = true),
-            @ApiImplicitParam(name = "email", value = "이메일", example = "이메일", required = true)
-    })
-    public ResponseEntity<UserResponseDto> update(@RequestParam Long id, String email, @RequestBody UserUpdateRequestDto updateRequestDto) {
-        return ResponseEntity.ok(userService.update(id, email, updateRequestDto));
+    @ApiImplicitParam(name = "id", value = "유저 id", example = "1", required = true)
+    public ResponseEntity<UserResponseDto> update(@RequestParam Long id, @RequestBody UserUpdateRequestDto updateRequestDto) {
+        return ResponseEntity.ok(userService.update(id, updateRequestDto));
     }
 
     // 유저 비밀번호 수정

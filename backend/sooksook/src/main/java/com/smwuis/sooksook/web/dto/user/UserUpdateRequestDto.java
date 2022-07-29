@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserUpdateRequestDto {
 
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
+    private String email;
+
     @ApiModelProperty(notes = "이름", example = "이름", required = true)
     private String name;
 
@@ -19,7 +22,8 @@ public class UserUpdateRequestDto {
     private String introduction;
 
     @Builder
-    public UserUpdateRequestDto(String name, String nickname, String introduction) {
+    public UserUpdateRequestDto(String email, String name, String nickname, String introduction) {
+        this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.introduction = introduction;

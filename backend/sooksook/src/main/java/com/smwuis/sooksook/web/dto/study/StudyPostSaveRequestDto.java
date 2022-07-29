@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudyPostSaveRequestDto {
 
-    @ApiModelProperty(example = "이메일")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
     private String email;
 
-    @ApiModelProperty(example = "1")
+    @ApiModelProperty(notes = "스터디 게시판 id (스터디 게시판 게시글이면 id 입력, 아니면 비워두기)", example = "1", required = true)
     private Long studyBoardId;
 
-    @ApiModelProperty(example = "제목")
+    @ApiModelProperty(notes = "제목", example = "제목", required = true)
     private String title;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용", required = true)
     private String content;
 
     @Builder

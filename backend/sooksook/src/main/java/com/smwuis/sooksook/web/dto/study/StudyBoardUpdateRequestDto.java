@@ -11,42 +11,43 @@ import java.util.Date;
 @NoArgsConstructor
 public class StudyBoardUpdateRequestDto {
 
-    @ApiModelProperty(example = "학부")
+    @ApiModelProperty(notes = "이메일", example = "이메일", required = true)
+    private String email;
+
+    @ApiModelProperty(notes = "강의 스터디 게시판 학부", example = "학부")
     private String department;
 
-    @ApiModelProperty(example = "과목")
+    @ApiModelProperty(notes = "과목명", example = "과목명", required = true)
     private String subject;
 
-    @ApiModelProperty(example = "제목")
+    @ApiModelProperty(notes = "제목", example = "제목", required = true)
     private String title;
 
-    @ApiModelProperty(example = "내용")
+    @ApiModelProperty(notes = "내용", example = "내용", required = true)
     private String content;
 
-    @ApiModelProperty(example = "4")
+    @ApiModelProperty(notes = "인원", example = "4")
     private Long number;
 
-    @ApiModelProperty(example = "온/오프라인")
+    @ApiModelProperty(notes = "온/오프라인", example = "온라인")
     private String onoff;
 
-    @ApiModelProperty(example = "2022-07-15")
+    @ApiModelProperty(notes = "기간", example = "2022-07-29")
     private Date period;
 
-    @ApiModelProperty(example = "비밀번호")
+    @ApiModelProperty(notes = "비밀번호", example = "비밀번호", required = true)
     private String password;
 
-    @ApiModelProperty(example = "true")
+    @ApiModelProperty(notes = "강의 스터디인지(true) 강의 외 스터디인지(false)", example = "true")
     private boolean lecture;
 
-    @ApiModelProperty(example = "카테고리")
+    @ApiModelProperty(notes = "강의 외 게시판 카테고리", example = "카테고리")
     private String category;
 
-    @ApiModelProperty(example = "false")
-    private boolean finished;
-
     @Builder
-    public StudyBoardUpdateRequestDto(String department, String subject, String title, String content,
-                                    Long number, String onoff, Date period, String password, boolean lecture, String category, boolean finished) {
+    public StudyBoardUpdateRequestDto(String email, String department, String subject, String title, String content,
+                                    Long number, String onoff, Date period, String password, boolean lecture, String category) {
+        this.email = email;
         this.department = department;
         this.subject = subject;
         this.title = title;
@@ -57,6 +58,5 @@ public class StudyBoardUpdateRequestDto {
         this.password = password;
         this.lecture = lecture;
         this.category = category;
-        this.finished = finished;
     }
 }

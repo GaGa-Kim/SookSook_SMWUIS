@@ -44,10 +44,10 @@ public class UserService {
     
     // 유저 수정
     @Transactional
-    public UserResponseDto update(Long id, String email, UserUpdateRequestDto updateRequestDto) {
+    public UserResponseDto update(Long id, UserUpdateRequestDto updateRequestDto) {
         User user = userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
-        if(user.getEmail().equals(email)) {
+        if(user.getEmail().equals(updateRequestDto.getEmail())) {
             user.update(updateRequestDto.getName(),
                     updateRequestDto.getNickname(),
                     updateRequestDto.getIntroduction());
