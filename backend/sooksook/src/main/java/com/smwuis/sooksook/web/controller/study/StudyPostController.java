@@ -13,6 +13,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.FileCopyUtils;
@@ -34,6 +36,8 @@ import java.util.List;
 @RestController
 public class StudyPostController {
 
+    Logger logger = LoggerFactory.getLogger(getClass());
+
     private final StudyPostService studyPostService;
     private final StudyPostRepository studyPostRepository;
     private final StudyFilesRepository studyFilesRepository;
@@ -50,6 +54,7 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
+        logger.info("lectureSave (강의 스터디 게시글 작성)");
         return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "강의 스터디 게시글"));
     }
 
@@ -64,6 +69,7 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
+        logger.info("notLectureSave (강의 외 스터디 게시글 작성)");
         return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "강의 외 스터디 게시글"));
     }
 
@@ -78,6 +84,7 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
+        logger.info("shareSave (자료 공유 게시글 작성)");
         return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "자료 공유 게시글"));
     }
 
@@ -92,6 +99,7 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
+        logger.info("sellSave (판매/나눔 게시글 작성)");
         return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "판매/나눔 게시글"));
     }
 
@@ -106,6 +114,7 @@ public class StudyPostController {
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
+        logger.info("questionSave (질문 게시글 작성)");
         return ResponseEntity.ok().body(studyPostService.save(saveRequestDto, studyPostVO.getFiles(), "질문 게시글"));
     }
 
@@ -161,9 +170,11 @@ public class StudyPostController {
                     }
                 }
             }
+            logger.info("update (게시글 수정)");
             return ResponseEntity.ok().body(studyPostService.updateWithFiles(id, updateRequestDto, addFileList));
 
         } else {
+            logger.info("update (게시글 수정)");
             return ResponseEntity.ok().body(studyPostService.update(id, updateRequestDto));
         }
     }
@@ -176,6 +187,7 @@ public class StudyPostController {
             @ApiImplicitParam(name = "email", value = "이메일", example = "이메일"),
     })
     public ResponseEntity<Boolean> delete(@RequestParam Long id, String email) {
+        logger.info("delete (게시글 삭제)");
         return ResponseEntity.ok().body(studyPostService.delete(id, email));
     }
 
@@ -184,6 +196,7 @@ public class StudyPostController {
     @ApiOperation(value = "게시판 id로 특정 스터디 게시판 전체 글 아이디 리스트 조회", notes = "게시판 id로 특정 스터디 게시판 전체 글 아이디 리스트 조회 API")
     @ApiImplicitParam(name = "studyBoardId", value = "게시판 id", example = "1")
     public ResponseEntity<List<Long>> allList(@RequestParam Long studyBoardId) {
+        logger.info("allList (게시판 id로 특정 스터디 게시판 전체 글 아이디 리스트 조회)");
         return ResponseEntity.ok().body(studyPostService.allList(studyBoardId));
     }
 
@@ -192,6 +205,7 @@ public class StudyPostController {
     @ApiOperation(value = "카테고리 별 게시글 아이디 리스트 조회", notes = "카테고리 별 게시글 아이디 리스트 조회 API")
     @ApiImplicitParam(name = "category", value = "카테고리 (강의 스터디 게시글, 강의 외 스터디 게시글, 질문 게시글, 자료 공유 게시글, 판매/나눔 게시글)", example = "카테고리")
     public ResponseEntity<List<Long>> findByCategory(@RequestParam String category) {
+        logger.info("findByCategory (카테고리 별 게시글 아이디 리스트 조회)");
         return ResponseEntity.ok().body(studyPostService.findByCategory(category));
     }
 
@@ -214,14 +228,16 @@ public class StudyPostController {
             fileId.add(studyFileIdResponseDto.getFileId());
         }
 
+        logger.info("view (게시글 상세 조회)");
         return ResponseEntity.ok().body(studyPostService.findById(id, fileId));
     }
 
     // 파일 정보 조회
     @GetMapping("/studyPost/fileInfo")
-    @ApiOperation(value = "이미지/파일 정보 조회", notes = "이미지/파일 정보 조회 API")
+    @ApiOperation(value = "파일 id로 이미지/파일 정보 조회", notes = "파일 id로 이미지/파일 정보 조회 API")
     @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
     public ResponseEntity<StudyPostFileResponseDto> findById(@RequestParam Long id) {
+        logger.info("findById (파일 id로 이미지/파일 정보 조회)");
         return ResponseEntity.ok().body(studyFilesService.findByFileId(id));
     }
 
@@ -230,7 +246,7 @@ public class StudyPostController {
             value = "/studyPost/fileImageByte",
             produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
     )
-    @ApiOperation(value = "이미지 ByteArray 조회", notes = "이미지 ByteArray 조회 API")
+    @ApiOperation(value = "이미지 id로 이미지 ByteArray 조회", notes = "이미지 id로 이미지 ByteArray 조회 API")
     @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
     public ResponseEntity<String> getImageByte(@RequestParam Long id) throws IOException {
         StudyPostFileResponseDto studyPostFileResponseDto = studyFilesService.findByFileId(id);
@@ -243,6 +259,7 @@ public class StudyPostController {
         String encodedString = Base64.getEncoder().encodeToString(imageByteArray);
         imageStream.close();
 
+        logger.info("getImageByte (이미지 id로 이미지 ByteArray 조회)");
         return ResponseEntity.ok().body(encodedString);
     }
 
@@ -250,7 +267,7 @@ public class StudyPostController {
     @GetMapping(value = "/studyPost/fileImage",
             produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
     )
-    @ApiOperation(value = "이미지 출력", notes = "이미지 출력 API")
+    @ApiOperation(value = "파일 id로 이미지 출력", notes = "파일 id로 이미지 출력 API")
     @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
     public ResponseEntity<byte[]> getImage(@RequestParam Long id) throws IOException {
         StudyPostFileResponseDto studyPostFileResponseDto = studyFilesService.findByFileId(id);
@@ -262,11 +279,12 @@ public class StudyPostController {
         byte[] imageByteArray = IOUtils.toByteArray(imageStream);
         imageStream.close();
 
+        logger.info("getImage (파일 id로 이미지 출력)");
         return ResponseEntity.ok().body(imageByteArray);
     }
 
     @GetMapping("/studyPost/fileDownload")
-    @ApiOperation(value = "이미지/파일 다운로드", notes = "이미지/파일 다운로드 API")
+    @ApiOperation(value = "파일 id로 이미지/파일 다운로드", notes = "파일 id로 이미지/파일 다운로드 API")
     @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
     public ResponseEntity<byte[]> downloadFiles(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response) {
 
@@ -289,6 +307,7 @@ public class StudyPostController {
             e.printStackTrace();
         }
 
+        logger.info("downloadFiles (파일 id로 이미지/파일 다운로드)");
         return ResponseEntity.ok().body(down);
     }
 }
