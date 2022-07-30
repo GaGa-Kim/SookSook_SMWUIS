@@ -21,11 +21,11 @@ public class StudySchedule extends BaseTimeEntity {
     @Column(name = "StudySchedule_ID")
     private Long id; // 기본키
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "User_ID")
     private User userId; // 작성자 (fk)
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudyBoard_ID")
     private StudyBoard studyBoardId; // 스터디 게시판 (fk)
 

@@ -20,7 +20,7 @@ public class UserSchedule extends BaseTimeEntity {
     @Column(name = "UserSchedule_ID")
     private Long id; // 기본키
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_ID")
     private User userId; // 작성자 (fk)
 

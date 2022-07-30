@@ -7,13 +7,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class SearchResponseDto {
 
-    @ApiModelProperty(notes = "생성 날짜", example = "2022-07-29")
-    private LocalDate createdDate;
+    @ApiModelProperty(notes = "생성 날짜 및 시간", example = "2022-07-29 00:00")
+    private LocalDateTime createdDate;
 
     @ApiModelProperty(notes = "스터디 게시판 기본키 (null이면 게시글)", example = "1")
     private Long studyBoardId;

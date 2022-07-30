@@ -16,7 +16,7 @@ public class StudyFiles {
     @Column(name = "StudyFile_ID")
     private Long id; // 기본키
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "StudyPost_ID")
     private StudyPost studyPostId; // 게시글 (fk)
 

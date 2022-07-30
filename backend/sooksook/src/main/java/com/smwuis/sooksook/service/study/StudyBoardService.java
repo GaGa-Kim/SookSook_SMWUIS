@@ -9,6 +9,8 @@ import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,8 +33,8 @@ public class StudyBoardService {
     private final StudyCommentRepository studyCommentRepository;
     private final StudyPostRepository studyPostRepository;
 
-    private final LocalDate startDatetime = LocalDate.now();
-    private final LocalDate endDatetime = LocalDate.now().plusDays(7);
+    private final LocalDateTime startDatetime = LocalDateTime.now();
+    private final LocalDateTime endDatetime = LocalDateTime.now().plusDays(7);
 
     // 강의 스터디 모집 게시판 글 작성
     @Transactional
@@ -139,7 +142,7 @@ public class StudyBoardService {
         return passwordCommentRepository.countByCreatedDateBetweenAndStudyBoardId(startDatetime, endDatetime, studyBoard);
     }
 
-    // 일주일간 스터디 게시판에 댓글이 많이 달린 인기 스터디 Top 5 조회
+    // 일주일간 스터디 게시판에 댓글이 많이 달린 인기 스터디 5개 조회
     @Transactional(readOnly = true)
     public List<Map<String, Object>> famousList() {
 
@@ -267,7 +270,6 @@ public class StudyBoardService {
         for(StudyPost studyPost : studyPostList) {
             searchResponseDtoList.add(new SearchResponseDto(studyPost));
         }
-
 
         return searchResponseDtoList
                 .stream()
