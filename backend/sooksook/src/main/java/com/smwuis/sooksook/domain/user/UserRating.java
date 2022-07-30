@@ -20,7 +20,7 @@ public class UserRating extends BaseTimeEntity {
     @Column(name = "UserRating_ID")
     private Long id; // 기본키
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "User_ID")
     private User receiverEmail; // 별점 받는 사람
 
