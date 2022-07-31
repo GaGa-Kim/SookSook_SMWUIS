@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
@@ -128,29 +129,44 @@ const StudyList = styled.li`
     text-align: left;
 `;
 const HotStudy = () => {
-    const hotStudyList = ["웹 프로그래밍 기초", "IT기기구조"];
-    return hotStudyList.map((name, index) =>
-        <StudyList key={index}>
-            {index + 1}위 {name}
+    const [hotStudyList, setHotStudyList] = React.useState([]);
+    React.useEffect(() => {
+        axios
+            .get("http://localhost:8080/studyBoard/famous")
+            .then((response) => {
+                setHotStudyList(response.data);
+            });
+    }, []);
+    return hotStudyList.map((study) => (
+        <StudyList>
+            {study.studyBoardId}위 {study.title}
         </StudyList>
-    );
+    ));
 };
 const NewStudy = () => {
-    const newStudyList = ["자료구조"];
-    return newStudyList.map((name, index) =>
-        <StudyList key={index}>
-            ∘{name}
-        </StudyList>
-    );
+    const [newStudyList, setNewStudyList] = React.useState([]);
+    React.useEffect(() => {
+        axios
+            .get("http://localhost:8080/studyBoard/famous")
+            .then((response) => {
+                setNewStudyList(response.data);
+            });
+    }, []);
+    return newStudyList.map((study) => <StudyList>∘{study.title}</StudyList>);
 };
 const HighStudy = () => {
-    const highStudyList = ["공예감상"];
-    return highStudyList.map((name, index) =>
-        <StudyList key={index}>
-            {index + 1}위 {name}
+    const [highStudyList, setHighStudyList] = React.useState([]);
+    React.useEffect(() => {
+        axios.get("http://localhost:8080/studyBoard/hard").then((response) => {
+            setHighStudyList(response.data);
+        });
+    }, []);
+    return highStudyList.map((study) => (
+        <StudyList>
+            {study.studyBoardId}위 {study.title}
         </StudyList>
-    );
-}
+    ));
+};
 
 function Home() {
     return (

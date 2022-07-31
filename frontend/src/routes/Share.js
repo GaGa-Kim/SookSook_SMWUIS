@@ -17,7 +17,7 @@ const Shareblock = () => {
 const Cwrite = () => {
     return (
         <section>
-            <button className="newstudy">
+            <button className="newstudy" style={{marginLeft:"0px"}}>
                 <Link to="/setboard_share">글 작성하기</Link></button>
         </section>
     );
