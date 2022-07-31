@@ -9,7 +9,7 @@ import Logo from "./components/Logo.js";
 const Qablock = () => {
     return (
         <section className="block">
-            <button className="qanda">Q & A 게시판</button><Cwrite />
+            <button className="qanda" >Q & A 게시판</button><Cwrite />
         </section>
     );
 };
@@ -50,7 +50,7 @@ const data = [
 const Cwrite = () => {
     return (
         <section>
-            <button className="newstudy">
+            <button className="newstudy" style={{marginLeft:"0px"}}>
                 <Link to="/setboard_qa">글 작성하기</Link></button>
         </section>
     );

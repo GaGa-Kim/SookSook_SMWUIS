@@ -1,3 +1,4 @@
+import axios from "axios";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -8,12 +9,12 @@ import InputPassword from "./components/InputPassword";
 import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
-import Logo from './components/Logo';
-import { Link } from 'react-router-dom';
+import Logo from "./components/Logo";
+import { Link } from "react-router-dom";
 import "../fonts/Font.css";
-import { useState } from 'react';
-import CheckBox from "./components/CheckBox";
-
+import React from "react";
+import { DatePicker, Space } from "antd";
+import { useSelector } from 'react-redux';
 
 const Title = styled.div`
     position: absolute;
@@ -70,46 +71,111 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const Openstudy2 = () => {
-    const [key, setKey] = useState(0);
-    const [id, setId] = useState("가송");
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [user, setUser] = useState("");
-    const [pw, setPw] = useState("");
+    const [email, setEmail] = React.useState("");
+    const loginId=useSelector(state=>state.loginId);
+    const password=useSelector(state=>state.password);
+    React.useEffect(() => {
+        axios
+            .get(
+                "http://localhost:8080/user",{
+                    params:{
+                        loginId:loginId,
+                        password:password
+                    }
+                }
+            )
+            .then((response) => {
+                setEmail(response.data.email);
+            });
+    }, []);
+    const [category, setCategory] = React.useState("");
+    const [title, setTitle] = React.useState("");
+    const [content, setContent] = React.useState("");
+    const [subject, setSubject] = React.useState("");
+    const [pw, setPw] = React.useState("");
+    const [date, setDate] = React.useState("");
+    const [number, setNumber] = React.useState();
+    const [onoff, setOnoff] = React.useState("");
 
-    const handleUploadClick = () => {
-
-        if (title.trim() === '') {
-            alert('제목을 입력하세요');
+    const handleUploadClick = (e) => {
+        if (subject === "") {
+            alert("과목을 입력하세요");
+            e.stopPropagation();
             return;
-        }
-        if (content.trim() === '') {
-            alert('내용을 입력하세요');
+        } else if (title === "") {
+            alert("제목을 입력하세요");
+            e.stopPropagation();
             return;
-        }
-        if (user.trim() === '') {
-            alert('내용을 입력하세요');
+        } else if (number == null) {
+            alert("인원를 입력하세요");
+            e.stopPropagation();
             return;
-        }
-        if (pw.trim() === '') {
-            alert('내용을 입력하세요');
+        } else if (!Number.isInteger(number)) {
+            alert("인원을 올바르게 입력하세요");
+            e.stopPropagation();
             return;
+        } else if (pw === "") {
+            alert("비밀번호를 입력하세요");
+            e.stopPropagation();
+            return;
+        } else if (content === "") {
+            alert("내용을 입력하세요");
+            e.stopPropagation();
+            return;
+        } else if (date === "") {
+            alert("기간를 입력하세요");
+            e.stopPropagation();
+            return;
+        } else if (onoff === "") {
+            alert("온라인 또는 오프라인을 체크하세요");
+            e.stopPropagation();
+            return;
+        } else {
+            axios
+                .post("http://localhost:8080/studyBoard/lecture", {
+                    content: content,
+                    category: category,
+                    email: email,
+                    number: number,
+                    onoff: onoff,
+                    password: pw,
+                    period: date,
+                    subject: subject,
+                    title: title,
+                })
+                .then((response) => {
+                    console.log(response.data);
+                });
         }
         /*db에 게시글 정보 저장*/
-
-    }
+    };
     const getText = (text) => {
         setTitle(text);
     };
     const getArea = (text) => {
         setContent(text);
     };
-    const getUser = (text) => {
-        setUser(text);
-    }
+    const getSubject = (text) => {
+        setSubject(text);
+    };
     const getPw = (text) => {
         setPw(text);
-    }
+    };
+    const onChangeDate = (date, dateString) => {
+        setDate(dateString);
+    };
+    const onChangeCategory = (category) => {
+        setCategory(category);
+    };
+    const onChangeOn = (on) => {
+        setOnoff(on.target.value);
+    };
+    const onChangeOff = (off) => {
+        setOnoff(off.target.value);
+    };
+    const getNumber = (text) => {
+        setNumber(Number(text));
+    };
 
     return (
         <Root>
@@ -122,7 +188,7 @@ const Openstudy2 = () => {
                 <InputBox>
                     <Quest>카테고리</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <Select>
+                        <Select onChange={onChangeCategory}>
                             <option>토익/토플</option>
                             <option>면접</option>
                             <option>자소서</option>
@@ -134,17 +200,12 @@ const Openstudy2 = () => {
                             <option>취미언어</option>
                             <option>전문자격증</option>
                         </Select>
-                    </Box></InputBox>
-                <InputBox >
-                    <Quest>이름</Quest>
-                    <Box width="200px" left="100px" top="7px">
-                        <InputText text="입력하세요" getUser={getUser} />
                     </Box>
                 </InputBox>
                 <InputBox>
-                    <Quest>비밀번호</Quest>
+                    <Quest>과목</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputPassword text="입력하세요" getPw={getPw} />
+                        <InputText text="입력하세요" getText={getSubject} />
                     </Box>
                 </InputBox>
                 <InputBox>
@@ -153,36 +214,64 @@ const Openstudy2 = () => {
                         <InputText text="입력하세요" getText={getText} />
                     </Box>
                 </InputBox>
+                <InputBox>
+                    <Quest>인원</Quest>
+                    <Box width="200px" left="100px" top="7px">
+                        <InputText text="입력하세요 ex)4" getText={getNumber} />
+                    </Box>
+                </InputBox>
+
+                <InputBox>
+                    <Quest>비밀번호</Quest>
+                    <Box width="200px" left="100px" top="7px">
+                        <InputPassword text="입력하세요" getPw={getPw} />
+                    </Box>
+                </InputBox>
                 <InputBox mgBot="70px">
                     <Quest>내용</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputArea area="입력하세요" bg="#F0F0F0" getArea={getArea} />
+                        <InputArea
+                            area="입력하세요"
+                            bg="#F0F0F0"
+                            getArea={getArea}
+                        />
                     </Box>
                 </InputBox>
                 <InputBox>
-                    <CheckBox />
+                    <Quest>기간</Quest>
+                    <Box width="200px" left="100px" top="7px">
+                        <DatePicker onChange={onChangeDate} />
+                    </Box>
+                </InputBox>
+                <InputBox pLeft="60px">
+                    <input
+                        type="radio"
+                        value="on"
+                        checked={onoff === "on"}
+                        onChange={onChangeOn}
+                    ></input>
                     <Quest>온라인</Quest>
-                    <CheckBox />
+                    <input
+                        type="radio"
+                        value="off"
+                        checked={onoff === "off"}
+                        onChange={onChangeOff}
+                    ></input>
                     <Quest>오프라인</Quest>
-                    <CheckBox />
-                    <Quest>장기</Quest>
-                    <CheckBox />
-                    <Quest>단기</Quest>
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
-                <Link to="/board2">
-                    <Button width="70px" mg="30px" >
-                        업로드
-                    </Button>
-                </Link>
-                <Link to="/board2">
-                    <Button width="70px" mg="30px" >
+                <Button width="70px" mg="30px" onClick={handleUploadClick}>
+                    <Link to="/board1">업로드</Link>
+                </Button>
+
+                <Link to="/board1">
+                    <Button width="70px" mg="30px">
                         목록
                     </Button>
                 </Link>
             </ButtonBox>
-        </Root >
+        </Root>
     );
 };
 export default Openstudy2;

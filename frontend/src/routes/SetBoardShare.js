@@ -1,3 +1,5 @@
+import axios from "axios";
+import React from "react";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -7,11 +9,10 @@ import InputText from "./components/InputText";
 import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
-import Logo from './components/Logo';
-import { Link } from 'react-router-dom';
+import Logo from "./components/Logo";
+import { Link } from "react-router-dom";
 import "../fonts/Font.css";
-import { useState } from 'react';
-
+import { useSelector } from 'react-redux';
 
 const Title = styled.div`
     position: absolute;
@@ -66,30 +67,54 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardShare = () => {
-    const [key, setKey] = useState(0);
-    const [id, setId] = useState("가송");
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [file, setFile] = useState("");
-    const handleUploadClick = () => {
-
-        if (title.trim() === '') {
-            alert('제목을 입력하세요');
+    const [email, setEmail] = React.useState("");
+    const loginId=useSelector(state=>state.loginId);
+    const password=useSelector(state=>state.password);
+    React.useEffect(() => {
+        axios
+            .get(
+                "http://localhost:8080/user",{
+                    params:{
+                        loginId:loginId,
+                        password:password
+                    }
+                }
+            )
+            .then((response) => {
+                setEmail(response.data.email);
+            });
+    }, []);
+    const [title, setTitle] = React.useState("");
+    const [content, setContent] = React.useState("");
+    const [file, setFile] = React.useState("");
+    const handleUploadClick = (e) => {
+        if (title === "") {
+            alert("제목을 입력하세요");
+            e.stopPropagation();
             return;
-        }
-        if (content.trim() === '') {
-            alert('내용을 입력하세요');
+        } else if (content === "") {
+            alert("내용을 입력하세요");
+            e.stopPropagation();
             return;
-        }
+        } else {
         /*db에 게시글 정보 저장*/
-
-    }
+            axios
+                .post("http://localhost:8080/studyPost/share", {
+                    content: content,
+                    email: email,
+                    title: title,
+                })
+                .then((response) => {
+                    console.log(response.data);
+                });
+        }
+    };
     const getText = (text) => {
         setTitle(text);
     };
     const getArea = (text) => {
         setContent(text);
-    }
+    };
 
     return (
         <Root>
@@ -108,7 +133,11 @@ const SetBoardShare = () => {
                 <InputBox mgBot="62px">
                     <Quest>내용</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputArea area="입력하세요" bg="#F0F0F0" getArea={getArea} />
+                        <InputArea
+                            area="입력하세요"
+                            bg="#F0F0F0"
+                            getArea={getArea}
+                        />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="50px">
@@ -127,7 +156,7 @@ const SetBoardShare = () => {
             </Main>
             <ButtonBox mgRight="50px">
                 <Link to="/share">
-                    <Button width="70px" mg="30px" >
+                    <Button width="70px" mg="30px">
                         업로드
                     </Button>
                 </Link>
@@ -137,7 +166,7 @@ const SetBoardShare = () => {
                     </Button>
                 </Link>
             </ButtonBox>
-        </Root >
+        </Root>
     );
 };
 export default SetBoardShare;

@@ -6,6 +6,9 @@ import "antd/dist/antd.css";
 import MenuBar from "./MenuBar";
 import logo from "../../images/logo.png";
 import "../../fonts/Font.css";
+import { useSelector } from "react-redux";
+import store from "../redux/store";
+import { INPUT_VALUE } from "../redux/login/types";
 
 const onSearch = (value) => console.log(value);
 const { Search } = Input;
@@ -14,18 +17,25 @@ const Top = (props) => {
     return <h2 className="topright">{props.children}</h2>;
 };
 const Login = () => {
-    const [isLogin, setIsLogin] = React.useState(true);
+    const isLogin = useSelector((state) => state.isLogin);
+
     const handleLogoutClick = () => {
-        console.log("클릭");
-        setIsLogin(false);
-    }
+        store.dispatch({
+            type: INPUT_VALUE,
+            loginId: "",
+            password: "",
+            isLogin: false,
+        });
+    };
     if (isLogin) {
         return (
             <>
                 <Top>
                     <Link to="/mypage">마이페이지</Link>
                 </Top>
-                <Top><div onClick={handleLogoutClick}>로그아웃</div></Top>
+                <Top>
+                    <div onClick={handleLogoutClick}>로그아웃</div>
+                </Top>
             </>
         );
     } else {
