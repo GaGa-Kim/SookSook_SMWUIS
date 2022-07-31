@@ -12,7 +12,8 @@ import Button from "./components/Button";
 import Logo from "./components/Logo";
 import { Link } from "react-router-dom";
 import "../fonts/Font.css";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import { Form } from "antd";
 
 const Title = styled.div`
     position: absolute;
@@ -42,13 +43,12 @@ const Quest = styled.div`
     align-items: center;
 `;
 
-const InputFile = styled.input``;
 const LabelFile = styled.label`
     height: 100%;
     border: thin solid #d9d9d9;
     color: #bfbfbf;
     border-radius: 70px;
-    padding: 7px 66.5px;
+    padding: 7px 30px;
     font-size: 13px;
 
     &:hover {
@@ -67,26 +67,34 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardShare = () => {
-    const [email, setEmail] = React.useState("");
-    const loginId=useSelector(state=>state.loginId);
-    const password=useSelector(state=>state.password);
-    React.useEffect(() => {
-        axios
-            .get(
-                "http://localhost:8080/user",{
-                    params:{
-                        loginId:loginId,
-                        password:password
-                    }
-                }
-            )
-            .then((response) => {
-                setEmail(response.data.email);
-            });
-    }, []);
+    const email = useSelector((state) => state.email);
+
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
-    const [file, setFile] = React.useState("");
+    const [filename, setFilename] = React.useState("파일 선택하기");
+    const getText = (text) => {
+        setTitle(text);
+    };
+    const getArea = (text) => {
+        setContent(text);
+    };
+    const [addFormData,setAddFormData]=React.useState([]);
+    const formData = new FormData();
+    const handleFileChange = (e) => {
+        if (e.target.value === "") {
+            setFilename("파일 선택하기");
+        } else {
+            if (e.target.files.length > 1) {
+                setFilename("파일" + e.target.files.length + "개");
+            } else {
+                setFilename(e.target.value);
+            }
+            for (let i = 0; i < e.target.files.length; i++) {
+                const temp=addFormData.concat( e.target.files[i]);
+                setAddFormData(temp);
+            }
+        }
+    };
     const handleUploadClick = (e) => {
         if (title === "") {
             alert("제목을 입력하세요");
@@ -97,23 +105,20 @@ const SetBoardShare = () => {
             e.stopPropagation();
             return;
         } else {
-        /*db에 게시글 정보 저장*/
+            formData.append("title", title);
+            formData.append("email", email);
+            formData.append("content", content);
+            for (let i = 0; i < addFormData.length; i++) {
+               
+                formData.append("files",addFormData[i]);
+            }
+            /*db에 게시글 정보 저장*/
             axios
-                .post("http://localhost:8080/studyPost/share", {
-                    content: content,
-                    email: email,
-                    title: title,
-                })
+                .post("http://localhost:8080/studyPost/share", formData)
                 .then((response) => {
-                    console.log(response.data);
+                    console.log(formData.get("files"));
                 });
         }
-    };
-    const getText = (text) => {
-        setTitle(text);
-    };
-    const getArea = (text) => {
-        setContent(text);
     };
 
     return (
@@ -144,19 +149,21 @@ const SetBoardShare = () => {
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
                         <LabelFile for="inputFile" onclick="focus()">
-                            파일 선택하기
+                            {filename}
                         </LabelFile>
-                        <InputFile
+                        <input
                             id="inputFile"
                             type="file"
+                            multiple="multiple"
                             style={{ display: "none" }}
+                            onChange={handleFileChange}
                         />
                     </Box>
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
                 <Link to="/share">
-                    <Button width="70px" mg="30px">
+                    <Button width="70px" mg="30px" onClick={handleUploadClick} >
                         업로드
                     </Button>
                 </Link>
