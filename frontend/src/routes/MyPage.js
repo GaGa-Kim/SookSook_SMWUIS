@@ -1,4 +1,5 @@
 import React from "react";
+import axios from 'axios';
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
@@ -25,6 +26,8 @@ import plus from "../images/plus.png";
 
 import { Progress } from "antd";
 import { DatePicker, Space } from "antd";
+
+import { useSelector } from 'react-redux';
 
 const SettingImg = styled.img`
     width: 50px;
@@ -113,13 +116,35 @@ const PlusImg = styled.img`
 `;
 
 function MyPage() {
+    
     const [date, setDate] = React.useState("");
     const onChange = (date, dateString) => {
         setDate(dateString);
     };
     const [target, setTarget] = React.useState(true);
-    const [name, setName] = React.useState("눈송");
-    const [comment, setComment] = React.useState("이번 기말고사 화이팅!");
+    const [name, setName] = React.useState("");
+    const [comment, setComment] = React.useState("");
+    const [level,setLevel]=React.useState("");
+    const [point,setPoint]=React.useState(0);
+    
+    const email=useSelector(state=>state.email);
+    React.useEffect(() => {
+        axios
+            .get(
+                "http://localhost:8080/user/myInfo",{
+                    params:{
+                        email:email
+                    }
+                }
+            )
+            .then((response) => {
+                setName(response.data.nickname);
+                setComment(response.data.introduction);
+                setLevel(response.data.rating);
+                setPoint(response.data.points);
+            });
+    }, []);
+
     const handleScheduleClick = () => {
         setTarget(false);
     };
@@ -149,8 +174,8 @@ function MyPage() {
         setStudyScheduleList(nextStudyScheduleList);
         setText("");
     };
-
     return (
+        
         <Root>
             <GlobalStyle />
             <Logo />
@@ -164,10 +189,10 @@ function MyPage() {
                 <ProfileComment>{comment}</ProfileComment>
             </ColorBox>
             <Level>
-                <LevelText>새싹 등급</LevelText>
+                <LevelText>{level}</LevelText>
                 <LevelGauge>
                     <Progress
-                        percent={30}
+                        percent={point}
                         format={(percent) => percent + "포인트"}
                     />
                 </LevelGauge>
@@ -233,6 +258,7 @@ function MyPage() {
                 </>
             )}
         </Root>
+   
     );
 }
 

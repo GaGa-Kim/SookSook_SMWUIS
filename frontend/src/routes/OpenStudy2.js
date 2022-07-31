@@ -71,23 +71,8 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const Openstudy2 = () => {
-    const [email, setEmail] = React.useState("");
-    const loginId=useSelector(state=>state.loginId);
-    const password=useSelector(state=>state.password);
-    React.useEffect(() => {
-        axios
-            .get(
-                "http://localhost:8080/user",{
-                    params:{
-                        loginId:loginId,
-                        password:password
-                    }
-                }
-            )
-            .then((response) => {
-                setEmail(response.data.email);
-            });
-    }, []);
+    const email=useSelector(state=>state.email);
+    
     const [category, setCategory] = React.useState("");
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");

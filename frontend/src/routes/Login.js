@@ -46,7 +46,8 @@ const Login = () => {
                         type: INPUT_VALUE,
                         loginId: id,
                         password: pw,
-                        isLogin:true
+                        isLogin:true,
+                        email:response.data.email
                     });
                     navigate("/");
                 }
