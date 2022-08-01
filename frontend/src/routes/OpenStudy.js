@@ -71,23 +71,7 @@ const ButtonBox = styled.div`
 `;
 
 const Openstudy = () => {
-    const [email, setEmail] = React.useState("");
-    const loginId=useSelector(state=>state.loginId);
-    const password=useSelector(state=>state.password);
-    React.useEffect(() => {
-        axios
-            .get(
-                "http://localhost:8080/user",{
-                    params:{
-                        loginId:loginId,
-                        password:password
-                    }
-                }
-            )
-            .then((response) => {
-                setEmail(response.data.email);
-            });
-    }, []);
+    const email=useSelector(state=>state.email);
 
     const [dpt, setDpt] = React.useState("문과대학");
     const [title, setTitle] = React.useState("");

@@ -25,6 +25,7 @@ const Login = () => {
             loginId: "",
             password: "",
             isLogin: false,
+            email:""
         });
     };
     if (isLogin) {

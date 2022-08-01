@@ -2,7 +2,9 @@ import { INPUT_VALUE } from './types'
 
 const initialState={
     loginId:"",
-    password:""
+    password:"",
+    isLogin:false,
+    email:""
 }
 const loginReducer=(state=initialState,action)=>{
     switch(action.type){
@@ -11,7 +13,8 @@ const loginReducer=(state=initialState,action)=>{
                 ...state,
                 loginId:action.loginId,
                 password:action.password,
-                isLogin:action.isLogin
+                isLogin:action.isLogin,
+                email:action.email
             };
         default:
             return state;
