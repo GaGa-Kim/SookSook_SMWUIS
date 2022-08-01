@@ -17,6 +17,8 @@ import CommentList from "./components/CommentList";
 import "../fonts/Font.css";
 import { Input, Modal } from "antd";
 import { Link, useParams, useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const Title = styled.div`
     position: absolute;
@@ -69,17 +71,43 @@ const CommentTitle = styled.div`
     background-color: #c1daff;
 `;
 const EnterBoard = () => {
-    //현재 로그인 중인 id 받기
-    const id = "가송";
+    //현재 로그인 중인 nickname 받기
+    const emailL=useSelector(state=>state.email);
+    let nicknameL="";
     const [comment, setComment] = React.useState("");
-    const [commentList, setCommentList] = React.useState([
-        /*db에서 가져오기*/
-    ]);
-
+    const [commentList, setCommentList] = React.useState([]);
+    
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
+    React.useEffect(()=>{
 
+        axios.get("http://localhost:8080/user/myInfo", {
+            params: {
+                email:emailL
+            },
+           
+        })
+        .then((response) => {
+            nicknameL=response.data.nickname;
+            }
+        )
+    },[])
+    React.useEffect(()=>{
+        /*db에서 댓글 가져오기*/
+        axios.get("http://localhost:8080/passwordComment/all", {
+            params: {
+                studyBoardId:dataKey
+            },
+           
+        })
+        .then((response) => {
+            setCommentList(response.data);
+
+            }
+        )
+    },[commentList])
+    
     //게시글 정보 db에서 key 값이 dataKey인 정보 받아오기
     const [title, setTitle] = React.useState(dataKey);
     const [content, setContent] = React.useState(dataKey);
@@ -106,13 +134,7 @@ const EnterBoard = () => {
     const getText = (text) => {
         setComment(text);
     };
-    const [nextKey, setNextKey] = React.useState(1);
-    const handleXclick = (listKey) => {
-        const nextComment = commentList.filter(
-            (comment) => comment.key !== listKey
-        );
-        setCommentList(nextComment);
-    };
+
     const pw = "1"; //비밀게시판 비밀번호 받아오기
     const [isRightPw, setIsRightPw] = React.useState(false);
     const getPw = (text) => {
@@ -140,31 +162,35 @@ const EnterBoard = () => {
         setIsOpen(false);
     }
     const handlePlusClick = () => {
-        const nextCommentList = commentList.concat({
-            key: nextKey,
-            parent: null,
-            id: id,
-            comment: comment,
-        });
-        setCommentList(nextCommentList);
-        setNextKey(nextKey + 1);
+       axios.post("http://localhost:8080/passwordComment",{
+        "content":comment,
+        "email":emailL,
+        "studyBoardId":dataKey,
+        "upIndex":"null"
+       }).then((response)=>{
+        const addCommentList=commentList.concat(response.data);
+        setCommentList(addCommentList);
+        
+       })
         setComment("");
     };
     const [isRecomment, setIsRecomment] = React.useState(false);
-    let parentIndex;
-    const handleSendClick = (listKey) => {
+    const [upIndex,setUpIndex]=React.useState();
+    const handleSendClick = (id) => {
         setIsRecomment(true);
-        parentIndex = listKey;
+        setUpIndex(id);
+ 
     };
     const handleRecommentClick = () => {
-        const addRecomment = commentList.concat({
-            key: nextKey,
-            parent: parentIndex,
-            id: id,
-            comment: comment,
-        });
-        setCommentList(addRecomment);
-        setNextKey(nextKey + 1);
+        axios.post("http://localhost:8080/passwordComment",{
+        "content":comment,
+        "email":emailL,
+        "studyBoardId":dataKey,
+        "upIndex":upIndex
+       }).then((response)=>{
+        const addCommentList=commentList.concat(response.data);
+        setCommentList(addCommentList);
+       })
         setComment("");
     };
     const handleCommentClick = () => {
@@ -230,14 +256,15 @@ const EnterBoard = () => {
             <Footer>
                 <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
                 <ListBox>
-                    {commentList.map((comment) => (
-                        <CommentList
-                            listKey={comment.key}
-                            id={comment.id}
-                            parent={comment.parent}
-                            comment={comment.comment}
-                            handleXclick={handleXclick}
+                    {commentList&&commentList.map((comment) => (
+                        <CommentList                            
+                            nickname={comment.nickname}
+                            email={comment.email}
+                            content={comment.content}
                             handleSendClick={handleSendClick}
+                            id={comment.id}
+                            dataKey={dataKey}
+                            childList={comment.childList}
                         />
                     ))}
                 </ListBox>

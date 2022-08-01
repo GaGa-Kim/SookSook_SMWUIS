@@ -10,15 +10,19 @@ import "../fonts/Font.css";
 
 const Block = () => {
     return (
-        <section className="block">
+        <section className="block" style={{display:"flex",justifyContent:"space-between"}}>
+            <div>
             <button className="upcome">다가오는 스터디 일정</button>
-            <button className="qrbutton">[7/21] 3주차 과제 제출</button>
+            <button className="qrbutton" style={{marginRight:"0px"}}>[7/21] 3주차 과제 제출</button>
+            </div>
+            <div>
             <button className="prbutton">
-                <Link to="/membergrade">스터디 종료</Link>
+                <Link to="/membergrade" >스터디 종료</Link>
             </button>
             <button className="prbutton">
                 <Link to="/setboard_private">글 작성하기</Link>
             </button>
+            </div>
         </section>
     );
 };
@@ -60,7 +64,11 @@ const Private = () => {
             title: <div className="studyname">게시글</div>,
             dataIndex: "title",
             key: "key",
-            render: (text, { key }) => <Link to={`/detailboard/${key}`} state={{ key: key }}>{text}</Link>,
+            render: (text, { key }) => (
+                <Link to={`/detailboard/${key}`} state={{ key: key }}>
+                    {text}
+                </Link>
+            ),
         },
 
         {
@@ -73,7 +81,7 @@ const Private = () => {
     const [piedata, setPiedata] = React.useState([]);
 
     let post = 0;
-    const comment = 0;//데이터 받아오기
+    const comment = 0; //데이터 받아오기
     React.useEffect(() => {
         let initialSpdata = [];
         let initialPiedata = [];
@@ -89,10 +97,8 @@ const Private = () => {
                 post: post,
                 comment: comment,
             });
-            if (data.length !== 0 && (post + comment) !== 0) {
-
+            if (data.length !== 0 && post + comment !== 0) {
                 initialPiedata.push({
-
                     title: member[i],
                     value: post + comment,
                     color: "#" + (0xbfbfaf + i * 16),
@@ -111,6 +117,8 @@ const Private = () => {
                 alignItems: "center",
                 width: "100%",
                 fontFamily: "DoHyeon",
+                overflowX: "hidden",
+                overflowY: "hidden",
             }}
         >
             <GlobalStyle />
