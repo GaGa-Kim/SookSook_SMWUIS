@@ -103,6 +103,7 @@ const SetBoardQa = () => {
             axios.post("http://localhost:8080/studyPost/question", {
                 content: content,
                 email: email,
+                file: file,
                 title: title,
             })
                 .then((response) => {
@@ -117,7 +118,11 @@ const SetBoardQa = () => {
     };
     const getArea = (text) => {
         setContent(text);
+    };
+    const getFile = (text) => {
+        setFile(text);
     }
+
 
     return (
         <Root>
@@ -142,7 +147,7 @@ const SetBoardQa = () => {
                 <InputBox mgBot="50px">
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
-                        <LabelFile for="inputFile" onclick="focus()">
+                        <LabelFile for="inputFile" onclick="focus()" getfile={getFile}>
                             파일 선택하기
                         </LabelFile>
                         <InputFile
