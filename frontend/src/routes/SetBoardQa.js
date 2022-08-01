@@ -160,7 +160,7 @@ const SetBoardQa = () => {
             </Main>
             <ButtonBox mgRight="50px">
                 <Link to="/qaboard">
-                    <Button width="70px" mg="30px" >
+                    <Button width="70px" mg="30px" onclick={handleUploadClick}>
                         업로드
                     </Button>
                 </Link>
