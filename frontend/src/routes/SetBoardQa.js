@@ -9,9 +9,11 @@ import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from './components/Logo';
 import { Link } from 'react-router-dom';
+import React from "react";
 import "../fonts/Font.css";
 import { useState } from 'react';
-
+import axios from "axios";
+import { useSelector } from 'react-redux';
 
 const Title = styled.div`
     position: absolute;
@@ -66,20 +68,46 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardQa = () => {
-    const [key, setKey] = useState(0);
-    const [id, setId] = useState("가송");
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [file, setFile] = useState("");
-    const handleUploadClick = () => {
-
+    const [email, setEmail] = React.useState("");
+    const loginId = useSelector(state => state.loginId);
+    const password = useSelector(state => state.password);
+    React.useEffect(() => {
+        axios
+            .get(
+                "http://localhost:8080/studyPost/question", {
+                params: {
+                    loginId: loginId,
+                    password: password
+                }
+            }
+            )
+            .then((response) => {
+                setEmail(response.data.email);
+            });
+    }, []);
+    const [title, setTitle] = React.useState("");
+    const [content, setContent] = React.useState("");
+    const [file, setFile] = React.useState("");
+    const handleUploadClick = (e) => {
         if (title.trim() === '') {
             alert('제목을 입력하세요');
+            e.stopPropagation();
             return;
         }
         if (content.trim() === '') {
             alert('내용을 입력하세요');
+            e.stopPropagation();
             return;
+        }
+        else {
+            axios.post("http://localhost:8080/studyPost/question", {
+                content: content,
+                email: email,
+                title: title,
+            })
+                .then((response) => {
+                    console.log(response.data);
+                });
         }
         /*db에 게시글 정보 저장*/
 
