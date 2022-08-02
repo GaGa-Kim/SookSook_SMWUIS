@@ -1,6 +1,5 @@
 package com.smwuis.sooksook.web.controller.study;
 
-import com.smwuis.sooksook.domain.study.StudySchedule;
 import com.smwuis.sooksook.service.study.StudyScheduleService;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyScheduleSaveRequestDto;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @Api(tags = "StudySchedule API (스터디 게시판 스케줄 정보 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class StudyScheduleController {
 

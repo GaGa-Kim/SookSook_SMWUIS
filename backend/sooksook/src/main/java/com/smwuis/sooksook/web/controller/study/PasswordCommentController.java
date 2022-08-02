@@ -14,7 +14,7 @@ import java.util.List;
 
 @Api(tags = "PasswordComment API (스터디 게시판 비밀 댓글 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class PasswordCommentController {
 

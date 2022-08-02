@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api(tags = "StudyComment API (게시글 댓글 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class StudyCommentController {
 
