@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api(tags = "UserSchedule API (유저 스케줄 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class UserScheduleController {
 

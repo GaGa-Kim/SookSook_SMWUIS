@@ -15,7 +15,7 @@ import java.util.List;
 
 @Api(tags = "UserRating API (유저 평가 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class UserRatingController {
 

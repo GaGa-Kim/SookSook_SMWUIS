@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "User API (유저 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class UserController {
 
