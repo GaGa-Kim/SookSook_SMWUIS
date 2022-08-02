@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import "../fonts/Font.css";
 import React from "react";
 import { DatePicker, Space } from "antd";
@@ -71,6 +71,7 @@ const ButtonBox = styled.div`
 `;
 
 const Openstudy = () => {
+    const navigate=useNavigate();
     const email=useSelector(state=>state.email);
 
     const [dpt, setDpt] = React.useState("문과대학");
@@ -85,35 +86,27 @@ const Openstudy = () => {
     const handleUploadClick = (e) => {
         if (subject === "") {
             alert("과목을 입력하세요");
-            e.stopPropagation();
             return;
         } else if (title === "") {
             alert("제목을 입력하세요");
-            e.stopPropagation();
             return;
         } else if (number == null) {
             alert("인원를 입력하세요");
-            e.stopPropagation();
             return;
         } else if (!Number.isInteger(number)) {
             alert("인원을 올바르게 입력하세요");
-            e.stopPropagation();
             return;
         } else if (pw === "") {
             alert("비밀번호를 입력하세요");
-            e.stopPropagation();
             return;
         } else if (content === "") {
             alert("내용을 입력하세요");
-            e.stopPropagation();
             return;
         } else if (date === "") {
             alert("기간를 입력하세요");
-            e.stopPropagation();
             return;
         } else if (onoff === "") {
             alert("온라인 또는 오프라인을 체크하세요");
-            e.stopPropagation();
             return;
         } else {
             axios
@@ -131,6 +124,7 @@ const Openstudy = () => {
                 .then((response) => {
                     console.log(response.data);
                 });
+                navigate(`/board1`);
         }
         /*db에 게시글 정보 저장*/
     };
@@ -146,8 +140,9 @@ const Openstudy = () => {
     const getPw = (text) => {
         setPw(text);
     };
-    const onChangeDate = (date, dateString) => {
+    const onChangeDate = (date,dateString) => {
         setDate(dateString);
+
     };
     const onChangeDpt = (dpt) => {
         setDpt(dpt);
@@ -250,7 +245,7 @@ const Openstudy = () => {
             </Main>
             <ButtonBox mgRight="50px">
                 <Button width="70px" mg="30px" onClick={handleUploadClick}>
-                    <Link to="/board1">업로드</Link>
+                    업로드
                 </Button>
 
                 <Link to="/board1">
