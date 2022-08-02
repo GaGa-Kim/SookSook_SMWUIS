@@ -19,7 +19,7 @@ import java.util.List;
 
 @Api(tags = "StudySchedule API (스터디 게시판 스케줄 정보 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 public class StudyScheduleController {
 

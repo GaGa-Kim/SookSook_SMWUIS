@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api(tags = "StudyComment API (게시글 댓글 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 public class StudyCommentController {
 

@@ -1,12 +1,10 @@
 package com.smwuis.sooksook.web.controller.study;
 
-import com.smwuis.sooksook.domain.study.StudyBoard;
 import com.smwuis.sooksook.service.study.StudyBoardService;
 import com.smwuis.sooksook.web.dto.study.SearchResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
-import com.smwuis.sooksook.web.dto.user.UserResponseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,7 +24,7 @@ import java.util.Map;
 
 @Api(tags = "StudyBoard API (스터디 게시판 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 public class StudyBoardController {
 

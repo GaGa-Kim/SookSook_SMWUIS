@@ -32,7 +32,7 @@ import java.util.List;
 
 @Api(tags = "StudyPostController API (게시글 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 public class StudyPostController {
 
