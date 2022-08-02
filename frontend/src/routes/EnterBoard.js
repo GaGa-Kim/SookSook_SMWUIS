@@ -19,6 +19,7 @@ import { Input, Modal } from "antd";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { Components } from 'antd/lib/date-picker/generatePicker';
 
 const Title = styled.div`
     position: absolute;
@@ -80,6 +81,14 @@ const EnterBoard = () => {
     const { key } = useParams();
     const location = useLocation();
     const dataKey = location.state.key;
+
+    const [dpt,setDpt]=React.useState("");
+    const [subject,setSubject]=React.useState("");
+    const [content,setContent]=React.useState("");
+    const [title, setTitle] = React.useState(dataKey);
+
+
+
     React.useEffect(()=>{
 
         axios.get("http://localhost:8080/user/myInfo", {
@@ -90,6 +99,16 @@ const EnterBoard = () => {
         })
         .then((response) => {
             nicknameL=response.data.nickname;
+            }
+        )
+        axios.get("http://localhost:8080/studyBoard", {
+            params: {
+                id:dataKey
+            },
+           
+        })
+        .then((response) => {
+                setDpt(response.data.department);
             }
         )
     },[])
@@ -108,28 +127,24 @@ const EnterBoard = () => {
         )
     },[commentList])
     
-    //게시글 정보 db에서 key 값이 dataKey인 정보 받아오기
-    const [title, setTitle] = React.useState(dataKey);
-    const [content, setContent] = React.useState(dataKey);
-    // const file=
-    // const name=
+    
     const [isShow, setIsShow] = React.useState(true);
     /*로그인 id랑 작성자 이름이랑 같으면 수정 삭제 버튼 보이도록
     id === name ? setIsModify(true) : setIsModify(false);
     */
-    const [isModify, setIsModify] = React.useState(false);
-    const handleModifyClick = () => {
-        setIsModify(true);
-    };
-    const handleUploadClick = () => {
-        // 게시글 정보 저장
-    };
-    const onChangeText = (e) => {
-        setTitle(e.target.value);
-    };
-    const onChangeArea = (e) => {
-        setContent(e.target.area);
-    };
+    // const [isModify, setIsModify] = React.useState(false);
+    // const handleModifyClick = () => {
+    //     setIsModify(true);
+    // };
+    // const handleUploadClick = () => {
+    //     // 게시글 정보 저장
+    // };
+    // const onChangeText = (e) => {
+    //     setTitle(e.target.value);
+    // };
+    // const onChangeArea = (e) => {
+    //     setContent(e.target.area);
+    // };
 
     const getText = (text) => {
         setComment(text);
@@ -207,7 +222,7 @@ const EnterBoard = () => {
                 <InputBox>
                     <Quest ftSize="25px">학부</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputText text="ICT융합공학부" disable="true" />
+                        <InputText text={dpt} disable="true" />
                     </Box>
                 </InputBox>
                 <InputBox>
@@ -217,9 +232,15 @@ const EnterBoard = () => {
                     </Box>
                 </InputBox>
                 <InputBox>
-                    <Quest ftSize="25px">이름</Quest>
+                    <Quest ftSize="25px">제목</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <InputText text={dataKey} disable="true" />
+                    </Box>
+                </InputBox>
+                <InputBox>
+                    <Quest ftSize="25px">인원</Quest>
+                    <Box width="200px" left="100px" top="7px">
+                        <InputText text="입력하세요 ex)4" disable="true" />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="65px">
@@ -229,14 +250,16 @@ const EnterBoard = () => {
                     </Box>
                 </InputBox>
                 <InputBox>
+                    <Quest ftSize="25px">기간</Quest>
+                    <Box width="200px" left="100px" top="7px">
+                    <InputText text={dataKey} disable="true" />
+                    </Box>
+                </InputBox>
+                <InputBox pLeft="60px">
                     <CheckBox check="true" disable="true" />
                     <Quest ftSize="25px">온라인</Quest>
                     <CheckBox disable="true" />
                     <Quest ftSize="25px">오프라인</Quest>
-                    <CheckBox disable="true" />
-                    <Quest ftSize="25px">장기</Quest>
-                    <CheckBox check="true" disable="true" />
-                    <Quest ftSize="25px">단기</Quest>
                 </InputBox>
                 <InputBox>
 
