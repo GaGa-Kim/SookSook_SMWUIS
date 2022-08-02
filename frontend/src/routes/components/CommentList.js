@@ -4,10 +4,12 @@ import List from "./List";
 import Box from "./Box";
 import ListText from "./ListText";
 import x from "../../images/x.png";
+import cut from "../../images/cut.png";
 import arrow from "../../images/arrow_forward.png";
 import send from "../../images/send.png";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { FieldContext } from "rc-field-form";
 
 const XImg = styled.img`
     width: 30px;
@@ -16,6 +18,17 @@ const XImg = styled.img`
     vertical-align: center;
     &:hover {
         width: 32px;
+        height: 32px;
+    }
+`;
+const CutImg = styled.img`
+    margin-right:10px;
+    width: 20px;
+    height: 30px;
+    display: block;
+    vertical-align: center;
+    &:hover {
+        width: 24px;
         height: 32px;
     }
 `;
@@ -36,13 +49,16 @@ const SendImg = styled.img`
     }
 `;
 const handleXclick = (email, id) => {
-    axios.delete("http://localhost:8080/passwordComment", {
+    axios.delete("/passwordComment", {
         params: {
             email: email,
             id: id,
         },
     });
 };
+const handleCutClick=()=>{
+
+}
 const Recomment = ({ id, emailL }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
@@ -62,25 +78,25 @@ const Recomment = ({ id, emailL }) => {
             });
     }, []);
     return (
-            <List>
-                <Box left="35px">
-                    <ArrowImg src={arrow} />
+        <List>
+            <Box left="35px">
+                <ArrowImg src={arrow} />
+            </Box>
+            <Box left="50px">
+                <ListText>{nickname}</ListText>
+            </Box>
+            <Box left="100px">
+                <ListText>{content}</ListText>
+            </Box>
+            {emailL === email ? (
+                <Box right="20px">
+                    <XImg
+                        src={x}
+                        onClick={() => handleXclick(email, id)}
+                    ></XImg>
                 </Box>
-                <Box left="50px">
-                    <ListText>{nickname}</ListText>
-                </Box>
-                <Box left="100px">
-                    <ListText>{content}</ListText>
-                </Box>
-                {emailL === email ? (
-                    <Box right="20px">
-                        <XImg
-                            src={x}
-                            onClick={() => handleXclick(email,id)}
-                        ></XImg>
-                    </Box>
-                ) : null}
-            </List>
+            ) : null}
+        </List>
     );
 };
 const CommentList = ({
@@ -133,12 +149,23 @@ const CommentList = ({
                 <Box left="100px">
                     <ListText>{content}</ListText>
                 </Box>
-                <Box right="20px">
+                <Box right="10px" width="65px">
                     {isDelete && (
-                        <XImg
-                            src={x}
-                            onClick={() => handleXclick(email, id)}
-                        ></XImg>
+                        // <div
+                        //     style={{
+                        //         display: "flex",
+                        //         justifyContent: "center",
+                        //     }}
+                        // >
+                        //     <CutImg
+                        //         src={cut}
+                        //         onClick={() => handleXclick(email, id)}
+                        //     ></CutImg>
+                            <XImg
+                                src={x}
+                                onClick={() => handleXclick(email, id)}
+                            ></XImg>
+                        // </div>
                     )}
                     {!isDelete && (
                         <SendImg
@@ -148,9 +175,8 @@ const CommentList = ({
                     )}
                 </Box>
             </List>
-            {childList&&childList.map((id) => (
-                <Recomment id={id} emailL={emailL} />
-            ))}
+            {childList &&
+                childList.map((id) => <Recomment id={id} emailL={emailL} />)}
         </>
     );
 };
