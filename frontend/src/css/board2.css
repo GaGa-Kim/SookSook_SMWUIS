@@ -8,7 +8,7 @@
 }
 
 .newstudy {
-    width:100px;
+    width: 100px;
     height: 30px;
     border-color: transparent;
     border-radius: 10px;
@@ -21,19 +21,6 @@
 .newstudy:hover {
     border-color: navy;
     transition: border-color 1s;
-}
-
-.dropdown {
-    font-size: 17px;
-    color: black;
-    font-weight: bold;
-    margin-left: 7px;
-    white-space: nowrap;
-    font-family: "DoHyeon";
-}
-
-.dropdown:hover {
-    color: gray;
 }
 
 .table {

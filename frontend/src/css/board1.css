@@ -39,7 +39,7 @@
 }
 
 .block {
-    flex:display;
+    flex: display;
     justify-content: space-between;
     background-color: #c1daff;
     padding: 12px 10px 8px 10px;
@@ -54,7 +54,7 @@
 }
 
 .newstudy {
-    width:100px;
+    width: 100px;
     height: 30px;
     border-color: transparent;
     border-radius: 10px;
@@ -101,20 +101,6 @@
 .topright a,
 .topright a:hover {
     color: inherit;
-}
-
-.dropdown1 {
-    font-size: 19.5px;
-    color: black;
-    margin-right: 16px;
-    font-weight: bold;
-    margin-left: 8px;
-    font-family: "DoHyeon";
-    white-space: nowrap;
-}
-
-.dropdown1:hover {
-    color: gray;
 }
 
 @media screen and (max-width:660px) {
