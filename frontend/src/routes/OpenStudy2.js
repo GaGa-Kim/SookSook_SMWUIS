@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../fonts/Font.css";
 import React from "react";
 import { DatePicker, Space } from "antd";
@@ -71,9 +71,10 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const Openstudy2 = () => {
+    const navigate=useNavigate();
     const email=useSelector(state=>state.email);
     
-    const [category, setCategory] = React.useState("");
+    const [category, setCategory] = React.useState("토익/토플");
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
     const [subject, setSubject] = React.useState("");
@@ -85,39 +86,31 @@ const Openstudy2 = () => {
     const handleUploadClick = (e) => {
         if (subject === "") {
             alert("과목을 입력하세요");
-            e.stopPropagation();
             return;
         } else if (title === "") {
             alert("제목을 입력하세요");
-            e.stopPropagation();
             return;
         } else if (number == null) {
             alert("인원를 입력하세요");
-            e.stopPropagation();
             return;
         } else if (!Number.isInteger(number)) {
             alert("인원을 올바르게 입력하세요");
-            e.stopPropagation();
             return;
         } else if (pw === "") {
             alert("비밀번호를 입력하세요");
-            e.stopPropagation();
             return;
         } else if (content === "") {
             alert("내용을 입력하세요");
-            e.stopPropagation();
             return;
         } else if (date === "") {
             alert("기간를 입력하세요");
-            e.stopPropagation();
             return;
         } else if (onoff === "") {
             alert("온라인 또는 오프라인을 체크하세요");
-            e.stopPropagation();
             return;
         } else {
             axios
-                .post("http://localhost:8080/studyBoard/lecture", {
+                .post("http://localhost:8080/studyBoard/notLecture", {
                     content: content,
                     category: category,
                     email: email,
@@ -127,10 +120,8 @@ const Openstudy2 = () => {
                     period: date,
                     subject: subject,
                     title: title,
-                })
-                .then((response) => {
-                    console.log(response.data);
                 });
+                navigate(`/board2`);
         }
         /*db에 게시글 정보 저장*/
     };
@@ -150,7 +141,7 @@ const Openstudy2 = () => {
         setDate(dateString);
     };
     const onChangeCategory = (category) => {
-        setCategory(category);
+        setCategory(category.target.value);
     };
     const onChangeOn = (on) => {
         setOnoff(on.target.value);
@@ -174,16 +165,16 @@ const Openstudy2 = () => {
                     <Quest>카테고리</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <Select onChange={onChangeCategory}>
-                            <option>토익/토플</option>
-                            <option>면접</option>
-                            <option>자소서</option>
-                            <option>코딩</option>
-                            <option>어학자격증</option>
-                            <option>LEET</option>
-                            <option>공무원시험</option>
-                            <option>해외유학</option>
-                            <option>취미언어</option>
-                            <option>전문자격증</option>
+                            <option value="토익/토플">토익/토플</option>
+                            <option value="면접">면접</option>
+                            <option value="자소서">자소서</option>
+                            <option value="코딩">코딩</option>
+                            <option value="어학자격증">어학자격증</option>
+                            <option value="LEET">LEET</option>
+                            <option value="공무원시험">공무원시험</option>
+                            <option value="해외유학">해외유학</option>
+                            <option value="취미언어">취미언어</option>
+                            <option value="전문자격증">전문자격증</option>
                         </Select>
                     </Box>
                 </InputBox>

@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
 import { Form } from "antd";
@@ -48,7 +48,7 @@ const LabelFile = styled.label`
     border: thin solid #d9d9d9;
     color: #bfbfbf;
     border-radius: 70px;
-    padding: 7px 30px;
+    padding: 7px 66px;
     font-size: 13px;
 
     &:hover {
@@ -67,6 +67,7 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardShare = () => {
+    const navigate=useNavigate();
     const email = useSelector((state) => state.email);
 
     const [title, setTitle] = React.useState("");
@@ -80,29 +81,37 @@ const SetBoardShare = () => {
     };
     const [addFormData,setAddFormData]=React.useState([]);
     const formData = new FormData();
-    const handleFileChange = (e) => {
+    const handleFileClick=()=>{
+        setAddFormData([]);
+    }
+    const handleFileChange = (e) => {   
         if (e.target.value === "") {
             setFilename("파일 선택하기");
         } else {
             if (e.target.files.length > 1) {
                 setFilename("파일" + e.target.files.length + "개");
             } else {
-                setFilename(e.target.value);
+                if(e.target.value.length>10){
+                    setFilename(e.target.value.substr(0,11)+"...");
+                    
+                }else{
+                    setFilename(e.target.value);
+                }
             }
+
             for (let i = 0; i < e.target.files.length; i++) {
-                const temp=addFormData.concat( e.target.files[i]);
+                const temp=addFormData.concat(e.target.files[i]);
                 setAddFormData(temp);
             }
+            console.log(addFormData);
         }
     };
     const handleUploadClick = (e) => {
         if (title === "") {
             alert("제목을 입력하세요");
-            e.stopPropagation();
             return;
         } else if (content === "") {
             alert("내용을 입력하세요");
-            e.stopPropagation();
             return;
         } else {
             formData.append("title", title);
@@ -118,6 +127,7 @@ const SetBoardShare = () => {
                 .then((response) => {
                     console.log(formData.get("files"));
                 });
+            navigate("/share");    
         }
     };
 
@@ -148,7 +158,7 @@ const SetBoardShare = () => {
                 <InputBox mgBot="50px">
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
-                        <LabelFile for="inputFile" onclick="focus()">
+                        <LabelFile for="inputFile" onClick={handleFileClick}>
                             {filename}
                         </LabelFile>
                         <input
@@ -162,11 +172,11 @@ const SetBoardShare = () => {
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
-                <Link to="/share">
+
                     <Button width="70px" mg="30px" onClick={handleUploadClick} >
                         업로드
                     </Button>
-                </Link>
+
                 <Link to="/share">
                     <Button width="70px" mg="30px">
                         목록
