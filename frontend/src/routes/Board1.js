@@ -7,7 +7,6 @@ import "antd/dist/antd.css";
 import GlobalStyle from "./components/GlobalStyle";
 import Logo from "./components/Logo.js";
 import Cstudy from "./components/Cstudy.js";
-import Drop1 from "./components/Drop1.js";
 import Root from "./components/Root";
 import axios from "axios";
 
@@ -26,7 +25,7 @@ const Select = styled.select`
 const Board1 = () => {
     const [data, setData] = useState("");
     const [setDpt] = React.useState("");
-    
+
     React.useEffect(() => {
         axios
             .get("http://localhost:8080/studyBoards/list?lecture=true")
@@ -76,8 +75,8 @@ const Board1 = () => {
             <Logo />
             <div className="block">
                 <Select onChange={onChangeDpt}>
-                    <option>문과대학</option>
-                    <option>이과대학</option>
+                    <option value="문과대학">문과대학</option>
+                    <option value="이과대학">이과대학</option>
                     <option>공과대학</option>
                     <option>생활과학대학</option>
                     <option>법과대학</option>
