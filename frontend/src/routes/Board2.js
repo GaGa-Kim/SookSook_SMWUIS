@@ -23,17 +23,13 @@ const Select = styled.select`
 `;
 
 const Board2 = () => {
-    const [setNickname] = useState("");
-    const [setTitle] = useState("");
     const [data, setData] = useState("");
     const [setCategory] = React.useState("");
     React.useEffect(() => {
         axios
             .get("http://localhost:8080/studyBoards/list?lecture=false")
             .then((response) => {
-                setData(response.data)
-                setNickname(response.data.nickname)
-                setTitle(response.data.title)
+                setData(response.data);
             });
     }, []);
     const onChangeCategory = (category) => {
@@ -53,8 +49,15 @@ const Board2 = () => {
         {
             title: <div className="studyname">스터디 명</div>,
             dataIndex: "title",
-            key: "key",
-            render: (text, { key }) => <Link to={`/enterboard2/${key}`} state={{ key: key }}>{text}</Link>
+            key: "title",
+            render: (text, record, index) => (
+                <Link
+                    to={`/enterboard2/${data[index].id}`}
+                    state={{ boardId: data[index].id }}
+                >
+                    {text}
+                </Link>
+            ),
         },
 
         {

@@ -26,25 +26,29 @@ const Share = () => {
             </section>
         );
     };
-
-    const [setNickname] = useState("");
-    const [setTitle] = useState("");
-    const [data, setData] = useState("");
+    const [data,setData]=useState("");
+    const [id, setId] = useState("");
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyPosts/category?category=share")
+            .get("http://localhost:8080/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
             .then((response) => {
-                setData(response.data)
-                setNickname(response.data.nickname)
-                setTitle(response.data.title)
+                console.log(response.data);
+                setId(response.data);
             });
     }, []);
     const columns = [
         {
             title: <div className="studyname">스터디 명</div>,
             dataIndex: "title",
-            key: "key",
-            render: (text, { key }) => <Link to={`/detailshare${key}`} state={{ key: key }}>{text}</Link>
+            key: "title",
+            render: (text, record, index) => (
+                <Link
+                    to={`/detailshare/${id[index].id}`}
+                    state={{ boardId: id[index].id }}
+                >
+                    {text}
+                </Link>
+            ),
         },
 
         {

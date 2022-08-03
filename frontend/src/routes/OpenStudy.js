@@ -10,11 +10,11 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../fonts/Font.css";
 import React from "react";
 import { DatePicker, Space } from "antd";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 const Title = styled.div`
     position: absolute;
     top: 30px;
@@ -71,8 +71,8 @@ const ButtonBox = styled.div`
 `;
 
 const Openstudy = () => {
-    const navigate=useNavigate();
-    const email=useSelector(state=>state.email);
+    const navigate = useNavigate();
+    const email = useSelector((state) => state.email);
 
     const [dpt, setDpt] = React.useState("문과대학");
     const [title, setTitle] = React.useState("");
@@ -109,22 +109,19 @@ const Openstudy = () => {
             alert("온라인 또는 오프라인을 체크하세요");
             return;
         } else {
-            axios
-                .post("http://localhost:8080/studyBoard/lecture", {
-                    content: content,
-                    department: dpt,
-                    email: email,
-                    number: number,
-                    onoff: onoff,
-                    password: pw,
-                    period: date,
-                    subject: subject,
-                    title: title,
-                })
-                .then((response) => {
-                    console.log(response.data);
-                });
-                navigate(`/board1`);
+            axios.post("http://localhost:8080/studyBoard/lecture", {
+                content: content,
+                department: dpt,
+                email: email,
+                number: number,
+                onoff: onoff,
+                password: pw,
+                period: date,
+                subject: subject,
+                title: title,
+            });
+
+           navigate(`/board1`);
         }
         /*db에 게시글 정보 저장*/
     };
@@ -140,12 +137,11 @@ const Openstudy = () => {
     const getPw = (text) => {
         setPw(text);
     };
-    const onChangeDate = (date,dateString) => {
+    const onChangeDate = (date, dateString) => {
         setDate(dateString);
-
     };
     const onChangeDpt = (dpt) => {
-        setDpt(dpt);
+        setDpt(dpt.target.value);
     };
     const onChangeOn = (on) => {
         setOnoff(on.target.value);
@@ -154,7 +150,8 @@ const Openstudy = () => {
         setOnoff(off.target.value);
     };
     const getNumber = (text) => {
-        setNumber(Number(text));
+        const num=parseInt(text);
+        setNumber(num);
     };
 
     return (
@@ -169,19 +166,19 @@ const Openstudy = () => {
                     <Quest>학부</Quest>
                     <Box width="200px" left="100px" top="7px">
                         <Select onChange={onChangeDpt}>
-                            <option>문과대학</option>
-                            <option>이과대학</option>
-                            <option>공과대학</option>
-                            <option>생활과학대학</option>
-                            <option>법과대학</option>
-                            <option>경상대학</option>
-                            <option>음악대학</option>
-                            <option>약학대학</option>
-                            <option>미술대학</option>
-                            <option>기초교양대학</option>
-                            <option>글로벌서비스학부</option>
-                            <option>영어영문학부</option>
-                            <option>미디어학부</option>
+                            <option value="문과대학">문과대학</option>
+                            <option value="이과대학">이과대학</option>
+                            <option value="공과대학">공과대학</option>
+                            <option value="생활과학대학">생활과학대학</option>
+                            <option value="법과대학">법과대학</option>
+                            <option value="경과대학">경상대학</option>
+                            <option value="음악대학">음악대학</option>
+                            <option value="약학대학">약학대학</option>
+                            <option value="미술대학">미술대학</option>
+                            <option value="기초교양대학">기초교양대학</option>
+                            <option value="글로벌서비스학부">글로벌서비스학부</option>
+                            <option value="영어영문학부">영어영문학부</option>
+                            <option value="미디어대학">미디어학부</option>
                         </Select>
                     </Box>
                 </InputBox>
