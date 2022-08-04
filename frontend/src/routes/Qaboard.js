@@ -32,7 +32,7 @@ const Qaboard = () => {
     const [data, setData] = useState("");
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyPosts/category?category=question")
+            .get("http://localhost:8080/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
             .then((response) => {
                 setData(response.data)
                 setNickname(response.data.nickname)

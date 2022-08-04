@@ -32,7 +32,7 @@ const Sell = () => {
     const [data, setData] = useState("");
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyPosts/category?category=sell")
+            .get("http://localhost:8080/studyPosts/category?category=%ED%8C%90%EB%A7%A4%2F%EB%82%98%EB%88%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
             .then((response) => {
                 setData(response.data)
                 setNickname(response.data.nickname)

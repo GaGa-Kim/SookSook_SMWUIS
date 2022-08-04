@@ -26,7 +26,7 @@ const Share = () => {
             </section>
         );
     };
-    const [data,setData]=useState("");
+    const [data, setData] = useState("");
     const [id, setId] = useState("");
     React.useEffect(() => {
         axios
