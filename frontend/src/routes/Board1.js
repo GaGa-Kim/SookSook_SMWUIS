@@ -24,8 +24,8 @@ const Select = styled.select`
 
 const Board1 = () => {
     const [data, setData] = useState("");
-    const [dpt,setDpt] = React.useState("");
-    
+    const [dpt, setDpt] = React.useState("");
+
     React.useEffect(() => {
         axios
             .get("http://localhost:8080/studyBoards/list?lecture=true")
@@ -73,19 +73,19 @@ const Board1 = () => {
             <Logo />
             <div className="block">
                 <Select onChange={onChangeDpt}>
-                    <option>문과대학</option>
-                    <option>이과대학</option>
-                    <option>공과대학</option>
-                    <option>생활과학대학</option>
-                    <option>법과대학</option>
-                    <option>경상대학</option>
-                    <option>음악대학</option>
-                    <option>약학대학</option>
-                    <option>미술대학</option>
-                    <option>기초교양대학</option>
-                    <option>글로벌서비스학부</option>
-                    <option>영어영문학부</option>
-                    <option>미디어학부</option>
+                    <option value="문과대학">문과대학</option>
+                    <option value="이과대학">이과대학</option>
+                    <option value="공과대학">공과대학</option>
+                    <option value="생활과학대학">생활과학대학</option>
+                    <option value="법과대학">법과대학</option>
+                    <option value="경상대학">경상대학</option>
+                    <option value="음악대학">음악대학</option>
+                    <option value="약학대학">약학대학</option>
+                    <option value="미술대학">미술대학</option>
+                    <option value="기초교양대학">기초교양대학</option>
+                    <option value="글로벌서비스학부">글로벌서비스학부</option>
+                    <option value="영어영문학부">영어영문학부</option>
+                    <option value="미디어학부">미디어학부</option>
                 </Select>
                 <Cstudy />
             </div>

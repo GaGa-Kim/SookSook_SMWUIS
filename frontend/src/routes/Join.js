@@ -1,5 +1,5 @@
 import "../css/join.css";
-import React from "react";
+import React, { useState } from "react";
 import { Form, Input } from "antd";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
@@ -10,13 +10,43 @@ import Header from "./components/Header.js";
 import Id from "./components/Id.js";
 import Pw from "./components/Pw.js";
 import Lgbutton from "./components/Lgbutton.js";
+import axios from "axios";
 
 const formItemLayout = {
     labelCol: { xs: { span: 24 }, sm: { span: 8 } },
     wrapperCol: { xs: { span: 24 }, sm: { span: 16 } }
 };
 
-const App = () => {
+const Join = () => {
+    const [id, setId] = useState('');
+    const [email, setEmail] = useState('');
+    const [pw, setPw] = useState('');
+    const [nickname, setNickname] = useState('');
+    const getId = (text) => {
+        setId(text);
+    };
+    const getPw = (text) => {
+        setPw(text);
+    };
+    const getEmail = (text) => {
+        setEmail(text);
+    };
+    const getNickname = (text) => {
+        setNickname(text);
+    };
+    const register = () => {
+        axios
+            .post("http://localhost:8080/user", {
+                loginId: id,
+                email: email,
+                password: pw,
+                nickname: nickname
+            })
+            .then(() => {
+                alert("회원가입이 완료되었습니다");
+            })
+    }
+
     return (
         <>
             <GlobalStyle />
@@ -25,33 +55,29 @@ const App = () => {
             <div className="join">
                 <Header text="회원가입" />
                 <Form {...formItemLayout} className="form">
-                    <Id />
-                    <Pw />
+                    <Id getId={getId} />
+                    <Pw getPw={getPw} />
                     <Form.Item
                         name="email"
                         label="E-mail"
-                        rules={[{ required: true, message: "이메일을 입력해 주세요" }]}
+                        getEmail={getEmail}
+                        rules={[{ required: true }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         name="nickname"
                         label="닉네임"
-                        rules={[
-                            {
-                                required: true,
-                                message: "닉네임을 입력해주세요",
-                                whitespace: true
-                            }
-                        ]}
+                        getNickname={getNickname}
+                        rules={[{ required: true }]}
                     >
                         <Input />
                     </Form.Item>
-                    <Lgbutton>회원가입</Lgbutton>
+                    <Link to="/login"><Lgbutton onClick={() => { register(); }}>회원가입</Lgbutton></Link>
                 </Form>
             </div>
         </>
     );
 };
 
-export default App;
+export default Join;

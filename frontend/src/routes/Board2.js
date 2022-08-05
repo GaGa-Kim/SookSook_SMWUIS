@@ -71,16 +71,16 @@ const Board2 = () => {
             <Logo />
             <div className="block">
                 <Select onChange={onChangeCategory}>
-                    <option>토익/토플</option>
-                    <option>면접</option>
-                    <option>자소서</option>
-                    <option>코딩</option>
-                    <option>어학자격증</option>
-                    <option>LEET</option>
-                    <option>공무원시험</option>
-                    <option>해외유학</option>
-                    <option>취미언어</option>
-                    <option>전문자격증</option>
+                    <option value="토익/토플">토익/토플</option>
+                    <option value="면접">면접</option>
+                    <option value="자소서">자소서</option>
+                    <option value="코딩">코딩</option>
+                    <option value="어학자격증">어학자격증</option>
+                    <option value="LEET">LEET</option>
+                    <option value="공무원시험">공무원시험</option>
+                    <option value="해외유학">해외유학</option>
+                    <option value="취미언어">취미언어</option>
+                    <option value="전문자격증">전문자격증</option>
                 </Select>
                 <Cstudy2 />
             </div>
