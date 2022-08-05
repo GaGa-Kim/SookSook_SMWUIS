@@ -14,7 +14,7 @@ import Logo from "./components/Logo";
 import ListBox from "./components/ListBox";
 import CommentList from "./components/CommentList";
 import "../fonts/Font.css";
-import { Link, useParams, useLocation,useNavigate } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { DatePicker, Space } from "antd";
@@ -88,7 +88,7 @@ const CommentTitle = styled.div`
     background-color: #c1daff;
 `;
 const EnterBoard = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate();
     const dateFormat = "YYYY-MM-DD";
     //현재 로그인 중인 email 받기
     const emailL = useSelector((state) => state.email);
@@ -96,7 +96,7 @@ const EnterBoard = () => {
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([]);
 
-    const { boardId} = useParams();
+    const { boardId } = useParams();
     const location = useLocation();
     const dataKey = location.state.boardId;
 
@@ -205,35 +205,34 @@ const EnterBoard = () => {
     };
     const handleUploadClick = () => {
         // 게시글 정보 저장
-        axios.put(`/studyBoard?id=${dataKey}`,{
-            department: dpt,
-            email: email,
-            number: number,
-            onoff: onoff,
-            password: password,
-            period: date,
-            subject: subject,
-            title: title,
-            content:content
-        })
-        .then(setIsDisable(true)
-        );
+        axios
+            .put(`/studyBoard?id=${dataKey}`, {
+                department: dpt,
+                email: email,
+                number: number,
+                onoff: onoff,
+                password: password,
+                period: date,
+                subject: subject,
+                title: title,
+                content: content,
+            })
+            .then(setIsDisable(true));
     };
-    const handleDeleteClick=()=>{
-        axios.delete(("/studyBoard"),{
-            params:{
-                email:email,
-                id:dataKey
-            }
-        })
-        .then(navigate("/board1"));
-    }
+    const handleDeleteClick = () => {
+        axios
+            .delete("/studyBoard", {
+                params: {
+                    email: email,
+                    id: dataKey,
+                },
+            })
+            .then(navigate("/board1"));
+    };
     const getText = (text) => {
         setComment(text);
     };
 
-   
-    
     //isOpen true이면 modal보임
     const [isOpen, setIsOpen] = React.useState(false);
     //입장버튼눌렀을때
@@ -243,28 +242,30 @@ const EnterBoard = () => {
     };
     const handleEnterClick = () => {
         //멤버라면 바로 입장
-        axios.post(`http://localhost:8080/studyMember?email=${emailL}&studyBoardId=${dataKey}`)
-        .then((response)=>{
-            if(response.data===true){
-                navigate(`/private/${dataKey}`);
-            }else{
-                setIsOpen(true);
-            }
-        })
-        
+        axios
+            .post(
+                `http://localhost:8080/studyMember?email=${emailL}&studyBoardId=${dataKey}`
+            )
+            .then((response) => {
+                if (response.data === true) {
+                    navigate(`/private/${dataKey}`);
+                } else {
+                    setIsOpen(true);
+                }
+            });
     };
     //모달에서 입력버튼 눌렀을때
     const handleModalEnterClick = () => {
         setIsOpen(false);
         //비밀번호 확인
-        if(password===pw){
-            axios.post("http://localhost:8080/studyMember/password",{
-                email:emailL,
-                password:pw,
-                studyBoardId:dataKey
+        if (password === pw) {
+            axios.post("http://localhost:8080/studyMember/password", {
+                email: emailL,
+                password: pw,
+                studyBoardId: dataKey,
             });
             navigate(`/private/${dataKey}`);
-        }else{
+        } else {
             alert("비밀번호가 틀렸습니다");
         }
     };
@@ -329,18 +330,28 @@ const EnterBoard = () => {
                             {!isDisable && (
                                 <Select onChange={onChangeDpt}>
                                     <option value="문과대학">문과대학</option>
-                            <option value="이과대학">이과대학</option>
-                            <option value="공과대학">공과대학</option>
-                            <option value="생활과학대학">생활과학대학</option>
-                            <option value="법과대학">법과대학</option>
-                            <option value="경과대학">경상대학</option>
-                            <option value="음악대학">음악대학</option>
-                            <option value="약학대학">약학대학</option>
-                            <option value="미술대학">미술대학</option>
-                            <option value="기초교양대학">기초교양대학</option>
-                            <option value="글로벌서비스학부">글로벌서비스학부</option>
-                            <option value="영어영문학부">영어영문학부</option>
-                            <option value="미디어대학">미디어학부</option>
+                                    <option value="이과대학">이과대학</option>
+                                    <option value="공과대학">공과대학</option>
+                                    <option value="생활과학대학">
+                                        생활과학대학
+                                    </option>
+                                    <option value="법과대학">법과대학</option>
+                                    <option value="경과대학">경상대학</option>
+                                    <option value="음악대학">음악대학</option>
+                                    <option value="약학대학">약학대학</option>
+                                    <option value="미술대학">미술대학</option>
+                                    <option value="기초교양대학">
+                                        기초교양대학
+                                    </option>
+                                    <option value="글로벌서비스학부">
+                                        글로벌서비스학부
+                                    </option>
+                                    <option value="영어영문학부">
+                                        영어영문학부
+                                    </option>
+                                    <option value="미디어대학">
+                                        미디어학부
+                                    </option>
                                 </Select>
                             )}
                         </Box>
@@ -421,20 +432,10 @@ const EnterBoard = () => {
                         <Quest ftSize="25px">오프라인</Quest>
                     </InputBox>
                     <InputBox>
-                        {!isShow && (
-                            <Box left="130px" top="7px">
-                                <Button
-                                    width="100px"
-                                    height="32px"
-                                    mg="0px"
-                                    onClick={handleEnterClick}
-                                >
-                                    입장
-                                </Button>
-                            </Box>
-                        )}
+                        
+
                         {isShow && (
-                            <Box left="55px" top="7px">
+                            <Box left="10px" top="2px">
                                 {isDisable && (
                                     <Button
                                         width="100px"
@@ -455,6 +456,20 @@ const EnterBoard = () => {
                                         업로드
                                     </Button>
                                 )}
+                            </Box>
+                        )}
+                        <Box left="118px" top="7px">
+                            <Button
+                                width="100px"
+                                height="32px"
+                                mg="0px"
+                                onClick={handleEnterClick}
+                            >
+                                입장
+                            </Button>
+                        </Box>
+                        {isShow && (
+                            <Box left="221px" top="7px">
                                 <Button
                                     width="100px"
                                     height="32px"
@@ -541,14 +556,14 @@ const EnterBoard = () => {
                     <InputPassword getPw={getPw} />
                 </div>
 
-                    <Button
-                        width="50px"
-                        height="32px"
-                        mg="0px"
-                        onClick={handleModalEnterClick}
-                    >
-                        입력
-                    </Button>
+                <Button
+                    width="50px"
+                    height="32px"
+                    mg="0px"
+                    onClick={handleModalEnterClick}
+                >
+                    입력
+                </Button>
             </ReactModal>
         </Root>
     );

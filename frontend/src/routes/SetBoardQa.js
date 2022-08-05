@@ -1,3 +1,4 @@
+import axios from "axios";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -8,9 +9,10 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from './components/Logo';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import "../fonts/Font.css";
-import { useState } from 'react';
+import React from 'react';
 
 
 const Title = styled.div`
@@ -66,24 +68,60 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardQa = () => {
-    const [key, setKey] = useState(0);
-    const [id, setId] = useState("가송");
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [file, setFile] = useState("");
+    const navigate = useNavigate();
+    const email = useSelector((state) => state.email);
+    const [title, setTitle] = React.useState("");
+    const [content, setContent] = React.useState("");
+    const [filename, setFilename] = React.useState("파일 선택하기");
+    const [addFormData, setAddFormData] = React.useState([]);
+    const formData = new FormData();
+
+    const handleFileChange = (e) => {
+        if (e.target.value === "") {
+            setFilename("파일 선택하기");
+        } else {
+            if (e.target.files.length > 1) {
+                setFilename("파일" + e.target.files.length + "개");
+            } else {
+                if (e.target.value.length > 10) {
+                    setFilename(e.target.value.substr(0, 11) + "...");
+                } else {
+                    setFilename(e.target.value);
+                }
+            }
+            setAddFormData([]);
+            for (let i = 0; i < e.target.files.length; i++) {
+                const temp = addFormData.concat(e.target.files[i]);
+                setAddFormData(temp);
+            }
+        }
+    };
+
     const handleUploadClick = () => {
-
-        if (title.trim() === '') {
-            alert('제목을 입력하세요');
+        if (title === "") {
+            alert("제목을 입력하세요");
             return;
-        }
-        if (content.trim() === '') {
-            alert('내용을 입력하세요');
+        } else if (content === "") {
+            alert("내용을 입력하세요");
             return;
+        } else {
+            formData.append("title", title);
+            formData.append("email", email);
+            formData.append("content", content);
+            console.log(addFormData);
+            for (let i = 0; i < addFormData.length; i++) {
+                formData.append("files", addFormData[i]);
+            }
+            /*db에 게시글 정보 저장*/
+            axios
+                .post("http://localhost:8080/studyPost/question", formData)
+                .then((response) => {
+                    console.log(formData.get("files"));
+                });
+            navigate("/qaboard");
         }
-        /*db에 게시글 정보 저장*/
 
-    }
+    };
     const getText = (text) => {
         setTitle(text);
     };
@@ -108,36 +146,39 @@ const SetBoardQa = () => {
                 <InputBox mgBot="62px">
                     <Quest>내용</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        <InputArea area="입력하세요" bg="#F0F0F0" getArea={getArea} />
+                        <InputArea
+                            area="입력하세요"
+                            bg="#F0F0F0"
+                            getArea={getArea}
+                        />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="50px">
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
-                        <LabelFile for="inputFile" onclick="focus()">
-                            파일 선택하기
-                        </LabelFile>
-                        <InputFile
+                        <LabelFile for="inputFile">{filename}</LabelFile>
+                        <input
                             id="inputFile"
                             type="file"
+                            multiple="multiple"
                             style={{ display: "none" }}
+                            onChange={handleFileChange}
                         />
                     </Box>
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
-                <Link to="/qaboard">
-                    <Button width="70px" mg="30px" >
-                        업로드
-                    </Button>
-                </Link>
+                <Button width="70px" mg="30px" onClick={handleUploadClick}>
+                    업로드
+                </Button>
+
                 <Link to="/qaboard">
                     <Button width="70px" mg="30px">
                         목록
                     </Button>
                 </Link>
             </ButtonBox>
-        </Root >
+        </Root>
     );
 };
 export default SetBoardQa;
