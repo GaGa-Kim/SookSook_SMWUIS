@@ -67,7 +67,7 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const SetBoardShare = () => {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const email = useSelector((state) => state.email);
 
     const [title, setTitle] = React.useState("");
@@ -79,31 +79,27 @@ const SetBoardShare = () => {
     const getArea = (text) => {
         setContent(text);
     };
-    const [addFormData,setAddFormData]=React.useState([]);
+    const [addFormData, setAddFormData] = React.useState([]);
     const formData = new FormData();
-    const handleFileClick=()=>{
-        setAddFormData([]);
-    }
-    const handleFileChange = (e) => {   
+
+    const handleFileChange = (e) => {
         if (e.target.value === "") {
             setFilename("파일 선택하기");
         } else {
             if (e.target.files.length > 1) {
                 setFilename("파일" + e.target.files.length + "개");
             } else {
-                if(e.target.value.length>10){
-                    setFilename(e.target.value.substr(0,11)+"...");
-                    
-                }else{
+                if (e.target.value.length > 10) {
+                    setFilename(e.target.value.substr(0, 11) + "...");
+                } else {
                     setFilename(e.target.value);
                 }
             }
-
+            setAddFormData([]);
             for (let i = 0; i < e.target.files.length; i++) {
-                const temp=addFormData.concat(e.target.files[i]);
+                const temp = addFormData.concat(e.target.files[i]);
                 setAddFormData(temp);
             }
-            console.log(addFormData);
         }
     };
     const handleUploadClick = (e) => {
@@ -117,9 +113,9 @@ const SetBoardShare = () => {
             formData.append("title", title);
             formData.append("email", email);
             formData.append("content", content);
+            console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
-               
-                formData.append("files",addFormData[i]);
+                formData.append("files", addFormData[i]);
             }
             /*db에 게시글 정보 저장*/
             axios
@@ -127,7 +123,7 @@ const SetBoardShare = () => {
                 .then((response) => {
                     console.log(formData.get("files"));
                 });
-            navigate("/share");    
+            navigate("/share");
         }
     };
 
@@ -158,9 +154,7 @@ const SetBoardShare = () => {
                 <InputBox mgBot="50px">
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
-                        <LabelFile for="inputFile" onClick={handleFileClick}>
-                            {filename}
-                        </LabelFile>
+                        <LabelFile for="inputFile">{filename}</LabelFile>
                         <input
                             id="inputFile"
                             type="file"
@@ -172,10 +166,9 @@ const SetBoardShare = () => {
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
-
-                    <Button width="70px" mg="30px" onClick={handleUploadClick} >
-                        업로드
-                    </Button>
+                <Button width="70px" mg="30px" onClick={handleUploadClick}>
+                    업로드
+                </Button>
 
                 <Link to="/share">
                     <Button width="70px" mg="30px">

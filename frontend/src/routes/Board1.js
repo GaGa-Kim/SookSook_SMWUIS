@@ -7,7 +7,6 @@ import "antd/dist/antd.css";
 import GlobalStyle from "./components/GlobalStyle";
 import Logo from "./components/Logo.js";
 import Cstudy from "./components/Cstudy.js";
-import Drop1 from "./components/Drop1.js";
 import Root from "./components/Root";
 import axios from "axios";
 
@@ -25,7 +24,7 @@ const Select = styled.select`
 
 const Board1 = () => {
     const [data, setData] = useState("");
-    const [setDpt] = React.useState("");
+    const [dpt,setDpt] = React.useState("");
     
     React.useEffect(() => {
         axios
@@ -43,9 +42,7 @@ const Board1 = () => {
         axios
             .get("http://localhost:8080/studyBoards/department?department=${dpt}")
             .then((response) => {
-                setData(response.data)
-                setNickname(response.data.nickname)
-                setTitle(response.data.title)
+                setData(response.data);
             });
     }, []);
     const columns = [

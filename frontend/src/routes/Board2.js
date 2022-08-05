@@ -40,9 +40,7 @@ const Board2 = () => {
         axios
             .get("http://localhost:8080/studyBoards/category?category=${category}")
             .then((response) => {
-                setData(response.data)
-                setNickname(response.data.nickname)
-                setTitle(response.data.title)
+                setData(response.data);
             });
     }, []);
     const columns = [
