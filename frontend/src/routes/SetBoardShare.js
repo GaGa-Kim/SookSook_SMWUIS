@@ -13,7 +13,6 @@ import Logo from "./components/Logo";
 import { Link, useNavigate } from "react-router-dom";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
-import { Form } from "antd";
 
 const Title = styled.div`
     position: absolute;
