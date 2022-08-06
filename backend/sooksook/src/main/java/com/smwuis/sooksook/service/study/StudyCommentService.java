@@ -33,10 +33,12 @@ public class StudyCommentService {
         studyComment.setUser(user);
         studyPost.addStudyComment(studyCommentRepository.save(studyComment));
 
+        // 스터디 게시글 댓글이 아닌 경우
         if(studyPost.getStudyBoardId() == null) {
             user.updatePoints(user.getPoints());
         }
 
+        // 스터디 게시글 댓글일 경우
         if(studyPost.getStudyBoardId() != null) {
             StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyPost.getStudyBoardId(), user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
             studyMember.updateComments(studyMember.getComments());
@@ -105,6 +107,7 @@ public class StudyCommentService {
     }
 
     // 댓글과 대댓글 시 댓글 지울 목록
+    @Transactional(readOnly = true)
     public List<StudyComment> findRemovableList(Long id) {
         StudyComment studyComment = studyCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
 
@@ -130,9 +133,8 @@ public class StudyCommentService {
     }
 
     // 모든 자식 댓글이 삭제되었는지 판단
+    @Transactional(readOnly = true)
     public boolean isAllChildRemoved(Long id) {
-
-        System.out.println("isAllChildRemoved");
 
         List<StudyComment> childList = studyCommentRepository.findAllByUpIndex(id);
 

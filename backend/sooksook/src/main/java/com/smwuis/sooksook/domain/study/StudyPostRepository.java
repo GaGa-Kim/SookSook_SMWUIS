@@ -11,7 +11,7 @@ import java.util.List;
 public interface StudyPostRepository extends JpaRepository<StudyPost, Long> {
     List<StudyPost> findAllByStudyBoardId(StudyBoard studyBoardId);
     List<StudyPost> findByCategory(String category);
-    Long countByCreatedDateBetweenAndStudyBoardId(LocalDateTime start, LocalDateTime end, StudyBoard studyBoardId);
+    Long countByCreatedDateTimeBetweenAndStudyBoardId(LocalDateTime start, LocalDateTime end, StudyBoard studyBoardId);
     List<StudyPost> findByTitleContaining(String keyword);
 
 }

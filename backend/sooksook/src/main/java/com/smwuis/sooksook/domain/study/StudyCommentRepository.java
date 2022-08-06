@@ -9,5 +9,5 @@ import java.util.List;
 public interface StudyCommentRepository extends JpaRepository<StudyComment, Long> {
     List<StudyComment> findAllByStudyPostIdAndUpIndex(StudyPost studyPost, Long upIndex);
     List<StudyComment> findAllByUpIndex(Long upIndex);
-    Long countByCreatedDateBetweenAndStudyPostId(LocalDateTime start, LocalDateTime end, StudyPost studyPostId);
+    Long countByCreatedDateTimeBetweenAndStudyPostId(LocalDateTime start, LocalDateTime end, StudyPost studyPostId);
 }

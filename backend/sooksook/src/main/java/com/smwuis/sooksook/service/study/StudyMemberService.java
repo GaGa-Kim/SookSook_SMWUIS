@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +67,7 @@ public class StudyMemberService {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         
         if(user.getEmail().equals(email)) {
-            StudyMember studyMember = studyMemberRepository.deleteByStudyBoardIdAndUserId(studyBoard, user);
+            Optional<StudyMember> studyMember = studyMemberRepository.deleteByStudyBoardIdAndUserId(studyBoard, user);
             return true;
         }
         else {

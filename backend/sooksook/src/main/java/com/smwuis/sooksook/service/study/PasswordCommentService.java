@@ -87,7 +87,7 @@ public class PasswordCommentService {
     }
 
     // 댓글 상세 조회
-    @Transactional
+    @Transactional(readOnly = true)
     public PasswordCommentResponseDto view(Long id, String uid) {
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
 
@@ -104,6 +104,7 @@ public class PasswordCommentService {
     }
 
     // 댓글과 대댓글 시 댓글 지울 목록
+    @Transactional(readOnly = true)
     public List<PasswordComment> findRemovableList(Long id) {
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
 
@@ -129,9 +130,8 @@ public class PasswordCommentService {
     }
 
     // 모든 자식 댓글이 삭제되었는지 판단
+    @Transactional(readOnly = true)
     public boolean isAllChildRemoved(Long id) {
-
-        System.out.println("isAllChildRemoved");
 
         List<PasswordComment> childList = passwordCommentRepository.findAllByUpIndex(id);
 
@@ -143,6 +143,7 @@ public class PasswordCommentService {
     }
 
     // 비밀댓글 표시 여부
+    @Transactional(readOnly = true)
     private boolean isSecretPassword(Long id, String email) {
         PasswordComment passwordComment = passwordCommentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 댓글이 없습니다."));
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));

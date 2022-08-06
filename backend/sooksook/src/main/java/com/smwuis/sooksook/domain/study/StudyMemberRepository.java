@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> {
     List<StudyMember> findAllByStudyBoardId(StudyBoard studyBoardId);
-    StudyMember deleteByStudyBoardIdAndUserId(StudyBoard studyBoardId, User userId);
+    Optional<StudyMember> deleteByStudyBoardIdAndUserId(StudyBoard studyBoardId, User userId);
     Optional<StudyMember> findByStudyBoardIdAndUserId(StudyBoard studyBoardId, User userId);
     List<StudyMember> findAllByUserId(User userId);
 }

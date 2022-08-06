@@ -139,7 +139,7 @@ public class StudyBoardService {
     @Transactional(readOnly = true)
     public Long countPasswordComments(Long id){
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        return passwordCommentRepository.countByCreatedDateBetweenAndStudyBoardId(startDatetime, endDatetime, studyBoard);
+        return passwordCommentRepository.countByCreatedDateTimeBetweenAndStudyBoardId(startDatetime, endDatetime, studyBoard);
     }
 
     // 일주일간 스터디 게시판에 댓글이 많이 달린 인기 스터디 5개 조회
@@ -199,7 +199,7 @@ public class StudyBoardService {
     @Transactional(readOnly = true)
     public Long countStudyPosts(Long id) {
         StudyBoard studyBoard = studyBoardRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-        return studyPostRepository.countByCreatedDateBetweenAndStudyBoardId(startDatetime, endDatetime, studyBoard);
+        return studyPostRepository.countByCreatedDateTimeBetweenAndStudyBoardId(startDatetime, endDatetime, studyBoard);
     }
 
     // 일주일간 게시판의 게시글에 달린 댓글 갯수
@@ -214,7 +214,7 @@ public class StudyBoardService {
 
         // 게시글마다 댓글 갯수 조회
         for(StudyPost studyPost: studyPostList) {
-            studyCommentList.add(studyCommentRepository.countByCreatedDateBetweenAndStudyPostId(startDatetime, endDatetime, studyPost));
+            studyCommentList.add(studyCommentRepository.countByCreatedDateTimeBetweenAndStudyPostId(startDatetime, endDatetime, studyPost));
         }
 
         for(int i = 0; i < studyCommentList.size(); i++) {
@@ -273,7 +273,7 @@ public class StudyBoardService {
 
         return searchResponseDtoList
                 .stream()
-                .sorted(Comparator.comparing(SearchResponseDto::getCreatedDate))
+                .sorted(Comparator.comparing(SearchResponseDto::getCreatedDateTime))
                 .collect(Collectors.toList());
     }
 }

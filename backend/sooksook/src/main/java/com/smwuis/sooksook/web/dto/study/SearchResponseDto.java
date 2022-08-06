@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class SearchResponseDto {
 
     @ApiModelProperty(notes = "생성 날짜 및 시간", example = "2022-07-29 00:00")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDateTime;
 
     @ApiModelProperty(notes = "스터디 게시판 기본키 (null이면 게시글)", example = "1")
     private Long studyBoardId;
@@ -35,7 +35,7 @@ public class SearchResponseDto {
     private String category;
 
     public SearchResponseDto(StudyBoard studyBoard) {
-        this.createdDate = studyBoard.getCreatedDate();
+        this.createdDateTime = studyBoard.getCreatedDateTime();
         this.studyBoardId = studyBoard.getId();
         this.studyPostId = null;
         this.email = studyBoard.getUserId().getEmail();
@@ -45,7 +45,7 @@ public class SearchResponseDto {
     }
 
     public SearchResponseDto(StudyPost studyPost) {
-        this.createdDate = studyPost.getCreatedDate();
+        this.createdDateTime = studyPost.getCreatedDateTime();
         this.studyBoardId = null;
         this.studyPostId = studyPost.getId();
         this.email = studyPost.getUserId().getEmail();

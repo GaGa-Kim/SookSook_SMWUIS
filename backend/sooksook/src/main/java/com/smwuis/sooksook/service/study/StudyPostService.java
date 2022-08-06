@@ -31,65 +31,35 @@ public class StudyPostService {
     @Transactional
     public StudyPostResponseDto save(StudyPostSaveRequestDto saveRequestDto, List<MultipartFile> files, String category) throws Exception {
         User user = userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
+        StudyPost studyPost = saveRequestDto.toEntity();
+        studyPost.setUser(user);
+        studyPost.setCategory(category);
+
+        List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
+
+        if(!filesList.isEmpty()) {
+            for(StudyFiles studyFiles: filesList) {
+                studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+            }
+        }
 
         // 스터디 게시판 게시글이 아닐 경우
-        if(saveRequestDto.getStudyBoardId() == null) {
-            StudyPost studyPost = saveRequestDto.toEntity();
-            studyPost.setUser(user);
-            studyPost.setCategory(category);
+        if (saveRequestDto.getStudyBoardId() == null) {
             user.updatePoints(user.getPoints());
-
-            List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
-
-            if(!filesList.isEmpty()) {
-                for(StudyFiles studyFiles: filesList) {
-                    studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
-                }
-            }
-
-            studyPostRepository.save(studyPost);
-
-            List<StudyFileIdResponseDto> studyFileIdResponseDtoList = studyFilesService.findAllByStudyPost(studyPost.getId());
-            List<Long> fileId = new ArrayList<>();
-
-            for (StudyFileIdResponseDto studyFileIdResponseDto : studyFileIdResponseDtoList) {
-                fileId.add(studyFileIdResponseDto.getFileId());
-            }
-
-            return new StudyPostResponseDto(studyPost, fileId);
         }
 
         // 스터디 게시판 게시글일 경우
         else {
             StudyBoard studyBoard = studyBoardRepository.findById(saveRequestDto.getStudyBoardId()).orElseThrow(()-> new IllegalArgumentException("해당 게시판이 없습니다."));
-            StudyPost studyPost = saveRequestDto.toEntity();
             studyPost.setStudyBoardId(studyBoard);
-            studyPost.setUser(user);
-            studyPost.setCategory(category);
             studyBoard.addStudyPost(studyPostRepository.save(studyPost));
 
             StudyMember studyMember = studyMemberRepository.findByStudyBoardIdAndUserId(studyBoard, user).orElseThrow(()-> new IllegalArgumentException("해당 스터디원이 없습니다."));
             studyMember.updatePost(studyMember.getPosts());
-
-            List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
-
-            if(!filesList.isEmpty()) {
-                for(StudyFiles studyFiles: filesList) {
-                    studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
-                }
-            }
-
-            studyPostRepository.save(studyPost);
-
-            List<StudyFileIdResponseDto> studyFileIdResponseDtoList = studyFilesService.findAllByStudyPost(studyPost.getId());
-            List<Long> fileId = new ArrayList<>();
-
-            for (StudyFileIdResponseDto studyFileIdResponseDto : studyFileIdResponseDtoList) {
-                fileId.add(studyFileIdResponseDto.getFileId());
-            }
-
-            return new StudyPostResponseDto(studyPost, fileId);
         }
+
+        studyPostRepository.save(studyPost);
+        return new StudyPostResponseDto(studyPost, findFileId(studyPost.getId()));
     }
     
     // 게시글 수정 - 첨부파일 없을 때
@@ -129,14 +99,7 @@ public class StudyPostService {
                     updateRequestDto.getContent(),
                     updateRequestDto.getCategory());
 
-            List<StudyFileIdResponseDto> studyFileIdResponseDtoList = studyFilesService.findAllByStudyPost(studyPost.getId());
-            List<Long> fileId = new ArrayList<>();
-
-            for (StudyFileIdResponseDto studyFileIdResponseDto : studyFileIdResponseDtoList) {
-                fileId.add(studyFileIdResponseDto.getFileId());
-            }
-
-            return new StudyPostResponseDto(studyPost, fileId);
+            return new StudyPostResponseDto(studyPost, findFileId(studyPost.getId()));
         }
         else {
             throw new RuntimeException("게시글 수정에 실패했습니다.");
@@ -192,6 +155,20 @@ public class StudyPostService {
 
         return studyPostIdList;
 
+    }
+
+    // 게시글 별 파일 아이디 전체 조회
+    @Transactional(readOnly = true)
+    public List<Long> findFileId(Long id){
+
+        List<StudyFileIdResponseDto> studyFileIdResponseDtoList = studyFilesService.findAllByStudyPost(id);
+        List<Long> fileId = new ArrayList<>();
+
+        for (StudyFileIdResponseDto studyFileIdResponseDto : studyFileIdResponseDtoList) {
+            fileId.add(studyFileIdResponseDto.getFileId());
+        }
+        
+        return fileId;
     }
 }
 

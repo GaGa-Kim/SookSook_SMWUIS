@@ -9,5 +9,5 @@ import java.util.List;
 public interface PasswordCommentRepository extends JpaRepository<PasswordComment, Long> {
     List<PasswordComment> findAllByStudyBoardIdAndUpIndex(StudyBoard studyBoard, Long upIndex);
     List<PasswordComment> findAllByUpIndex(Long upIndex);
-    Long countByCreatedDateBetweenAndStudyBoardId(LocalDateTime start, LocalDateTime end, StudyBoard studyBoardId);
+    Long countByCreatedDateTimeBetweenAndStudyBoardId(LocalDateTime start, LocalDateTime end, StudyBoard studyBoardId);
 }
