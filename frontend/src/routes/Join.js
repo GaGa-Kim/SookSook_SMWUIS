@@ -18,10 +18,11 @@ const formItemLayout = {
 };
 
 const Join = () => {
-    const [id, setId] = useState('');
-    const [email, setEmail] = useState('');
-    const [pw, setPw] = useState('');
-    const [nickname, setNickname] = useState('');
+    const [id, setId] = useState("");
+    const [email, setEmail] = useState("");
+    const [pw, setPw] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [name, setName] = useState("");
     const getId = (text) => {
         setId(text);
     };
@@ -34,14 +35,19 @@ const Join = () => {
     const getNickname = (text) => {
         setNickname(text);
     };
+    const getName = (text) => {
+        setName(text);
+    }
     const register = () => {
         axios
             .post("http://localhost:8080/user", {
                 loginId: id,
                 email: email,
                 password: pw,
-                nickname: nickname
-            })
+                nickname: nickname,
+                name: name
+            }
+            )
             .then(() => {
                 alert("회원가입이 완료되었습니다");
             })
@@ -66,6 +72,14 @@ const Join = () => {
                         <Input />
                     </Form.Item>
                     <Form.Item
+                        name="name"
+                        label="이름"
+                        getNname={getName}
+                        rules={[{ required: true }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
                         name="nickname"
                         label="닉네임"
                         getNickname={getNickname}
@@ -73,6 +87,7 @@ const Join = () => {
                     >
                         <Input />
                     </Form.Item>
+
                     <Link to="/login"><Lgbutton onClick={() => { register(); }}>회원가입</Lgbutton></Link>
                 </Form>
             </div>
