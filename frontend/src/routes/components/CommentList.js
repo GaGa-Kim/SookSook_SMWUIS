@@ -49,20 +49,21 @@ const SendImg = styled.img`
     }
 `;
 const handleXclick = (email, id) => {
+    
     axios.delete("/passwordComment", {
         params: {
             email: email,
             id: id,
         },
     });
-};
-const handleCutClick=()=>{
 
-}
+};
+
 const Recomment = ({ id, emailL }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const [xClick,setXClick]=React.useState(0);
     React.useEffect(() => {
         axios
             .get("http://localhost:8080/passwordComment", {
@@ -76,7 +77,8 @@ const Recomment = ({ id, emailL }) => {
                 setContent(response.data.content);
                 setEmail(response.data.email);
             });
-    }, []);
+            setXClick(xClick+1);
+    }, [xClick]);
     return (
         <List>
             <Box left="35px">
