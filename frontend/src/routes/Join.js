@@ -12,11 +12,6 @@ import Pw from "./components/Pw.js";
 import Lgbutton from "./components/Lgbutton.js";
 import axios from "axios";
 
-const formItemLayout = {
-    labelCol: { xs: { span: 24 }, sm: { span: 8 } },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 16 } }
-};
-
 const Join = () => {
     const [id, setId] = useState("");
     const [email, setEmail] = useState("");
@@ -37,8 +32,9 @@ const Join = () => {
     };
     const getName = (text) => {
         setName(text);
-    }
-    const register = () => {
+    };
+
+    const onFinish = (e) => {
         axios
             .post("http://localhost:8080/user", {
                 loginId: id,
@@ -51,7 +47,12 @@ const Join = () => {
             .then(() => {
                 alert("회원가입이 완료되었습니다");
             })
-    }
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log("Failed:", errorInfo);
+    };
+
 
     return (
         <>
@@ -60,7 +61,22 @@ const Join = () => {
             <Block />
             <div className="join">
                 <Header text="회원가입" />
-                <Form {...formItemLayout} className="form">
+                <Form
+                    className="form"
+                    name="basic"
+                    labelCol={{
+                        span: 8,
+                    }}
+                    wrapperCol={{
+                        span: 16,
+                    }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                >
                     <Id getId={getId} />
                     <Pw getPw={getPw} />
                     <Form.Item
@@ -74,7 +90,7 @@ const Join = () => {
                     <Form.Item
                         name="name"
                         label="이름"
-                        getName={getName}
+                        getNname={getName}
                         rules={[{ required: true }]}
                     >
                         <Input />
@@ -87,8 +103,7 @@ const Join = () => {
                     >
                         <Input />
                     </Form.Item>
-
-                    <Link to="/login"><Lgbutton onClick={() => { register(); }}>회원가입</Lgbutton></Link>
+                    <Link to="/login"><Lgbutton >회원가입</Lgbutton></Link>
                 </Form>
             </div>
         </>
