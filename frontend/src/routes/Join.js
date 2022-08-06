@@ -74,7 +74,7 @@ const Join = () => {
                     <Form.Item
                         name="name"
                         label="이름"
-                        getNname={getName}
+                        getName={getName}
                         rules={[{ required: true }]}
                     >
                         <Input />
