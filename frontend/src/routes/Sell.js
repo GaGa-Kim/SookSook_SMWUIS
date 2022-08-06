@@ -14,7 +14,6 @@ const Shareblock = () => {
             <Cwrite />
         </section>
     );
-
 };
 
 const Cwrite = () => {
@@ -49,6 +48,7 @@ const Sell = () => {
     data.sort((a, b) => {
         return a.id - b.id;
     });
+
 
     const columns = [
         {

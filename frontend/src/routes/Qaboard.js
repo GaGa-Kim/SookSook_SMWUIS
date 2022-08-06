@@ -32,6 +32,7 @@ const Qaboard = () => {
         axios
             .get("http://localhost:8080/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
             .then((response) => {
+
                 setId(response.data);
             });
 
@@ -66,8 +67,8 @@ const Qaboard = () => {
 
         {
             title: <div className="user">작성자</div>,
-            dataIndex: "name",
-            key: <div>"address"</div>
+            dataIndex: "nickname",
+            key: "nickname"
         }
     ];
 
