@@ -87,7 +87,9 @@ const SetBoardShare = () => {
     };
     const [addFormData, setAddFormData] = React.useState([]);
     const formData = new FormData();
-
+    const handleFileClick=()=>{
+        setAddFormData([]);
+    }
     const handleFileChange = (e) => {
         const nowFile=[...addFormData];
         if (e.target.value === "") {
@@ -171,6 +173,7 @@ const SetBoardShare = () => {
                             multiple="multiple"
                             style={{ display: "none" }}
                             onChange={handleFileChange}
+                            onClick={handleFileClick}
                         />
                     </Box>
                 </InputBox>

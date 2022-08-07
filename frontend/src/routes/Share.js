@@ -36,27 +36,32 @@ const Share = () => {
         );
         setId(response.data);
     };
-    const getData=async (i)=>{
-        const response=axios
-        .get(`http://localhost:8080/studyPost/info?id=${id[i]}`);
-        if (
-            data.some((element) => element.id === id[i]) === false
-        ) {
-            const temp = data.concat(response.data);
-            setData(temp);
-        }
-    }   
-     React.useEffect(() => {
-        getId();
+    const getData = async (i) => {
 
-    }, [getId]);
+            const response = await axios.get(
+                `http://localhost:8080/studyPost/info?id=${id[i]}`
+            );
+            
+            if (data.some((element) => element.id === id[i]) === false) {
+                const temp = data.concat(response.data);
+                setData(temp);
+            }
+            
+        
+
+    };
+
     React.useEffect(() => {
-        if (id != []) {
-            for(let i = 0; i < id.length; i++){
+        getId();
+    });
+
+    React.useEffect(() => {
+
+            for (let i = 0; i < id.length; i++) {
                 getData(i);
             }
-        }
-    }, [getData]);
+        
+    },[id]);
 
     data.sort((a, b) => {
         return a.id - b.id;

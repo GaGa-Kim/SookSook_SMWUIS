@@ -25,33 +25,33 @@ const Select = styled.select`
 const Board1 = () => {
     const [data, setData] = useState("");
     const [dpt, setDpt] = React.useState("전체");
-    const getAll=async ()=>{
-        const response=axios
-        .get("http://localhost:8080/studyBoards/list?lecture=true");
+    const getAll = async () => {
+        const response = await axios.get(
+            "http://localhost:8080/studyBoards/list?lecture=true"
+        );
         setData(response.data);
-    }
-    const getDpt =async ()=>{
-        const response=axios
-            .get("/studyBoards/department",{
-                params:{
-                    department:dpt
-                }
-            });
-            setData(response.data);
-    }
+    };
+    const getDpt = async () => {
+        const response = await axios.get("/studyBoards/department", {
+            params: {
+                department: dpt,
+            },
+        });
+        setData(response.data);
+    };
     React.useEffect(() => {
-        if(dpt==="전체"){
+        if (dpt === "전체") {
             getAll();
-        }else{
-           getDpt();
+        } else {
+            getDpt();
         }
-    }, [getAll,getDpt]);
+    }, [getAll, getDpt]);
 
     const onChangeDpt = async (e) => {
-        const dpt=await setDpt(e.target.value);
+        const dpt = await setDpt(e.target.value);
         return dpt;
     };
-   
+
     const columns = [
         {
             title: <div className="studyname">스터디 명</div>,

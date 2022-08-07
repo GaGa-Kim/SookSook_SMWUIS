@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -94,7 +94,7 @@ const DetailShare = () => {
     const navigate = useNavigate();
     //현재 로그인 중인 email 받기
     const emailL = useSelector((state) => state.email);
-    
+
     //수정 삭제 버튼 유무
     const [isShow, setIsShow] = React.useState(false);
     //게시글 정보 가져오기
@@ -106,46 +106,57 @@ const DetailShare = () => {
     const [fileDownload, setfileDownload] = React.useState([]);
     const [email, setEmail] = React.useState("");
 
-    React.useEffect(() => {
-        if(emailL===""){
-            alert("로그인이 필요합니다.");
-            navigate("/login");  
+    const postInfo = async () => {
+        const response = await axios.get(
+            `http://localhost:8080/studyPost/info?id=${dataKey}`
+        );
+        setTitle(response.data.title);
+        setContent(response.data.content);
+        setFileId(response.data.fileId);
+        setEmail(response.data.email);
+        if (emailL === response.data.email) {
+            setIsShow(true);
+        } else {
+            setIsShow(false);
         }
-        axios
-            .get(`http://localhost:8080/studyPost/info?id=${dataKey}`)
-            .then((response) => {
-                setTitle(response.data.title);
-                setContent(response.data.content);
-                setFileId(response.data.fileId);
-                setEmail(response.data.email);
-                if (emailL === response.data.email) {
-                    setIsShow(true);
-                } else {
-                    setIsShow(false);
-                }
-            });
+    };
+
+    const getFilename = async (i) => {
+        const response = await axios.get(
+            `http://localhost:8080/studyPost/fileInfo?id=${fileId[i]}`
+        );
+
+        setfileName(response.data.origFileName);
+    };
+    const getFiledown = async (i) => {
+        const response = await axios.get(
+            `http://localhost:8080/studyPost/fileDownload?id=${fileId[i]}`
+        );
+        setfileDownload(response.data);
+    };
+    React.useEffect(() => {
+        if (emailL === "") {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+        }
+        postInfo();
+        console.log(fileId);
+    }, []);
+    React.useEffect(() => {
         for (let i = 0; i < fileId.length; i++) {
-            let filename = "";
-            let filedownload = "";
-            let temp = "";
-            axios
-                .get(`http://localhost:8080/studyPost/fileInfo?id=${fileId[i]}`)
-                .then((response) => {
-                    filename = response.data.origFileName;
+            getFilename(i);
+            getFiledown(i);
+            console.log(fileName);
+            if (fileInfo.some((element) => element.filename === fileId[i].filename) === false) {
+                const temp = fileInfo.concat({
+                    filename: fileName,
+                    filedownload: fileDownload,
                 });
-            axios
-                .get(
-                    `http://localhost:8080/studyPost/fileDownload?id=${fileId[i]}`
-                )
-                .then((response) => {
-                    filedownload = response.data;
-                });
-                //console.log(filename);
-            temp = { filename: filename, filedownload: filedownload };
-            setFileInfo(temp);
+                setFileInfo(temp);
+            }
         }
         console.log(fileInfo);
-    }, []);
+    });
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([]);
     React.useEffect(() => {
@@ -185,21 +196,22 @@ const DetailShare = () => {
                 },
             })
             .then(setIsDisable(true));
-   
     };
     //게시글 삭제
-    const removePost=async ()=>{
-        await axios
-            .delete("/studyPost", {
+
+    const handleDeleteClick = () => {
+        const removePost = async () => {
+            const response = await axios.delete("/studyPost", {
                 params: {
                     email: email,
                     id: dataKey,
                 },
             });
-    }
-    const handleDeleteClick = () => {
-            removePost();
-            navigate("/share");
+            if (response.data) {
+                navigate("/share");
+            }
+        };
+        removePost();
     };
 
     const getText = (text) => {
@@ -277,12 +289,13 @@ const DetailShare = () => {
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
                         {/* 파일 정보 */}
-                        {fileInfo&&fileInfo.map((element)=>{
-                            <div>
-                                <div>{element.filename}</div>
-                                <div>{element.filedownload}</div>
-                            </div>
-                        })}
+                        {/* {fileInfo &&
+                            fileInfo.map((element) => {
+                                <div>
+                                    <div>{element.filename}</div>
+                                    <div>{element.filedownload}</div>
+                                </div>;
+                            })} */}
                         {!isDisable && (
                             <>
                                 <LabelFile for="inputFile">
@@ -319,7 +332,11 @@ const DetailShare = () => {
                                 업로드
                             </Button>
                         )}
-                        <Button width="70px" mg="30px" onClick={handleDeleteClick}>
+                        <Button
+                            width="70px"
+                            mg="30px"
+                            onClick={handleDeleteClick}
+                        >
                             삭제
                         </Button>
                     </>
