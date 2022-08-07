@@ -1,20 +1,20 @@
 import "../css/board2.css";
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { Table } from "antd";
 import "antd/dist/antd.css";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Logo from "./components/Logo.js";
 import Cstudy2 from "./components/Cstudy2.js";
-import Root from './components/Root';
+import Root from "./components/Root";
 import axios from "axios";
 
 const Select = styled.select`
     width: 100px;
     height: 32px;
     transition: 0.5s;
-    border-color:#c1daff;
+    border-color: #c1daff;
     font-size: 19.5px;
     background-color: transparent;
     white-space: nowrap;
@@ -24,21 +24,34 @@ const Select = styled.select`
 
 const Board2 = () => {
     const [data, setData] = useState("");
-    const [setCategory] = React.useState("");
+    const [category, setCategory] = React.useState("전체");
     React.useEffect(() => {
-        axios
-            .get("http://localhost:8080/studyBoards/list?lecture=false")
-            .then((response) => {
-                setData(response.data);
-            });
-    }, []);
-    const onChangeCategory = (category) => {
-        setCategory(category.target.value);
+        if (category === "전체") {
+            axios
+                .get("http://localhost:8080/studyBoards/list?lecture=false")
+                .then((response) => {
+                    setData(response.data);
+                });
+        } else {
+            axios
+                .get("/studyBoards/category", {
+                    params: {
+                        category: category,
+                    },
+                })
+                .then((response) => {
+                    setData(response.data);
+                });
+        }
+    }, [category]);
 
+    const onChangeCategory = async (e) => {
+        const category = setCategory(e.target.value);
+        return category;
     };
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyBoards/category?category=${category}")
+            .get("/studyBoards/category?category=${category}")
             .then((response) => {
                 setData(response.data);
             });
@@ -61,8 +74,8 @@ const Board2 = () => {
         {
             title: <div className="user">작성자</div>,
             dataIndex: "nickname",
-            key: "key"
-        }
+            key: "key",
+        },
     ];
 
     return (
@@ -71,6 +84,7 @@ const Board2 = () => {
             <Logo />
             <div className="block">
                 <Select onChange={onChangeCategory}>
+                    <option value="전체">전체</option>
                     <option value="토익/토플">토익/토플</option>
                     <option value="면접">면접</option>
                     <option value="자소서">자소서</option>
@@ -87,7 +101,8 @@ const Board2 = () => {
             <section className="table">
                 <Table columns={columns} dataSource={data} />
             </section>
-        </Root>)
+        </Root>
+    );
 };
 
 export default Board2;

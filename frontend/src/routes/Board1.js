@@ -14,7 +14,7 @@ const Select = styled.select`
     width: 140px;
     height: 32px;
     transition: 0.5s;
-    border-color:#c1daff;
+    border-color: #c1daff;
     font-size: 19.5px;
     background-color: transparent;
     white-space: nowrap;
@@ -24,27 +24,33 @@ const Select = styled.select`
 
 const Board1 = () => {
     const [data, setData] = useState("");
-    const [dpt, setDpt] = React.useState("");
+    const [dpt, setDpt] = React.useState("전체");
 
     React.useEffect(() => {
-        axios
+        if(dpt==="전체"){
+            axios
             .get("http://localhost:8080/studyBoards/list?lecture=true")
             .then((response) => {
                 setData(response.data);
             });
-    }, []);
-
-    const onChangeDpt = (dpt) => {
-        setDpt(dpt.target.value);
-
-    };
-    React.useEffect(() => {
-        axios
-            .get("http://localhost:8080/studyBoards/department?department=${dpt}")
+        }else{
+            axios
+            .get("/studyBoards/department",{
+                params:{
+                    department:dpt
+                }
+            })
             .then((response) => {
                 setData(response.data);
             });
-    }, []);
+        }
+    }, [dpt]);
+
+    const onChangeDpt = async (e) => {
+        const dpt=await setDpt(e.target.value);
+        return dpt;
+    };
+   
     const columns = [
         {
             title: <div className="studyname">스터디 명</div>,
@@ -73,6 +79,7 @@ const Board1 = () => {
             <Logo />
             <div className="block">
                 <Select onChange={onChangeDpt}>
+                    <option value="전체">전체</option>
                     <option value="문과대학">문과대학</option>
                     <option value="이과대학">이과대학</option>
                     <option value="공과대학">공과대학</option>
