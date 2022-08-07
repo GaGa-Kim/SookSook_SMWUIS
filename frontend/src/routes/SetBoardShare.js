@@ -108,11 +108,11 @@ const SetBoardShare = () => {
         }
         setAddFormData(nowFile);
     };
-    const upload=async()=>{
+    const upload=async ()=>{
         await axios
         .post("http://localhost:8080/studyPost/share", formData)
         .then((response) => {
-            console.log(formData.get("files"));
+            console.log(response.data);
         });
     }
     const handleUploadClick = (e) => {

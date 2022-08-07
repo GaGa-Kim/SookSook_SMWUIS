@@ -25,25 +25,27 @@ const Select = styled.select`
 const Board2 = () => {
     const [data, setData] = useState("");
     const [category, setCategory] = React.useState("전체");
+    const getAll=async ()=>{
+        const response=axios
+        .get("http://localhost:8080/studyBoards/list?lecture=false");
+        setData(response.data);
+    }
+    const getCategory =async ()=>{
+        const response=axios
+            .get("/studyBoards/category",{
+                params:{
+                    category: category,
+                }
+            });
+            setData(response.data);
+    }
     React.useEffect(() => {
-        if (category === "전체") {
-            axios
-                .get("http://localhost:8080/studyBoards/list?lecture=false")
-                .then((response) => {
-                    setData(response.data);
-                });
-        } else {
-            axios
-                .get("/studyBoards/category", {
-                    params: {
-                        category: category,
-                    },
-                })
-                .then((response) => {
-                    setData(response.data);
-                });
+        if(category==="전체"){
+            getAll();
+        }else{
+           getCategory();
         }
-    }, [category]);
+    }, [getAll,getCategory]);;
 
     const onChangeCategory = async (e) => {
         const category = setCategory(e.target.value);

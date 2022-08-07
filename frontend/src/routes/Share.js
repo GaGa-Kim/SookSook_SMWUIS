@@ -1,7 +1,7 @@
 import "../css/share.css";
 import { Table } from "antd";
 import GlobalStyle from "./components/GlobalStyle";
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
 import React, { useEffect, useState } from "react";
@@ -14,14 +14,14 @@ const Shareblock = () => {
             <Cwrite />
         </section>
     );
-
 };
 
 const Cwrite = () => {
     return (
         <section>
             <button className="newstudy" style={{ marginLeft: "0px" }}>
-                <Link to="/setboard_share">글 작성하기</Link></button>
+                <Link to="/setboard_share">글 작성하기</Link>
+            </button>
         </section>
     );
 };
@@ -29,26 +29,35 @@ const Cwrite = () => {
 const Share = () => {
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
-    const getData=async ()=>{
-        for (let i = 0; i < id.length; i++) {
-            axios.get(`http://localhost:8080/studyPost/info?id=${id[i]}`)
-                .then((response) => {
-                    if (data.some((element) => element.id === id[i]) === false) {
-                        const temp = data.concat(response.data);
-                        setData(temp);
-                    }
-                });
+
+    const getId = async () => {
+        const response = await axios.get(
+            "http://localhost:8080/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+        );
+        setId(response.data);
+    };
+    const getData=async (i)=>{
+        const response=axios
+        .get(`http://localhost:8080/studyPost/info?id=${id[i]}`);
+        if (
+            data.some((element) => element.id === id[i]) === false
+        ) {
+            const temp = data.concat(response.data);
+            setData(temp);
         }
-    }
+    }   
+     React.useEffect(() => {
+        getId();
+
+    }, [getId]);
     React.useEffect(() => {
-        axios
-            .get("http://localhost:8080/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
-            .then((response) => {
-                setId(response.data);
-            });
-        getData();
-        }, [getData]);
-        
+        if (id != []) {
+            for(let i = 0; i < id.length; i++){
+                getData(i);
+            }
+        }
+    }, [getData]);
+
     data.sort((a, b) => {
         return a.id - b.id;
     });
@@ -70,8 +79,8 @@ const Share = () => {
         {
             title: <div className="user">작성자</div>,
             dataIndex: "nickname",
-            key: "key"
-        }
+            key: "key",
+        },
     ];
 
     return (
@@ -80,12 +89,10 @@ const Share = () => {
             <Logo />
             <Shareblock />
             <section className="table">
-                <Table columns={columns} dataSource={data} />;
+                <Table columns={columns} dataSource={data} />
             </section>
         </>
-    )
+    );
 };
 
 export default Share;
-
-

@@ -495,9 +495,8 @@ const EnterBoard = () => {
                     {commentList &&
                         commentList.map((comment) => (
                             <CommentList
-                                nickname={comment.nickname}
                                 email={comment.email}
-                                content={comment.content}
+                                writeEmail={email}
                                 handleSendClick={handleSendClick}
                                 id={comment.id}
                                 dataKey={dataKey}

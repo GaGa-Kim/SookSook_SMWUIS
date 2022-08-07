@@ -105,6 +105,7 @@ const DetailShare = () => {
     const [fileName, setfileName] = React.useState([]);
     const [fileDownload, setfileDownload] = React.useState([]);
     const [email, setEmail] = React.useState("");
+
     React.useEffect(() => {
         if(emailL===""){
             alert("로그인이 필요합니다.");
@@ -150,7 +151,7 @@ const DetailShare = () => {
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
-            .get("http://localhost:8080/studyComment/all", {
+            .get("http://localhost:8080/studyComments/all", {
                 params: {
                     studyPostId: dataKey,
                 },

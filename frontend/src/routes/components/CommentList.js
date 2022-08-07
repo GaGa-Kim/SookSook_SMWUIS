@@ -96,7 +96,7 @@ const Recomment = ({ id, emailL }) => {
                 <ListText>{content}</ListText>
             </Box>
             {emailL === email ? (
-                <Box right="50px">
+                <Box right="35px">
                     <XImg
                         src={x}
                         onClick={() => handleXclick(email, id)}
@@ -112,6 +112,7 @@ const CommentList = ({
     email,
     dataKey,
     childList,
+    writeEmail
 }) => {
     let nicknameL = "";
     const emailL = useSelector((state) => state.email);
@@ -127,6 +128,7 @@ const CommentList = ({
             });
     }, []); //현재 로그인 중인 닉네임
     const [isDelete, setIsDelete] = React.useState(true);
+    const [isSend,setIsSend]=React.useState(false);
     //데이터 받아오기
     const [nickname,setNickname]=React.useState("");
     const [content,setContent]=React.useState("");
@@ -147,6 +149,7 @@ const CommentList = ({
 
     React.useState(() => {
         emailL === email ? setIsDelete(true) : setIsDelete(false);
+        emailL===writeEmail||emailL===email? setIsSend(true):setIsSend(false);
     }, []);
     return (
         <>
@@ -157,7 +160,7 @@ const CommentList = ({
                 <Box left="100px">
                     <ListText>{content}</ListText>
                 </Box>
-                <Box right="15px" width="65px">
+                <Box right="0px" width="65px">
                     {isDelete && (
                         // <div
                         //     style={{
@@ -175,13 +178,13 @@ const CommentList = ({
                             ></XImg>
                         // </div>
                     )}
-                    {!isDelete && (
-                        <SendImg
+                    </Box>
+                    <Box right="20px" width="65px">
+                        {isSend&&<SendImg
                             src={send}
                             onClick={() => handleSendClick(id)}
-                        ></SendImg>
-                    )}
-                </Box>
+                        ></SendImg>}
+                    </Box>
             </List>
             {childList &&
                 childList.map((id) => <Recomment id={id} emailL={emailL} />)}
