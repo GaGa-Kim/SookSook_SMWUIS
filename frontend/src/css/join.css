@@ -24,13 +24,12 @@
     color: inherit;
 }
 
-
 .join {
     width: 50%;
-    height: 360px;
+    height: 400px;
     float: center;
     margin-left: 23%;
-    margin-top: 4.5%;
+    margin-bottom: 50px;
     padding-top: 20px;
     font-size: 17px;
     background-color: rgb(245, 242, 242);

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Form, Input } from "antd";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import Block from "./components/Block.js";
 import GlobalStyle from "./components/GlobalStyle";
 import Header from "./components/Header.js";
@@ -12,16 +12,13 @@ import Pw from "./components/Pw.js";
 import Lgbutton from "./components/Lgbutton.js";
 import axios from "axios";
 
-const formItemLayout = {
-    labelCol: { xs: { span: 24 }, sm: { span: 8 } },
-    wrapperCol: { xs: { span: 24 }, sm: { span: 16 } }
-};
-
 const Join = () => {
-    const [id, setId] = useState('');
-    const [email, setEmail] = useState('');
-    const [pw, setPw] = useState('');
-    const [nickname, setNickname] = useState('');
+    const navigate = useNavigate();
+    const [id, setId] = useState("");
+    const [email, setEmail] = useState("");
+    const [pw, setPw] = useState("");
+    const [nickname, setNickname] = useState("");
+    const [name, setName] = useState("");
     const getId = (text) => {
         setId(text);
     };
@@ -29,23 +26,47 @@ const Join = () => {
         setPw(text);
     };
     const getEmail = (text) => {
-        setEmail(text);
+        setEmail(text.target.value);
     };
     const getNickname = (text) => {
-        setNickname(text);
+        setNickname(text.target.value);
     };
-    const register = () => {
+    const getName = (text) => {
+        setName(text.target.value);
+    };
+
+    const onFinish = (e) => {
         axios
             .post("http://localhost:8080/user", {
                 loginId: id,
                 email: email,
                 password: pw,
-                nickname: nickname
+                nickname: nickname,
+                name: name,
             })
             .then(() => {
-                alert("회원가입이 완료되었습니다");
+                
+                    alert("회원가입이 완료되었습니다");
+                    navigate("/login");
+                
             })
-    }
+            .catch((error)=>{
+                if (error.response.status === 500) {
+                    if (
+                        error.response.data.message ===
+                        "이미 가입되어 있는 유저입니다."
+                    ) {
+                        alert(error.response.data.message);
+                    } else {
+                        alert("이메일 또는 아이디가 이미 존재합니다.");
+                    }
+                }
+            });
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log("Failed:", errorInfo);
+    };
 
     return (
         <>
@@ -54,26 +75,47 @@ const Join = () => {
             <Block />
             <div className="join">
                 <Header text="회원가입" />
-                <Form {...formItemLayout} className="form">
+                <Form
+                    className="form"
+                    name="basic"
+                    labelCol={{
+                        span: 8,
+                    }}
+                    wrapperCol={{
+                        span: 16,
+                    }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                >
                     <Id getId={getId} />
                     <Pw getPw={getPw} />
                     <Form.Item
                         name="email"
                         label="E-mail"
-                        getEmail={getEmail}
                         rules={[{ required: true }]}
                     >
-                        <Input />
+                        <Input onChange={getEmail} />
+                    </Form.Item>
+                    <Form.Item
+                        name="name"
+                        label="이름"
+                        rules={[{ required: true }]}
+                    >
+                        <Input onChange={getName} />
                     </Form.Item>
                     <Form.Item
                         name="nickname"
                         label="닉네임"
-                        getNickname={getNickname}
                         rules={[{ required: true }]}
                     >
-                        <Input />
+                        <Input onChange={getNickname} />
                     </Form.Item>
-                    <Link to="/login"><Lgbutton onClick={() => { register(); }}>회원가입</Lgbutton></Link>
+
+                    <Lgbutton>회원가입</Lgbutton>
                 </Form>
             </div>
         </>
