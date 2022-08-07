@@ -117,6 +117,10 @@ const EnterBoard = () => {
     const [isShow, setIsShow] = React.useState(false);
 
     React.useEffect(() => {
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
         axios
             .get("http://localhost:8080/user/myInfo", {
                 params: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import List from "./List";
 import Box from "./Box";
@@ -56,29 +56,34 @@ const handleXclick = (email, id) => {
             id: id,
         },
     });
-
 };
 
 const Recomment = ({ id, emailL }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [xClick,setXClick]=React.useState(0);
+    const [get,setGet]=React.useState(false);
+    const getRecomment=async ()=>{
+        await axios
+        .get("http://localhost:8080/passwordComment", {
+            params: {
+                email: emailL,
+                id: id,
+            },
+        })
+        .then((response) => {
+            setNickname(response.data.nickname);
+            setContent(response.data.content);
+            setEmail(response.data.email);
+            setGet(true);
+        });
+    }
+    getRecomment();
     React.useEffect(() => {
-        axios
-            .get("http://localhost:8080/passwordComment", {
-                params: {
-                    email: emailL,
-                    id: id,
-                },
-            })
-            .then((response) => {
-                setNickname(response.data.nickname);
-                setContent(response.data.content);
-                setEmail(response.data.email);
-            });
-            setXClick(xClick+1);
-    }, [xClick]);
+        setGet(false);
+       getRecomment();
+            
+    }, [get]);
     return (
         <List>
             <Box left="35px">
@@ -91,7 +96,7 @@ const Recomment = ({ id, emailL }) => {
                 <ListText>{content}</ListText>
             </Box>
             {emailL === email ? (
-                <Box right="20px">
+                <Box right="50px">
                     <XImg
                         src={x}
                         onClick={() => handleXclick(email, id)}
@@ -103,10 +108,8 @@ const Recomment = ({ id, emailL }) => {
 };
 const CommentList = ({
     handleSendClick,
-    nickname,
-    content,
-    email,
     id,
+    email,
     dataKey,
     childList,
 }) => {
@@ -125,19 +128,22 @@ const CommentList = ({
     }, []); //현재 로그인 중인 닉네임
     const [isDelete, setIsDelete] = React.useState(true);
     //데이터 받아오기
-    const [commentList, setCommentList] = React.useState([]);
+    const [nickname,setNickname]=React.useState("");
+    const [content,setContent]=React.useState("");
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
-            .get("http://localhost:8080/passwordComment/all", {
+            .get("http://localhost:8080/passwordComment", {
                 params: {
-                    studyBoardId: dataKey,
+                    email:emailL,
+                    id:String(id)
                 },
             })
             .then((response) => {
-                setCommentList(response.data);
+                setNickname(response.data.nickname);
+                setContent(response.data.content);
             });
-    }, [commentList]);
+    }, []);
 
     React.useState(() => {
         emailL === email ? setIsDelete(true) : setIsDelete(false);
@@ -151,7 +157,7 @@ const CommentList = ({
                 <Box left="100px">
                     <ListText>{content}</ListText>
                 </Box>
-                <Box right="10px" width="65px">
+                <Box right="15px" width="65px">
                     {isDelete && (
                         // <div
                         //     style={{

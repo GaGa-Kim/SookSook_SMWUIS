@@ -115,7 +115,13 @@ const EnterBoard = () => {
     const [onoff, setOnoff] = React.useState("");
     //수정 삭제 버튼 유무
     const [isShow, setIsShow] = React.useState(false);
+    React.useEffect(()=>{
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
 
+    },[emailL])
     React.useEffect(() => {
         axios
             .get("http://localhost:8080/user/myInfo", {

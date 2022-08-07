@@ -68,11 +68,19 @@ const ButtonBox = styled.div`
 `;
 const SetBoardSell = () => {
     const navigate = useNavigate();
-    const email = useSelector((state) => state.email);
+    const emailL = useSelector((state) => state.email);
 
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
     const [filename, setFilename] = React.useState("파일 선택하기");
+
+    React.useEffect(()=>{
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
+    })
+    
     const getText = (text) => {
         setTitle(text);
     };
@@ -111,7 +119,7 @@ const SetBoardSell = () => {
             return;
         } else {
             formData.append("title", title);
-            formData.append("email", email);
+            formData.append("email", emailL);
             formData.append("content", content);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {

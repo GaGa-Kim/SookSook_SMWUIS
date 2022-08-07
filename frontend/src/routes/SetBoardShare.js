@@ -67,11 +67,18 @@ const ButtonBox = styled.div`
 `;
 const SetBoardShare = () => {
     const navigate = useNavigate();
-    const email = useSelector((state) => state.email);
+    const emailL = useSelector((state) => state.email);
 
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
     const [filename, setFilename] = React.useState("파일 선택하기");
+
+    React.useEffect(()=>{
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
+    },[emailL])
     const getText = (text) => {
         setTitle(text);
     };
@@ -82,6 +89,7 @@ const SetBoardShare = () => {
     const formData = new FormData();
 
     const handleFileChange = (e) => {
+        const nowFile=[...addFormData];
         if (e.target.value === "") {
             setFilename("파일 선택하기");
         } else {
@@ -94,13 +102,19 @@ const SetBoardShare = () => {
                     setFilename(e.target.value);
                 }
             }
-            setAddFormData([]);
-            for (let i = 0; i < e.target.files.length; i++) {
-                const temp = addFormData.concat(e.target.files[i]);
-                setAddFormData(temp);
-            }
         }
+        for (let i = 0; i < e.target.files.length; i++) {
+            nowFile.push(e.target.files[i]);
+        }
+        setAddFormData(nowFile);
     };
+    const upload=async()=>{
+        await axios
+        .post("http://localhost:8080/studyPost/share", formData)
+        .then((response) => {
+            console.log(formData.get("files"));
+        });
+    }
     const handleUploadClick = (e) => {
         if (title === "") {
             alert("제목을 입력하세요");
@@ -110,19 +124,16 @@ const SetBoardShare = () => {
             return;
         } else {
             formData.append("title", title);
-            formData.append("email", email);
+            formData.append("email", emailL);
             formData.append("content", content);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
                 formData.append("files", addFormData[i]);
             }
             /*db에 게시글 정보 저장*/
-            axios
-                .post("http://localhost:8080/studyPost/share", formData)
-                .then((response) => {
-                    console.log(formData.get("files"));
-                });
+            upload();
             navigate("/share");
+
         }
     };
 

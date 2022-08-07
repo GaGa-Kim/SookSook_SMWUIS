@@ -94,6 +94,7 @@ const DetailShare = () => {
     const navigate = useNavigate();
     //현재 로그인 중인 email 받기
     const emailL = useSelector((state) => state.email);
+    
     //수정 삭제 버튼 유무
     const [isShow, setIsShow] = React.useState(false);
     //게시글 정보 가져오기
@@ -105,6 +106,10 @@ const DetailShare = () => {
     const [fileDownload, setfileDownload] = React.useState([]);
     const [email, setEmail] = React.useState("");
     React.useEffect(() => {
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
         axios
             .get(`http://localhost:8080/studyPost/info?id=${dataKey}`)
             .then((response) => {
@@ -179,17 +184,21 @@ const DetailShare = () => {
                 },
             })
             .then(setIsDisable(true));
+   
     };
     //게시글 삭제
-    const handleDeleteClick = () => {
-        axios
+    const removePost=async ()=>{
+        await axios
             .delete("/studyPost", {
                 params: {
                     email: email,
                     id: dataKey,
                 },
-            })
-            .then(navigate("/share"));
+            });
+    }
+    const handleDeleteClick = () => {
+            removePost();
+            navigate("/share");
     };
 
     const getText = (text) => {

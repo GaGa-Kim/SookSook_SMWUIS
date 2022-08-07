@@ -1,7 +1,7 @@
 import "../css/share.css";
 import { Table } from "antd";
 import GlobalStyle from "./components/GlobalStyle";
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
 import React, { useEffect, useState } from "react";
@@ -29,13 +29,7 @@ const Cwrite = () => {
 const Share = () => {
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
-    React.useEffect(() => {
-        axios
-            .get("http://localhost:8080/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
-            .then((response) => {
-                setId(response.data);
-            });
-
+    const getData=async ()=>{
         for (let i = 0; i < id.length; i++) {
             axios.get(`http://localhost:8080/studyPost/info?id=${id[i]}`)
                 .then((response) => {
@@ -45,7 +39,16 @@ const Share = () => {
                     }
                 });
         }
-    }, [id]);
+    }
+    React.useEffect(() => {
+        axios
+            .get("http://localhost:8080/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
+            .then((response) => {
+                setId(response.data);
+            });
+        getData();
+        }, [getData]);
+        
     data.sort((a, b) => {
         return a.id - b.id;
     });
