@@ -137,12 +137,13 @@ const HotStudy = () => {
                 setHotStudyList(response.data);
             });
     }, []);
-    return hotStudyList.map((study) => (
-        <StudyList>
-            {study.studyBoardId}위 {study.title}
+    return hotStudyList.map((study, index) => (
+        <StudyList key={index}>
+            {index + 1}위 <Link to={`/enterboard/ ${study.studyBoardId}`} >{study.title}</Link>
         </StudyList>
     ));
 };
+
 const NewStudy = () => {
     const [newStudyList, setNewStudyList] = React.useState([]);
     React.useEffect(() => {
@@ -152,8 +153,10 @@ const NewStudy = () => {
                 setNewStudyList(response.data);
             });
     }, []);
-    return newStudyList.map((study) => <StudyList>∘{study.title}</StudyList>);
+    return newStudyList.map((study) => <StudyList>∘<Link to={`/enterboard/ ${study.studyBoardId}`}
+    >{study.title}</Link></StudyList>);
 };
+
 const HighStudy = () => {
     const [highStudyList, setHighStudyList] = React.useState([]);
     React.useEffect(() => {
@@ -161,9 +164,10 @@ const HighStudy = () => {
             setHighStudyList(response.data);
         });
     }, []);
-    return highStudyList.map((study) => (
-        <StudyList>
-            {study.studyBoardId}위 {study.title}
+    return highStudyList.map((study, index) => (
+        <StudyList key={index}>
+            {index + 1}위
+            <Link to={`/enterboard/ ${study.studyBoardId}`}>{study.title}</Link>
         </StudyList>
     ));
 };
