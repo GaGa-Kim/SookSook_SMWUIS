@@ -100,19 +100,19 @@ const DetailShare = () => {
     //게시글 정보 가져오기
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
-    const [fileId, setFileId] = React.useState([]);
+    const [fileId, setFileId] = React.useState(null);
     const [fileInfo, setFileInfo] = React.useState([]);
     const [fileName, setfileName] = React.useState([]);
     const [fileDownload, setfileDownload] = React.useState([]);
     const [email, setEmail] = React.useState("");
 
-    const postInfo = async () => {
+    const getPost = async () => {
         const response = await axios.get(
             `http://localhost:8080/studyPost/info?id=${dataKey}`
         );
         setTitle(response.data.title);
         setContent(response.data.content);
-        setFileId(response.data.fileId);
+        setFileId((prev)=>{return response.data.fileId});
         setEmail(response.data.email);
         if (emailL === response.data.email) {
             setIsShow(true);
@@ -120,43 +120,41 @@ const DetailShare = () => {
             setIsShow(false);
         }
     };
-
-    const getFilename = async (i) => {
-        const response = await axios.get(
-            `http://localhost:8080/studyPost/fileInfo?id=${fileId[i]}`
-        );
-
-        setfileName(response.data.origFileName);
-    };
-    const getFiledown = async (i) => {
-        const response = await axios.get(
-            `http://localhost:8080/studyPost/fileDownload?id=${fileId[i]}`
-        );
-        setfileDownload(response.data);
-    };
+    
     React.useEffect(() => {
         if (emailL === "") {
             alert("로그인이 필요합니다.");
             navigate("/login");
         }
-        postInfo();
-        console.log(fileId);
-    }, []);
+    },[]);
+    React.useEffect(()=>{
+        
+        getPost();
+    },[])
+    
     React.useEffect(() => {
-        for (let i = 0; i < fileId.length; i++) {
-            getFilename(i);
-            getFiledown(i);
-            console.log(fileName);
-            if (fileInfo.some((element) => element.filename === fileId[i].filename) === false) {
-                const temp = fileInfo.concat({
-                    filename: fileName,
-                    filedownload: fileDownload,
-                });
-                setFileInfo(temp);
-            }
-        }
-        console.log(fileInfo);
-    });
+        const getFile = async (id) => {
+            const response = await axios.get(
+                `http://localhost:8080/studyPost/fileInfo?id=${id}`
+                );
+
+        const response2 = await axios.get(
+            `http://localhost:8080/studyPost/fileDownload?id=${id}`
+            );
+            
+            setfileName((prev)=>{return response.data.origFileName});
+            setfileDownload((prev)=>{return response2.data});
+           
+        };
+        const temp=fileId.map((id) => {
+            getFile(id);
+
+             return { filename: fileName, filedownload: fileDownload };
+        });
+        setFileInfo(fileInfo.concat(temp));
+        
+    }, []);
+
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([]);
     React.useEffect(() => {
@@ -289,13 +287,15 @@ const DetailShare = () => {
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
                         {/* 파일 정보 */}
-                        {/* {fileInfo &&
+                        {fileInfo &&
                             fileInfo.map((element) => {
-                                <div>
-                                    <div>{element.filename}</div>
-                                    <div>{element.filedownload}</div>
-                                </div>;
-                            })} */}
+                                return (
+                                    <div>
+                                        <div>{element.filename}</div>
+                                        {/* <div>{element.filedownload}</div> */}
+                                    </div>
+                                );
+                            })}
                         {!isDisable && (
                             <>
                                 <LabelFile for="inputFile">
