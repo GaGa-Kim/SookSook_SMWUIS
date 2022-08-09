@@ -27,7 +27,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
+	// runtimeOnly 'com.h2database:h2'
+	implementation 'mysql:mysql-connector-java'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -51,11 +52,18 @@ dependencies {
 	// common
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
-	// DriverSpy
-	// https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1
-	implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+	// s3 bucket
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'com.amazonaws:aws-java-sdk:1.11.404'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jar {
+	enabled = false
+	manifest {
+		attributes 'Main-Class': 'com.smwuis.sooksook.SooksookApplication'
+	}
 }

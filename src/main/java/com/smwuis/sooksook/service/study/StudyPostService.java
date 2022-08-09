@@ -21,11 +21,11 @@ public class StudyPostService {
 
     private final StudyPostRepository studyPostRepository;
     private final StudyBoardRepository studyBoardRepository;
-    private final FileHandler fileHandler;
     private final StudyFilesRepository studyFilesRepository;
     private final UserRepository userRepository;
     private final StudyMemberRepository studyMemberRepository;
     private final StudyFilesService studyFilesService;
+    private final AwsS3Service awsS3Service;
 
     // 게시글 저장
     @Transactional
@@ -35,11 +35,13 @@ public class StudyPostService {
         studyPost.setUser(user);
         studyPost.setCategory(category);
 
-        List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
+        if(files != null) {
+            List<StudyFiles> filesList = awsS3Service.uploadFile(files);
 
-        if(!filesList.isEmpty()) {
-            for(StudyFiles studyFiles: filesList) {
-                studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+            if(!filesList.isEmpty()) {
+                for(StudyFiles studyFiles: filesList) {
+                    studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
+                }
             }
         }
 
@@ -70,8 +72,7 @@ public class StudyPostService {
 
         if(user.equals(studyPost.getUserId())) {
             studyPost.update(updateRequestDto.getTitle(),
-                    updateRequestDto.getContent(),
-                    updateRequestDto.getCategory());
+                    updateRequestDto.getContent());
 
             return new StudyPostResponseDto(studyPost, null);
         }
@@ -87,7 +88,8 @@ public class StudyPostService {
         StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
 
         if(user.equals(studyPost.getUserId())) {
-            List<StudyFiles> filesList = fileHandler.parseFileInfo(files);
+
+            List<StudyFiles> filesList = awsS3Service.uploadFile(files);
 
             if(!filesList.isEmpty()) {
                 for(StudyFiles studyFiles: filesList) {
@@ -96,8 +98,7 @@ public class StudyPostService {
             }
 
             studyPost.update(updateRequestDto.getTitle(),
-                    updateRequestDto.getContent(),
-                    updateRequestDto.getCategory());
+                    updateRequestDto.getContent());
 
             return new StudyPostResponseDto(studyPost, findFileId(studyPost.getId()));
         }
@@ -111,8 +112,14 @@ public class StudyPostService {
     public Boolean delete(Long id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
-        
+        List<StudyFiles> studyFiles = studyFilesRepository.findAllByStudyPostId(studyPost);
+
         if(user.equals(studyPost.getUserId())) {
+
+            for (StudyFiles studyFile:studyFiles) {
+                awsS3Service.deleteS3(studyFile.getFileName());
+            }
+
             studyPostRepository.delete(studyPost);
             return true;
         }

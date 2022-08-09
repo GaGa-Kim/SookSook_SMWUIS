@@ -4,6 +4,7 @@ import com.smwuis.sooksook.domain.study.StudyFiles;
 import com.smwuis.sooksook.domain.study.StudyFilesRepository;
 import com.smwuis.sooksook.domain.study.StudyPost;
 import com.smwuis.sooksook.domain.study.StudyPostRepository;
+import com.smwuis.sooksook.service.study.AwsS3Service;
 import com.smwuis.sooksook.service.study.StudyFilesService;
 import com.smwuis.sooksook.service.study.StudyPostService;
 import com.smwuis.sooksook.web.dto.study.*;
@@ -12,22 +13,17 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @Api(tags = "StudyPostController API (게시글 API)")
@@ -42,6 +38,7 @@ public class StudyPostController {
     private final StudyPostRepository studyPostRepository;
     private final StudyFilesRepository studyFilesRepository;
     private final StudyFilesService studyFilesService;
+    private final AwsS3Service awsS3Service;
 
     // 강의 스터디 게시글 작성
     @PostMapping(value = "/studyPost/lecture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -130,53 +127,54 @@ public class StudyPostController {
 
         StudyPostUpdateRequestDto updateRequestDto = StudyPostUpdateRequestDto
                 .builder()
+                .email(studyPostVO.getEmail())
                 .title(studyPostVO.getTitle())
                 .content(studyPostVO.getContent())
                 .build();
 
-        if (studyPostVO.getFiles() != null) {
-            StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
-            List<StudyFiles> dbFilesList = studyFilesRepository.findAllByStudyPostId(studyPost);
-            List<MultipartFile> multipartList = studyPostVO.getFiles();
-            List<MultipartFile> addFileList = new ArrayList<>();
+        StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        List<StudyFiles> dbFilesList = studyFilesRepository.findAllByStudyPostId(studyPost);
+        List<MultipartFile> multipartList = studyPostVO.getFiles();
+        List<MultipartFile> addFileList = new ArrayList<>();
 
-            if (CollectionUtils.isEmpty(dbFilesList)) {
-                if (!CollectionUtils.isEmpty(multipartList)) {
-                    for (MultipartFile multipartFile : multipartList)
-                        addFileList.add(multipartFile);
+        if (CollectionUtils.isEmpty(dbFilesList)) {
+            if (!CollectionUtils.isEmpty(multipartList)) {
+                for (MultipartFile multipartFile : multipartList)
+                    addFileList.add(multipartFile);
+            }
+        }
+
+        else {
+            if (CollectionUtils.isEmpty(multipartList)) {
+                for (StudyFiles dbStudyFiles : dbFilesList) {
+                    awsS3Service.deleteS3(dbStudyFiles.getFileName());
+                    studyFilesService.delete(dbStudyFiles.getId());
                 }
             } else {
-                if (CollectionUtils.isEmpty(multipartList)) {
-                    for (StudyFiles dbStudyFiles : dbFilesList)
+                List<String> dbOriginNameList = new ArrayList<>();
+
+                for (StudyFiles dbStudyFiles : dbFilesList) {
+                    StudyPostFileResponseDto dbStudyPostFileResponseDto = studyFilesService.findByFileId(dbStudyFiles.getId());
+                    String dbOrigFileName = dbStudyFiles.getOrigFileName();
+
+                    if (!multipartList.contains(dbOrigFileName)) {
+                        awsS3Service.deleteS3(dbStudyFiles.getFileName());
                         studyFilesService.delete(dbStudyFiles.getId());
-                } else {
-                    List<String> dbOriginNameList = new ArrayList<>();
+                    } else
+                        dbOriginNameList.add(dbOrigFileName);
+                }
 
-                    for (StudyFiles dbStudyFiles : dbFilesList) {
-                        StudyPostFileResponseDto dbStudyPostFileResponseDto = studyFilesService.findByFileId(dbStudyFiles.getId());
-                        String dbOrigFileName = dbStudyFiles.getOrigFileName();
-
-                        if (!multipartList.contains(dbOrigFileName))
-                            studyFilesService.delete(dbStudyFiles.getId());
-                        else
-                            dbOriginNameList.add(dbOrigFileName);
-                    }
-
-                    for (MultipartFile multipartFile : multipartList) {
-                        String multipartOrigName = multipartFile.getOriginalFilename();
-                        if (!dbOriginNameList.contains(multipartOrigName)) {
-                            addFileList.add(multipartFile);
-                        }
+                for (MultipartFile multipartFile : multipartList) {
+                    String multipartOrigName = multipartFile.getOriginalFilename();
+                    if (!dbOriginNameList.contains(multipartOrigName)) {
+                        addFileList.add(multipartFile);
                     }
                 }
             }
-            logger.info("update (게시글 수정)");
-            return ResponseEntity.ok().body(studyPostService.updateWithFiles(id, updateRequestDto, addFileList));
-
-        } else {
-            logger.info("update (게시글 수정)");
-            return ResponseEntity.ok().body(studyPostService.update(id, updateRequestDto));
         }
+
+        logger.info("update (게시글 수정)");
+        return ResponseEntity.ok().body(studyPostService.updateWithFiles(id, updateRequestDto, addFileList));
     }
 
     // 스터디 게시글 삭제
@@ -241,73 +239,23 @@ public class StudyPostController {
         return ResponseEntity.ok().body(studyFilesService.findByFileId(id));
     }
 
-    // 파일 이미지 ByteArray 조회
-    @GetMapping(
-            value = "/studyPost/fileImageByte",
-            produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
-    )
-    @ApiOperation(value = "이미지 id로 이미지 ByteArray 조회", notes = "이미지 id로 이미지 ByteArray 조회 API")
+    // 파일 URL 정보 조회
+    @GetMapping("/studyPost/fileURL")
+    @ApiOperation(value = "파일 id로 이미지/파일 URL 정보 조회", notes = "파일 id로 이미지/파일 URL 정보 조회 API")
     @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
-    public ResponseEntity<String> getImageByte(@RequestParam Long id) throws IOException {
-        StudyPostFileResponseDto studyPostFileResponseDto = studyFilesService.findByFileId(id);
-        String absolutePath
-                = new File("").getAbsolutePath() + File.separator + File.separator;
-        String path = studyPostFileResponseDto.getFilePath();
-
-        InputStream imageStream = new FileInputStream(absolutePath + path);
-        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-        String encodedString = Base64.getEncoder().encodeToString(imageByteArray);
-        imageStream.close();
-
-        logger.info("getImageByte (이미지 id로 이미지 ByteArray 조회)");
-        return ResponseEntity.ok().body(encodedString);
+    public ResponseEntity<String> getS3(@RequestParam Long id) {
+        StudyFiles studyFiles = studyFilesRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 파일이 없습니다."));
+        logger.info("findById (파일 id로 이미지/파일 URL 정보 조회)");
+        return ResponseEntity.ok().body(studyFiles.getFilePath());
     }
 
-    // 파일 이미지 출력
-    @GetMapping(value = "/studyPost/fileImage",
-            produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE}
-    )
-    @ApiOperation(value = "파일 id로 이미지 출력", notes = "파일 id로 이미지 출력 API")
-    @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
-    public ResponseEntity<byte[]> getImage(@RequestParam Long id) throws IOException {
-        StudyPostFileResponseDto studyPostFileResponseDto = studyFilesService.findByFileId(id);
-        String absolutePath
-                = new File("").getAbsolutePath() + File.separator + File.separator;
-        String path = studyPostFileResponseDto.getFilePath();
-
-        InputStream imageStream = new FileInputStream(absolutePath + path);
-        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-        imageStream.close();
-
-        logger.info("getImage (파일 id로 이미지 출력)");
-        return ResponseEntity.ok().body(imageByteArray);
-    }
-
+    // 파일 다운로드
     @GetMapping("/studyPost/fileDownload")
     @ApiOperation(value = "파일 id로 이미지/파일 다운로드", notes = "파일 id로 이미지/파일 다운로드 API")
     @ApiImplicitParam(name = "id", value = "파일 id", example = "1")
-    public ResponseEntity<byte[]> downloadFiles(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response) {
-
+    public ResponseEntity<byte[]> downloadFiles(@RequestParam Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
         StudyFiles studyFiles = studyFilesRepository.findById(id).orElse(null);
-
-        byte[] down = null;
-
-        try {
-            File file = new File(studyFiles.getFilePath());
-
-            down = FileCopyUtils.copyToByteArray(file);
-            String encodedFileName = UriUtils.encode(studyFiles.getOrigFileName(), StandardCharsets.UTF_8);
-
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
-            response.setContentLength(down.length);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         logger.info("downloadFiles (파일 id로 이미지/파일 다운로드)");
-        return ResponseEntity.ok().body(down);
+        return awsS3Service.getObject(studyFiles.getOrigFileName(), studyFiles.getFileName());
     }
 }
