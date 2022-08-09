@@ -43,6 +43,9 @@
     <logger name="com.zaxxer">
         <level value="ERROR"/>
     </logger>
+    <logger name="com.amazonaws">
+        <level value="ERROR"/>
+    </logger>
 
     <!-- Query Loggers -->
     <logger name="jdbc" level="ERROR"/>

@@ -57,10 +57,9 @@ public class StudyPost extends BaseTimeEntity {
         this.category = category;
     }
 
-    public StudyPost update(String title, String content, String category) {
+    public StudyPost update(String title, String content) {
         this.title = title;
         this.content = content;
-        this.category = category;
         return this;
     }
 
