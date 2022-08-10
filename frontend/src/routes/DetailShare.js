@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -100,19 +100,18 @@ const DetailShare = () => {
     //게시글 정보 가져오기
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
-    const [fileId, setFileId] = React.useState(null);
+    const [fileId, setFileId] = React.useState([]);
     const [fileInfo, setFileInfo] = React.useState([]);
-    const [fileName, setfileName] = React.useState([]);
-    const [fileDownload, setfileDownload] = React.useState([]);
     const [email, setEmail] = React.useState("");
-
+    const fileName = useRef();
+    const fileDownload = useRef();
     const getPost = async () => {
         const response = await axios.get(
-            `http://localhost:8080/studyPost/info?id=${dataKey}`
+            `https://sooksook.herokuapp.com/studyPost/info?id=${dataKey}`
         );
         setTitle(response.data.title);
         setContent(response.data.content);
-        setFileId((prev)=>{return response.data.fileId});
+        setFileId(response.data.fileId);
         setEmail(response.data.email);
         if (emailL === response.data.email) {
             setIsShow(true);
@@ -120,47 +119,52 @@ const DetailShare = () => {
             setIsShow(false);
         }
     };
-    
+
     React.useEffect(() => {
         if (emailL === "") {
             alert("로그인이 필요합니다.");
             navigate("/login");
         }
-    },[]);
-    React.useEffect(()=>{
-        
         getPost();
-    },[])
-    
-    React.useEffect(() => {
-        const getFile = async (id) => {
-            const response = await axios.get(
-                `http://localhost:8080/studyPost/fileInfo?id=${id}`
-                );
+    }, []);
+
+    const getFile = async (id) => {
+        const response = await axios.get(
+            `https://sooksook.herokuapp.com/studyPost/fileInfo?id=${id}`
+        );
 
         const response2 = await axios.get(
-            `http://localhost:8080/studyPost/fileDownload?id=${id}`
-            );
-            
-            setfileName((prev)=>{return response.data.origFileName});
-            setfileDownload((prev)=>{return response2.data});
-           
-        };
-        const temp=fileId.map((id) => {
-            getFile(id);
+            `https://sooksook.herokuapp.com/studyPost/fileDownload?id=${id}`,
+            {
+                //responseType:'blob',
+            }
+        );
 
-             return { filename: fileName, filedownload: fileDownload };
-        });
-        setFileInfo(fileInfo.concat(temp));
+        fileName.current = response.data.origFileName;
+        fileDownload.current = response2.data;
+    };
+    React.useEffect(() => {
         
-    }, []);
+        const get = async () => {
+            for (const id of fileId) {
+                await getFile(id);
+                const temp= fileInfo.concat({
+                    filename: fileName.current,
+                    filedownload: fileDownload.current,
+                });
+                console.log(temp);
+                setFileInfo(fileInfo.push(temp));
+            }
+        };
+        get();
+    }, [fileId]);
 
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([]);
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
-            .get("http://localhost:8080/studyComments/all", {
+            .get("https://sooksook.herokuapp.com/studyComments/all", {
                 params: {
                     studyPostId: dataKey,
                 },
@@ -168,7 +172,7 @@ const DetailShare = () => {
             .then((response) => {
                 setCommentList(response.data);
             });
-    }, [commentList]);
+    }, []);
     const [isModify, setIsModify] = React.useState(false);
     const [isDisable, setIsDisable] = React.useState(true);
     const handleModifyClick = () => {
@@ -218,7 +222,7 @@ const DetailShare = () => {
 
     const handlePlusClick = () => {
         axios
-            .post("http://localhost:8080/studyComment", {
+            .post("https://sooksook.herokuapp.com/studyComment", {
                 content: comment,
                 email: emailL,
                 studyBoardId: dataKey,
@@ -239,7 +243,7 @@ const DetailShare = () => {
     };
     const handleRecommentClick = () => {
         axios
-            .post("http://localhost:8080/studyComment", {
+            .post("https://sooksook.herokuapp.com/studyComment", {
                 content: comment,
                 email: emailL,
                 studyBoardId: dataKey,
@@ -288,14 +292,12 @@ const DetailShare = () => {
                     <Box width="200px" left="100px" top="17px">
                         {/* 파일 정보 */}
                         {fileInfo &&
-                            fileInfo.map((element) => {
-                                return (
-                                    <div>
-                                        <div>{element.filename}</div>
-                                        {/* <div>{element.filedownload}</div> */}
-                                    </div>
-                                );
-                            })}
+                            fileInfo.map((element) => (
+                                <div>
+                                    <div>{element.filename}</div>
+                                    {/* <div>{element.filedownload}</div> */}
+                                </div>
+                            ))}
                         {!isDisable && (
                             <>
                                 <LabelFile for="inputFile">

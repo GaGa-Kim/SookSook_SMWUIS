@@ -37,7 +37,7 @@ const Join = () => {
 
     const onFinish = (e) => {
         axios
-            .post("http://localhost:8080/user", {
+            .post("https://sooksook.herokuapp.com/user", {
                 loginId: id,
                 email: email,
                 password: pw,

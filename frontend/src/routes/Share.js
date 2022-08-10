@@ -32,14 +32,14 @@ const Share = () => {
 
     const getId = async () => {
         const response = await axios.get(
-            "http://localhost:8080/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
         setId(response.data);
     };
     const getData = async (i) => {
 
             const response = await axios.get(
-                `http://localhost:8080/studyPost/info?id=${id[i]}`
+                `https://sooksook.herokuapp.com/studyPost/info?id=${id[i]}`
             );
             
             if (data.some((element) => element.id === id[i]) === false) {

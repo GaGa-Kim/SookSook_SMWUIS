@@ -112,7 +112,7 @@ const SetBoardShare = () => {
     };
     const upload=async ()=>{
         await axios
-        .post("http://localhost:8080/studyPost/share", formData)
+        .post("https://sooksook.herokuapp.com/studyPost/share", formData)
         .then((response) => {
             console.log(response.data);
         });
