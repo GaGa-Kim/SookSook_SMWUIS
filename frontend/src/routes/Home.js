@@ -154,7 +154,7 @@ const NewStudy = () => {
             });
     }, []);
     return newStudyList.map((study) => <StudyList>∘<Link to={`/enterboard/ ${study.studyBoardId}`}
-    >{study.title}</Link></StudyList>);
+    >&nbsp;{study.title}</Link></StudyList>);
 };
 
 const HighStudy = () => {
@@ -167,7 +167,7 @@ const HighStudy = () => {
     return highStudyList.map((study, index) => (
         <StudyList key={index}>
             {index + 1}위
-            <Link to={`/enterboard/ ${study.studyBoardId}`}>{study.title}</Link>
+            <Link to={`/enterboard/ ${study.studyBoardId}`}>&nbsp;{study.title}</Link>
         </StudyList>
     ));
 };
