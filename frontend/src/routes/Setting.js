@@ -1,4 +1,5 @@
 import Logo from './components/Logo';
+import axios from "axios";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -8,9 +9,11 @@ import InputText from "./components/InputText";
 import Box from "./components/Box";
 import Button from './components/Button';
 import ButtonBox from './components/ButtonBox';
-import InputPassword from './components/InputPassword';
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
+import React, { useState } from "react";
 import "../fonts/Font.css";
-
+import { useSelector } from 'react-redux';
+import { Input, Space } from "antd";
 
 const Title = styled.div`
     position: absolute;
@@ -39,31 +42,109 @@ const Quest = styled.div`
     font-size: 25px;
     align-items: center;
 `;
-const InputEmail = styled.input`
-    padding-left: 10px;
-    font-size: 14px;
-    width: 200px;
-    height: 32px;
-    border-radius: 70px;
-    border: thin solid #d9d9d9;
-    transition: 0.5s;
-    ::placeholder {
-        color: #bfbfbf;
+const InputPassword = (item) => {
+    const onChange = (e) => {
+        item.getPw(e.target.value);
     }
-    &:hover {
-        border-color: #4aacfc;
-        transition: 0.5s;
-    }
-    &:focus {
-        outline: none;
-        border-color: #4aacfc;
-        box-shadow: 0px 0px 0 2px #c7e4fe;
-        transition: 0.5s;
-    }
-`;
-
+    return (
+        <Input.Password
+            value={item.value}
+            onChange={onChange}
+            style={{ "border-radius": "70px" }}
+            disabled={item.disable}
+        />
+    );
+};
 
 const Setting = () => {
+
+    const handleDeleteClick = (e) => {
+        // 회원탈퇴
+        axios
+            .delete("http://localhost:8080/user", {
+                params: {
+                    email: email,
+                    id: id,
+                }
+            })
+            .then(() => {
+                alert("회원탈퇴가 완료되었습니다");
+                navigate("/");
+            })
+
+    };
+
+    const getPassword = (text) => {
+        setPassword(text);
+    };
+    const getNickname = (text) => {
+        setNickname(text);
+    };
+    const getIntroduction = (text) => {
+        setIntroduction(text);
+    };
+    const getEmail = (text) => {
+        setEmail(text);
+    };
+
+    const [nickname, setNickname] = React.useState("");
+    const [name, setName] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [introduction, setIntroduction] = React.useState("");
+    const navigate = useNavigate();
+    const email = useSelector(state => state.email);
+    const setEmail = React.useState("");
+    const id = useSelector(state => state.loginId);
+
+    React.useEffect(() => {
+        axios
+            .get(
+                "http://localhost:8080/user/myInfo", {
+                params: {
+                    email: email,
+                    id: id,
+                }
+            }
+            )
+            .then((response) => {
+                setNickname(response.data.nickname);
+                setIntroduction(response.data.introduction);
+                setPassword(response.data.password);
+                setName(response.data.name);
+            });
+    }, []);
+
+    const handleUploadClick = () => {
+        // 유저 정보 수정후 저장
+        axios
+            .put(`/user?id=${id}`, {
+                email: email,
+                introduction: introduction,
+                nickname: nickname,
+                name: name,
+            })
+            .then(setIsDisable(true))
+
+    };
+
+    // const handlePasswordClick = () => {
+    //     //비밀번호 수정
+    //     axios
+    //     .put(`http://localhost:8080/studyMember?email=${email}`, {
+
+    //         newpassword: password,
+    //     })
+    //     .then(setIsDisable(true));
+    // };
+
+    const [isModify, setIsModify] = React.useState(false);
+    const [isDisable, setIsDisable] = React.useState(true);
+
+    const handleModifyClick = () => {
+        setIsModify(true);
+        setIsDisable(false);
+    };
+
     return (
         <Root>
             <GlobalStyle />
@@ -74,33 +155,62 @@ const Setting = () => {
             <Main>
                 <InputBox>
                     <Quest>닉네임</Quest>
-                    <Box width="200px" left="130px" top="7px">
-                        <InputText text="입력하세요" bg="#F0F0F0" />
+                    <Box width="200px" left="150px" top="7px">
+                        <InputText value={nickname} disable={isDisable} getText={getNickname} />
                     </Box>
                 </InputBox>
                 <InputBox>
-                    <Quest>비밀번호</Quest>
-                    <Box width="200px" left="130px" top="7px">
-                        <InputPassword />
+                    <Quest>현재 비밀번호</Quest>
+                    <Box width="200px" left="150px" disable={isDisable} top="7px" >
+                        <InputPassword value={password} disable={isDisable} getText={getPassword} />
+                    </Box>
+                </InputBox>
+                <InputBox>
+                    <Quest>새 비밀번호</Quest>
+                    <Box width="200px" left="150px" disable={isDisable} top="7px" >
+                        <InputPassword value={password} disable={isDisable} getText={getPassword} />
                     </Box>
                 </InputBox>
                 <InputBox>
                     <Quest>한 줄 소개</Quest>
-                    <Box width="200px" left="130px" top="7px" >
-                        <InputText text="입력하세요" bg="#F0F0F0" />
+                    <Box width="200px" left="150px" top="7px" >
+                        <InputText value={introduction} disable={isDisable} text="입력하세요" getText={getIntroduction} />
                     </Box>
                 </InputBox>
                 <InputBox>
                     <Quest>이메일</Quest>
-                    <Box width="200px" left="130px" top="7px">
-                        <InputEmail type="email" placeholder="입력하세요" />
+                    <Box width="200px" left="150px" top="7px">
+                        <InputText value={email} disable={isDisable} type="email" getText={getEmail} />
                     </Box>
                 </InputBox>
             </Main>
+
             <ButtonBox mgRight="50px">
-                <Button width="100px" mg="30px">회원탈퇴</Button>
+                {isDisable && (
+                    <Button
+                        width="100px"
+                        mg="30px"
+                        onClick={handleModifyClick}
+                    >
+                        수정
+                    </Button>
+                )}
+                {!isDisable && (
+                    <Button
+                        width="100px"
+                        mg="30px"
+                        onClick={handleUploadClick}
+                    >
+                        저장
+                    </Button>
+                )}
+
+                <Button width="100px" mg="30px" onClick={handleDeleteClick}>회원탈퇴</Button>
             </ButtonBox>
+
         </Root>
+
     );
 };
+
 export default Setting;

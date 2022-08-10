@@ -25,7 +25,7 @@ const Login = () => {
             loginId: "",
             password: "",
             isLogin: false,
-            email:""
+            email: ""
         });
     };
     if (isLogin) {
@@ -72,7 +72,7 @@ const Logo = () => {
 
             <div className="customer" style={{ fontFamily: "DoHyeon" }}>
                 <Login />
-                <Top>고객센터</Top>
+                <Top><a href="https://forms.gle/5aDqADeFdQCeHdu49" target="_blank">고객센터</a></Top>
             </div>
         </section>
     );
