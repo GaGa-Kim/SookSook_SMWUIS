@@ -27,30 +27,30 @@ const Board1 = () => {
     const [dpt, setDpt] = React.useState("전체");
 
     React.useEffect(() => {
-        if(dpt==="전체"){
+        if (dpt === "전체") {
             axios
-            .get("http://localhost:8080/studyBoards/list?lecture=true")
-            .then((response) => {
-                setData(response.data);
-            });
-        }else{
+                .get("https://sooksook.herokuapp.com/studyBoards/list?lecture=true")
+                .then((response) => {
+                    setData(response.data);
+                });
+        } else {
             axios
-            .get("/studyBoards/department",{
-                params:{
-                    department:dpt
-                }
-            })
-            .then((response) => {
-                setData(response.data);
-            });
+                .get("/studyBoards/department", {
+                    params: {
+                        department: dpt
+                    }
+                })
+                .then((response) => {
+                    setData(response.data);
+                });
         }
     }, [dpt]);
 
     const onChangeDpt = async (e) => {
-        const dpt=await setDpt(e.target.value);
+        const dpt = await setDpt(e.target.value);
         return dpt;
     };
-   
+
     const columns = [
         {
             title: <div className="studyname">스터디 명</div>,

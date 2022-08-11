@@ -37,7 +37,7 @@ const Share = () => {
             });
 
         for (let i = 0; i < id.length; i++) {
-            axios.get(`https://sooksook.herokuapp.com/info?id=${id[i]}`)
+            axios.get(`https://sooksook.herokuapp.com/studyPost/info?id=${id[i]}`)
                 .then((response) => {
                     if (data.some((element) => element.id === id[i]) === false) {
                         const temp = data.concat(response.data);

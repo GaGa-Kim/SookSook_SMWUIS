@@ -28,7 +28,7 @@ const Board2 = () => {
     React.useEffect(() => {
         if (category === "전체") {
             axios
-                .get("https://sooksook.herokuapp.com/list?lecture=false")
+                .get("https://sooksook.herokuapp.com/studyBoards/list?lecture=false")
                 .then((response) => {
                     setData(response.data);
                 });
