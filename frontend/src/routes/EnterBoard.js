@@ -12,7 +12,7 @@ import InputPassword from "./components/InputPassword";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
 import ListBox from "./components/ListBox";
-import CommentList from "./components/CommentList";
+import CommentListPw from "./components/CommentListPw";
 import "../fonts/Font.css";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -115,7 +115,13 @@ const EnterBoard = () => {
     const [onoff, setOnoff] = React.useState("");
     //수정 삭제 버튼 유무
     const [isShow, setIsShow] = React.useState(false);
+    React.useEffect(()=>{
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
 
+    },[emailL])
     React.useEffect(() => {
         axios
             .get("https://sooksook.herokuapp.com/user/myInfo", {
@@ -488,10 +494,9 @@ const EnterBoard = () => {
                 <ListBox>
                     {commentList &&
                         commentList.map((comment) => (
-                            <CommentList
-                                nickname={comment.nickname}
+                            <CommentListPw
                                 email={comment.email}
-                                content={comment.content}
+                                writeEmail={email}
                                 handleSendClick={handleSendClick}
                                 id={comment.id}
                                 dataKey={dataKey}

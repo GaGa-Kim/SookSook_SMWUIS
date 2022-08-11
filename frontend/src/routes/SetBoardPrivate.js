@@ -67,14 +67,22 @@ const ButtonBox = styled.div`
 `;
 const SetBoardShare = () => {
     const navigate = useNavigate();
-    const email = useSelector((state) => state.email);
+    const emailL = useSelector((state) => state.email);
     const location = useLocation();
+
     const studyBoardId = location.state.boardId;
     console.log(studyBoardId);
 
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
     const [filename, setFilename] = React.useState("파일 선택하기");
+
+    React.useEffect(()=>{
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
+    })
     const getText = (text) => {
         setTitle(text);
     };
@@ -113,7 +121,7 @@ const SetBoardShare = () => {
             return;
         } else {
             formData.append("title", title);
-            formData.append("email", email);
+            formData.append("email", emailL);
             formData.append("content", content);
             formData.append("studyBoardId", studyBoardId);
             console.log(addFormData);

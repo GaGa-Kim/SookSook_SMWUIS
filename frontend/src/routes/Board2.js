@@ -25,25 +25,35 @@ const Select = styled.select`
 const Board2 = () => {
     const [data, setData] = useState("");
     const [category, setCategory] = React.useState("전체");
+    const getAll = async () => {
+        const response = await axios.get(
+            "http://localhost:8080/studyBoards/list?lecture=false"
+        );
+        setData(response.data);
+    };
+    const getCategory = async () => {
+        const response = await axios.get("/studyBoards/category", {
+            params: {
+                category: category,
+            },
+        });
+        setData(response.data);
+    };
     React.useEffect(() => {
         if (category === "전체") {
+            getAll();
+
             axios
-                .get("https://sooksook.herokuapp.com/studyBoards/list?lecture=false")
+                .get(
+                    "https://sooksook.herokuapp.com/studyBoards/list?lecture=false"
+                )
                 .then((response) => {
                     setData(response.data);
                 });
         } else {
-            axios
-                .get("/studyBoards/category", {
-                    params: {
-                        category: category,
-                    },
-                })
-                .then((response) => {
-                    setData(response.data);
-                });
+            getCategory();
         }
-    }, [category]);
+    }, [getAll, getCategory]);
 
     const onChangeCategory = async (e) => {
         const category = setCategory(e.target.value);

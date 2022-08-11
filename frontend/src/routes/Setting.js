@@ -123,7 +123,7 @@ const Setting = () => {
                 nickname: nickname,
                 name: name,
             })
-            .then(setIsDisable(true))
+            .then(setIsDisable(true));
 
     };
 

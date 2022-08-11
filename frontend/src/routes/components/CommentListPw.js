@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import List from "./List";
 import Box from "./Box";
@@ -56,13 +56,36 @@ const handleXclick = (email, id) => {
             id: id,
         },
     });
-
 };
 
 const Recomment = ({ id, emailL }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
+
+    const [get,setGet]=React.useState(false);
+    const getRecomment=async ()=>{
+        const response=await axios
+        .get("https://sooksook.herokuapp.com/passwordComment", {
+            params: {
+                email: emailL,
+                id: id,
+            },
+        })
+        //.then((response) => {
+            setNickname(response.data.nickname);
+            setContent(response.data.content);
+            setEmail(response.data.email);
+            setGet(true);
+       // });
+    }
+    getRecomment();
+    React.useEffect(() => {
+        setGet(false);
+       getRecomment();
+            
+    }, [get]);
+
     const [xClick, setXClick] = React.useState(0);
     React.useEffect(() => {
         axios
@@ -79,6 +102,7 @@ const Recomment = ({ id, emailL }) => {
             });
         setXClick(xClick + 1);
     }, [xClick]);
+
     return (
         <List>
             <Box left="35px">
@@ -91,7 +115,7 @@ const Recomment = ({ id, emailL }) => {
                 <ListText>{content}</ListText>
             </Box>
             {emailL === email ? (
-                <Box right="20px">
+                <Box right="35px">
                     <XImg
                         src={x}
                         onClick={() => handleXclick(email, id)}
@@ -103,12 +127,11 @@ const Recomment = ({ id, emailL }) => {
 };
 const CommentList = ({
     handleSendClick,
-    nickname,
-    content,
-    email,
     id,
+    email,
     dataKey,
     childList,
+    writeEmail
 }) => {
     let nicknameL = "";
     const emailL = useSelector((state) => state.email);
@@ -124,23 +147,30 @@ const CommentList = ({
             });
     }, []); //현재 로그인 중인 닉네임
     const [isDelete, setIsDelete] = React.useState(true);
+    const [isSend,setIsSend]=React.useState(false);
     //데이터 받아오기
-    const [commentList, setCommentList] = React.useState([]);
+    const [nickname,setNickname]=React.useState("");
+    const [content,setContent]=React.useState("");
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
+            .get("https://sooksook.herokuapp.com/passwordComment", {
+        axios
             .get("https://sooksook.herokuapp.com/passwordComment/all", {
                 params: {
-                    studyBoardId: dataKey,
+                    email:emailL,
+                    id:String(id)
                 },
             })
             .then((response) => {
-                setCommentList(response.data);
+                setNickname(response.data.nickname);
+                setContent(response.data.content);
             });
-    }, [commentList]);
+    }, []);
 
     React.useState(() => {
         emailL === email ? setIsDelete(true) : setIsDelete(false);
+        emailL===writeEmail||emailL===email? setIsSend(true):setIsSend(false);
     }, []);
     return (
         <>
@@ -151,7 +181,7 @@ const CommentList = ({
                 <Box left="100px">
                     <ListText>{content}</ListText>
                 </Box>
-                <Box right="10px" width="65px">
+                <Box right="0px" width="65px">
                     {isDelete && (
                         // <div
                         //     style={{
@@ -169,13 +199,13 @@ const CommentList = ({
                         ></XImg>
                         // </div>
                     )}
-                    {!isDelete && (
-                        <SendImg
+                    </Box>
+                    <Box right="20px" width="65px">
+                        {isSend&&<SendImg
                             src={send}
                             onClick={() => handleSendClick(id)}
-                        ></SendImg>
-                    )}
-                </Box>
+                        ></SendImg>}
+                    </Box>
             </List>
             {childList &&
                 childList.map((id) => <Recomment id={id} emailL={emailL} />)}

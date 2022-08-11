@@ -25,9 +25,25 @@ const Select = styled.select`
 const Board1 = () => {
     const [data, setData] = useState("");
     const [dpt, setDpt] = React.useState("전체");
-
+    const getAll = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyBoards/list?lecture=true"
+        );
+        setData(response.data);
+    };
+    const getDpt = async () => {
+        const response = await axios.get("/studyBoards/department", {
+            params: {
+                department: dpt,
+            },
+        });
+        setData(response.data);
+    };
     React.useEffect(() => {
         if (dpt === "전체") {
+            getAll();
+        } else {
+            getDpt();
             axios
                 .get("https://sooksook.herokuapp.com/studyBoards/list?lecture=true")
                 .then((response) => {
@@ -42,9 +58,8 @@ const Board1 = () => {
                 })
                 .then((response) => {
                     setData(response.data);
-                });
         }
-    }, [dpt]);
+    }, [getAll, getDpt]);
 
     const onChangeDpt = async (e) => {
         const dpt = await setDpt(e.target.value);
@@ -97,7 +112,7 @@ const Board1 = () => {
                 <Cstudy />
             </div>
             <section className="table">
-                <Table columns={columns} dataSource={data} />;
+                <Table columns={columns} dataSource={data} />
             </section>
         </Root>
     );

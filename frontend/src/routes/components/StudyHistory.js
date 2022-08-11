@@ -3,6 +3,9 @@ import List from "./List";
 import ListText from "./ListText";
 import Badge from "./Badge";
 import star from "../../images/star.png";
+import { useSelector } from "react-redux";
+import axios from 'axios';
+import React from 'react';
 
 const StarImg = styled.img`
     width: 20px;
@@ -11,20 +14,23 @@ const StarImg = styled.img`
 `;
 
 const StudyHistory = () => {
+    //현재 로그인 중인 email 받기
+    const emailL = useSelector((state) => state.email);
+    //랜덤한 색깔
     const RandomColor = () => {
         return "#" + Math.round(Math.random() * 0xffffff).toString(16);
     };
-    const studyHistoryList = [
-        { name: "IT기기구조", progress: false, badge: <></>, star: null },
-        {
-            name: "웹 프로그래밍 기초",
-            progress: true,
-            badge: <Badge></Badge>,
-            star: 4.7,
-        },
-    ];
+    //참여 스터디 조회
+    const getMyStudy=async()=>{
+        const res=await axios.get(`/studyMember/myInfo?email=${emailL}`);
+        setStudyHistory(res.data);
+    }
+    const [studyHistoryList,setStudyHistory] = React.useState([]);
+    React.useEffect(()=>{
+        getMyStudy();
+    },[])
     return studyHistoryList.map((history, index) => {
-        if (history.progress === false) {
+        if (history.finished === false) {
             return(
             <List key={index}>
                 <ListText  style={{flexShrink:1}}>{history.name}</ListText>

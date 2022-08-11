@@ -26,7 +26,7 @@ const Login = () => {
 
     const onFinish = (e) => {
         axios
-            .get("https://sooksook.herokuapp.com/user", {
+            .get("/user", {
                 params: {
                     loginId: id,
                     password: pw,

@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
 
@@ -67,11 +67,26 @@ const ButtonBox = styled.div`
 `;
 const SetBoardShare = () => {
     const navigate = useNavigate();
-    const email = useSelector((state) => state.email);
+    const emailL = useSelector((state) => state.email);
 
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
     const [filename, setFilename] = React.useState("파일 선택하기");
+
+    const [id,setId]=React.useState([]);
+    const getId = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+        );
+        setId(...id, response.data);
+    };
+
+    React.useEffect(()=>{
+        if(emailL===""){
+            alert("로그인이 필요합니다.");
+            navigate("/login");  
+        }
+    },[emailL])
     const getText = (text) => {
         setTitle(text);
     };
@@ -80,8 +95,11 @@ const SetBoardShare = () => {
     };
     const [addFormData, setAddFormData] = React.useState([]);
     const formData = new FormData();
-
+    const handleFileClick=()=>{
+        setAddFormData([]);
+    }
     const handleFileChange = (e) => {
+        const nowFile=[...addFormData];
         if (e.target.value === "") {
             setFilename("파일 선택하기");
         } else {
@@ -94,13 +112,20 @@ const SetBoardShare = () => {
                     setFilename(e.target.value);
                 }
             }
-            setAddFormData([]);
-            for (let i = 0; i < e.target.files.length; i++) {
-                const temp = addFormData.concat(e.target.files[i]);
-                setAddFormData(temp);
-            }
         }
+        for (let i = 0; i < e.target.files.length; i++) {
+            nowFile.push(e.target.files[i]);
+        }
+        setAddFormData(nowFile);
     };
+    const upload=async ()=>{
+        await axios
+        .post("https://sooksook.herokuapp.com/studyPost/share", formData)
+        .then((response) => {
+            console.log(response.data);
+            getId();
+        });
+    }
     const handleUploadClick = (e) => {
         if (title === "") {
             alert("제목을 입력하세요");
@@ -110,19 +135,26 @@ const SetBoardShare = () => {
             return;
         } else {
             formData.append("title", title);
-            formData.append("email", email);
+            formData.append("email", emailL);
             formData.append("content", content);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
                 formData.append("files", addFormData[i]);
             }
             /*db에 게시글 정보 저장*/
+
+            upload();
+
+            navigate("/share",{state:id});
+
+
             axios
                 .post("https://sooksook.herokuapp.com/studyPost/share", formData)
                 .then((response) => {
                     console.log(formData.get("files"));
                 });
             navigate("/share");
+
         }
     };
 
@@ -160,6 +192,7 @@ const SetBoardShare = () => {
                             multiple="multiple"
                             style={{ display: "none" }}
                             onChange={handleFileChange}
+                            onClick={handleFileClick}
                         />
                     </Box>
                 </InputBox>
