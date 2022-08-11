@@ -71,8 +71,8 @@ public class AwsS3Service {
 
     // S3 버킷에서 이미지 URL 가져오기
     @Transactional(readOnly = true)
-    public String getS3(String filePath) {
-        return amazonS3Client.getUrl(bucket, filePath).toString();
+    public String getS3(String fileName) {
+        return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
     // S3 버킷에서 이미지 삭제

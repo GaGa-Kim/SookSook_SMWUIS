@@ -246,7 +246,7 @@ public class StudyPostController {
     public ResponseEntity<String> getS3(@RequestParam Long id) {
         StudyFiles studyFiles = studyFilesRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 파일이 없습니다."));
         logger.info("findById (파일 id로 이미지/파일 URL 정보 조회)");
-        return ResponseEntity.ok().body(studyFiles.getFilePath());
+        return ResponseEntity.ok().body(awsS3Service.getS3(studyFiles.getFileName()));
     }
 
     // 파일 다운로드
