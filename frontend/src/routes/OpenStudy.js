@@ -109,7 +109,7 @@ const Openstudy = () => {
             alert("온라인 또는 오프라인을 체크하세요");
             return;
         } else {
-            axios.post("http://localhost:8080/studyBoard/lecture", {
+            axios.post("https://sooksook.herokuapp.com/studyBoard/lecture", {
                 content: content,
                 department: dpt,
                 email: email,

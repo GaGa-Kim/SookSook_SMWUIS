@@ -130,49 +130,41 @@ const DetailShare = () => {
 
     const getFile = async (id) => {
         const response = await axios.get(
-            `https://sooksook.herokuapp.com/studyPost/fileInfo?id=${id}`
+            `https://sooksook.herokuapp.com/studyPost/fileInfo?id=${id}`,
         );
 
         const response2 = await axios.get(
-            `https://sooksook.herokuapp.com/studyPost/fileDownload?id=${id}`,
-            {
-                //responseType:'blob',
+            `https://sooksook.herokuapp.com/studyPost/fileDownload?id=${id}`,{
+                 responseType:'arraybuffer'
             }
+        
         );
 
+        const file= new Blob([response2.data]);
+        fileDownload.current= window.URL.createObjectURL(file);
         fileName.current = response.data.origFileName;
-        fileDownload.current = response2.data;
-    };
+        };
     React.useEffect(() => {
         
         const get = async () => {
+            await getPost();
+            let temp=[];
             for (const id of fileId) {
                 await getFile(id);
-                const temp= fileInfo.concat({
+                const temp=[]||temp.concat([{
                     filename: fileName.current,
                     filedownload: fileDownload.current,
-                });
+                }]);
+            
                 console.log(temp);
-                setFileInfo(fileInfo.push(temp));
             }
+            setFileInfo(...temp);
         };
         get();
-    }, [fileId]);
-
-    const [comment, setComment] = React.useState("");
-    const [commentList, setCommentList] = React.useState([]);
-    React.useEffect(() => {
-        /*db에서 댓글 가져오기*/
-        axios
-            .get("https://sooksook.herokuapp.com/studyComments/all", {
-                params: {
-                    studyPostId: dataKey,
-                },
-            })
-            .then((response) => {
-                setCommentList(response.data);
-            });
     }, []);
+    
+
+    
     const [isModify, setIsModify] = React.useState(false);
     const [isDisable, setIsDisable] = React.useState(true);
     const handleModifyClick = () => {
@@ -215,7 +207,30 @@ const DetailShare = () => {
         };
         removePost();
     };
-
+    const [comment, setComment] = React.useState("");
+    const [commentList, setCommentList] = React.useState([]);
+    //댓글 가져오는 함수
+    const getComment=async()=>{
+        const response =await  axios
+        .get("https://sooksook.herokuapp.com/studyComments/all", {
+            params: {
+                studyPostId: dataKey,
+            },
+        });
+        setCommentList(response.data);
+    }
+    React.useEffect(() => {
+        // axios
+        //     .get("https://sooksook.herokuapp.com/studyComments/all", {
+        //         params: {
+        //             studyPostId: dataKey,
+        //         },
+        //     })
+        //     .then((response) => {
+        //         setCommentList(response.data);
+        //     });
+        getComment();
+    }, []);
     const getText = (text) => {
         setComment(text);
     };
@@ -233,6 +248,7 @@ const DetailShare = () => {
                 setCommentList(addCommentList);
             });
         setComment("");
+        getComment();
     };
 
     const [isRecomment, setIsRecomment] = React.useState(false);
@@ -241,19 +257,20 @@ const DetailShare = () => {
         setIsRecomment(true);
         setUpIndex(id);
     };
-    const handleRecommentClick = () => {
-        axios
+    const handleRecommentClick = async () => {
+        const response= await axios
             .post("https://sooksook.herokuapp.com/studyComment", {
                 content: comment,
                 email: emailL,
                 studyBoardId: dataKey,
                 upIndex: upIndex,
             })
-            .then((response) => {
+            //.then((response) => {
                 const addCommentList = commentList.concat(response.data);
                 setCommentList(addCommentList);
-            });
+            //});
         setComment("");
+        getComment();
     };
     const handleCommentClick = () => {
         setIsRecomment(false);
@@ -291,13 +308,7 @@ const DetailShare = () => {
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
                         {/* 파일 정보 */}
-                        {fileInfo &&
-                            fileInfo.map((element) => (
-                                <div>
-                                    <div>{element.filename}</div>
-                                    {/* <div>{element.filedownload}</div> */}
-                                </div>
-                            ))}
+                       <a href={fileDownload.current} download={fileName.current}>{fileName.current}</a>
                         {!isDisable && (
                             <>
                                 <LabelFile for="inputFile">
@@ -356,9 +367,8 @@ const DetailShare = () => {
                     {commentList &&
                         commentList.map((comment) => (
                             <CommentList
-                                nickname={comment.nickname}
                                 email={comment.email}
-                                content={comment.content}
+                                writeEmail={email}
                                 handleSendClick={handleSendClick}
                                 id={comment.id}
                                 dataKey={dataKey}

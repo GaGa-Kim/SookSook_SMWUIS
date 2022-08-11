@@ -27,7 +27,7 @@ const Board1 = () => {
     const [dpt, setDpt] = React.useState("전체");
     const getAll = async () => {
         const response = await axios.get(
-            "http://localhost:8080/studyBoards/list?lecture=true"
+            "https://sooksook.herokuapp.com/studyBoards/list?lecture=true"
         );
         setData(response.data);
     };
