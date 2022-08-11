@@ -50,7 +50,7 @@ const SendImg = styled.img`
 `;
 const handleXclick = (email, id) => {
     
-    axios.delete("/passwordComment", {
+    axios.delete("/studyComment", {
         params: {
             email: email,
             id: id,
@@ -64,19 +64,19 @@ const Recomment = ({ id, emailL }) => {
     const [email, setEmail] = React.useState("");
     const [get,setGet]=React.useState(false);
     const getRecomment=async ()=>{
-        await axios
-        .get("http://localhost:8080/passwordComment", {
+        const response=await axios
+        .get("https://sooksook.herokuapp.com/studyComment", {
             params: {
                 email: emailL,
                 id: id,
             },
         })
-        .then((response) => {
+        //.then((response) => {
             setNickname(response.data.nickname);
             setContent(response.data.content);
             setEmail(response.data.email);
             setGet(true);
-        });
+       // });
     }
     getRecomment();
     React.useEffect(() => {
@@ -118,7 +118,7 @@ const CommentList = ({
     const emailL = useSelector((state) => state.email);
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/user/myInfo", {
+            .get("https://sooksook.herokuapp.com/user/myInfo", {
                 params: {
                     email: emailL,
                 },
@@ -135,7 +135,7 @@ const CommentList = ({
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
-            .get("http://localhost:8080/passwordComment", {
+            .get("https://sooksook.herokuapp.com/studyComment", {
                 params: {
                     email:emailL,
                     id:String(id)

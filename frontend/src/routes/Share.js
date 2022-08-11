@@ -1,7 +1,7 @@
 import "../css/share.css";
 import { Table } from "antd";
 import GlobalStyle from "./components/GlobalStyle";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
 import React, { useEffect, useState } from "react";
@@ -20,52 +20,44 @@ const Cwrite = () => {
     return (
         <section>
             <button className="newstudy" style={{ marginLeft: "0px" }}>
-                <Link to="/setboard_share">글 작성하기</Link>
+                <Link to="/setboard_share" >글 작성하기</Link>
             </button>
         </section>
     );
 };
 
 const Share = () => {
-    const [data, setData] = useState([]);
-    const [id, setId] = useState([]);
-
     const getId = async () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
-        setId(response.data);
+        setId(...id, response.data);
     };
-    const getData = async (i) => {
-
-            const response = await axios.get(
-                `https://sooksook.herokuapp.com/studyPost/info?id=${id[i]}`
-            );
-            
-            if (data.some((element) => element.id === id[i]) === false) {
-                const temp = data.concat(response.data);
-                setData(temp);
-            }
-            
-        
-
+    const getData =  () => {
+        (id || []).reduce((prev, cur) => {
+            return prev.then(async () => {
+                await axios
+                    .get(
+                        `https://sooksook.herokuapp.com/studyPost/info?id=${cur}`
+                    )
+                    .then((res) => {
+                        setData((prev) => [...prev, res.data]);
+                    });
+            });
+        }, Promise.resolve());
     };
-
+    const {state}=useLocation();
+    const [data, setData] = useState([]);
+    const [id, setId] = useState([]);
     React.useEffect(() => {
+        setId(state);
         getId();
-    });
+    }, [state]);
 
     React.useEffect(() => {
+        getData();
+    }, [id]);
 
-            for (let i = 0; i < id.length; i++) {
-                getData(i);
-            }
-        
-    },[id]);
-
-    data.sort((a, b) => {
-        return a.id - b.id;
-    });
     const columns = [
         {
             title: <div className="studyname">스터디 명</div>,

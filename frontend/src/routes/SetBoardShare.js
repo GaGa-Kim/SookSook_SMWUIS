@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
 
@@ -73,6 +73,14 @@ const SetBoardShare = () => {
     const [content, setContent] = React.useState("");
     const [filename, setFilename] = React.useState("파일 선택하기");
 
+    const [id,setId]=React.useState([]);
+    const getId = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+        );
+        setId(...id, response.data);
+    };
+
     React.useEffect(()=>{
         if(emailL===""){
             alert("로그인이 필요합니다.");
@@ -115,6 +123,7 @@ const SetBoardShare = () => {
         .post("https://sooksook.herokuapp.com/studyPost/share", formData)
         .then((response) => {
             console.log(response.data);
+            getId();
         });
     }
     const handleUploadClick = (e) => {
@@ -134,7 +143,8 @@ const SetBoardShare = () => {
             }
             /*db에 게시글 정보 저장*/
             upload();
-            navigate("/share");
+
+            navigate("/share",{state:id});
 
         }
     };

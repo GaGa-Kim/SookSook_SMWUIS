@@ -12,7 +12,7 @@ import InputPassword from "./components/InputPassword";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
 import ListBox from "./components/ListBox";
-import CommentList from "./components/CommentList";
+import CommentListPw from "./components/CommentListPw";
 import "../fonts/Font.css";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -481,7 +481,7 @@ const EnterBoard = () => {
                 <ListBox>
                     {commentList &&
                         commentList.map((comment) => (
-                            <CommentList
+                            <CommentListPw
                                 nickname={comment.nickname}
                                 email={comment.email}
                                 content={comment.content}
