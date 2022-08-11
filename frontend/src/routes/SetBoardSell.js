@@ -119,7 +119,7 @@ const SetBoardSell = () => {
             }
             /*db에 게시글 정보 저장*/
             axios
-                .post("http://localhost:8080/studyPost/sell", formData)
+                .post("https://sooksook.herokuapp.com/studyPost/sell", formData)
                 .then((response) => {
                     console.log(formData.get("files"));
                 });

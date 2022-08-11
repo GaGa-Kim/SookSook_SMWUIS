@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link, useNavigate,useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
 
@@ -69,7 +69,7 @@ const SetBoardShare = () => {
     const navigate = useNavigate();
     const email = useSelector((state) => state.email);
     const location = useLocation();
-    const studyBoardId=location.state.boardId;
+    const studyBoardId = location.state.boardId;
     console.log(studyBoardId);
 
     const [title, setTitle] = React.useState("");
@@ -115,14 +115,14 @@ const SetBoardShare = () => {
             formData.append("title", title);
             formData.append("email", email);
             formData.append("content", content);
-            formData.append("studyBoardId",studyBoardId);
+            formData.append("studyBoardId", studyBoardId);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
                 formData.append("files", addFormData[i]);
             }
             /*db에 게시글 정보 저장*/
             axios
-                .post("http://localhost:8080/studyPost/lecture", formData)
+                .post("https://sooksook.herokuapp.com/studyPost/lecture", formData)
                 .then((response) => {
                     console.log(formData.get("files"));
                 });

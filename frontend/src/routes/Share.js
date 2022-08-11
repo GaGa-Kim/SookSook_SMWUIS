@@ -31,13 +31,13 @@ const Share = () => {
     const [id, setId] = useState([]);
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
+            .get("https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
             .then((response) => {
                 setId(response.data);
             });
 
         for (let i = 0; i < id.length; i++) {
-            axios.get(`http://localhost:8080/studyPost/info?id=${id[i]}`)
+            axios.get(`https://sooksook.herokuapp.com/info?id=${id[i]}`)
                 .then((response) => {
                     if (data.some((element) => element.id === id[i]) === false) {
                         const temp = data.concat(response.data);

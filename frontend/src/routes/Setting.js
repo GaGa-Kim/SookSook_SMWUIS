@@ -61,7 +61,7 @@ const Setting = () => {
     const handleDeleteClick = (e) => {
         // 회원탈퇴
         axios
-            .delete("http://localhost:8080/user", {
+            .delete("https://sooksook.herokuapp.com/user", {
                 params: {
                     email: email,
                     id: id,
@@ -99,7 +99,7 @@ const Setting = () => {
     React.useEffect(() => {
         axios
             .get(
-                "http://localhost:8080/user/myInfo", {
+                "https://sooksook.herokuapp.com/user/myInfo", {
                 params: {
                     email: email,
                     id: id,

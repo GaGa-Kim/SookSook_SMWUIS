@@ -88,10 +88,10 @@ const Private = () => {
                 comment: memberInfo[i].comments,
             });
             setSpdata(temp);
-            let pieTemp=piedata.concat({
-                title:memberInfo[i].nickname,
-                value:memberInfo[i].posts+memberInfo[i].comments,
-                color:"#" + (0xbfbfaf + i * 16)
+            let pieTemp = piedata.concat({
+                title: memberInfo[i].nickname,
+                value: memberInfo[i].posts + memberInfo[i].comments,
+                color: "#" + (0xbfbfaf + i * 16)
             })
             setPiedata(pieTemp);
         }
@@ -100,25 +100,25 @@ const Private = () => {
     React.useEffect(() => {
         axios
             .get(
-                "http://localhost:8080/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+                "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
             )
             .then((response) => {
                 setId(response.data);
             });
 
-        }, []);
-        for (let i = 0; i < id.length; i++) {
-            axios
-                .get(`http://localhost:8080/studyPost/info?id=${id[i]}`)
-                .then((response) => {
-                    if (
-                        data.some((element) => element.id === id[i]) === false
-                    ) {
-                        const temp = data.concat(response.data);
-                        setData(temp);
-                    }
-                });
-        }
+    }, []);
+    for (let i = 0; i < id.length; i++) {
+        axios
+            .get(`https://sooksook.herokuapp.com/studyPost/info?id=${id[i]}`)
+            .then((response) => {
+                if (
+                    data.some((element) => element.id === id[i]) === false
+                ) {
+                    const temp = data.concat(response.data);
+                    setData(temp);
+                }
+            });
+    }
     data.sort((a, b) => {
         return a.id - b.id;
     });
