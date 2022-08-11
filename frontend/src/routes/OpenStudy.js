@@ -109,7 +109,7 @@ const Openstudy = () => {
             alert("온라인 또는 오프라인을 체크하세요");
             return;
         } else {
-            axios.post("http://localhost:8080/studyBoard/lecture", {
+            axios.post("https://sooksook.herokuapp.com/studyBoard/lecture", {
                 content: content,
                 department: dpt,
                 email: email,
@@ -121,7 +121,7 @@ const Openstudy = () => {
                 title: title,
             });
 
-           navigate(`/board1`);
+            navigate(`/board1`);
         }
         /*db에 게시글 정보 저장*/
     };
@@ -150,7 +150,7 @@ const Openstudy = () => {
         setOnoff(off.target.value);
     };
     const getNumber = (text) => {
-        const num=parseInt(text);
+        const num = parseInt(text);
         setNumber(num);
     };
 

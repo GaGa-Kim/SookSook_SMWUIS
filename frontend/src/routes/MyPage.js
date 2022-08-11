@@ -116,7 +116,7 @@ const PlusImg = styled.img`
 `;
 
 function MyPage() {
-    
+
     const [date, setDate] = React.useState("");
     const onChange = (date, dateString) => {
         setDate(dateString);
@@ -124,18 +124,18 @@ function MyPage() {
     const [target, setTarget] = React.useState(true);
     const [name, setName] = React.useState("");
     const [comment, setComment] = React.useState("");
-    const [level,setLevel]=React.useState("");
-    const [point,setPoint]=React.useState(0);
-    
-    const email=useSelector(state=>state.email);
+    const [level, setLevel] = React.useState("");
+    const [point, setPoint] = React.useState(0);
+
+    const email = useSelector(state => state.email);
     React.useEffect(() => {
         axios
             .get(
-                "http://localhost:8080/user/myInfo",{
-                    params:{
-                        email:email
-                    }
+                "https://sooksook.herokuapp.com/user/myInfo", {
+                params: {
+                    email: email
                 }
+            }
             )
             .then((response) => {
                 setName(response.data.nickname);
@@ -175,7 +175,7 @@ function MyPage() {
         setText("");
     };
     return (
-        
+
         <Root>
             <GlobalStyle />
             <Logo />
@@ -258,7 +258,7 @@ function MyPage() {
                 </>
             )}
         </Root>
-   
+
     );
 }
 

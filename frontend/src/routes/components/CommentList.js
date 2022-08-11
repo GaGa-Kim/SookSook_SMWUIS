@@ -49,7 +49,7 @@ const SendImg = styled.img`
     }
 `;
 const handleXclick = (email, id) => {
-    
+
     axios.delete("/passwordComment", {
         params: {
             email: email,
@@ -63,10 +63,10 @@ const Recomment = ({ id, emailL }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [xClick,setXClick]=React.useState(0);
+    const [xClick, setXClick] = React.useState(0);
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/passwordComment", {
+            .get("https://sooksook.herokuapp.com/passwordComment", {
                 params: {
                     email: emailL,
                     id: id,
@@ -77,7 +77,7 @@ const Recomment = ({ id, emailL }) => {
                 setContent(response.data.content);
                 setEmail(response.data.email);
             });
-            setXClick(xClick+1);
+        setXClick(xClick + 1);
     }, [xClick]);
     return (
         <List>
@@ -114,7 +114,7 @@ const CommentList = ({
     const emailL = useSelector((state) => state.email);
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/user/myInfo", {
+            .get("https://sooksook.herokuapp.com/user/myInfo", {
                 params: {
                     email: emailL,
                 },
@@ -129,7 +129,7 @@ const CommentList = ({
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
-            .get("http://localhost:8080/passwordComment/all", {
+            .get("https://sooksook.herokuapp.com/passwordComment/all", {
                 params: {
                     studyBoardId: dataKey,
                 },
@@ -163,10 +163,10 @@ const CommentList = ({
                         //         src={cut}
                         //         onClick={() => handleXclick(email, id)}
                         //     ></CutImg>
-                            <XImg
-                                src={x}
-                                onClick={() => handleXclick(email, id)}
-                            ></XImg>
+                        <XImg
+                            src={x}
+                            onClick={() => handleXclick(email, id)}
+                        ></XImg>
                         // </div>
                     )}
                     {!isDelete && (

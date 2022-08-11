@@ -118,7 +118,7 @@ const SetBoardShare = () => {
             }
             /*db에 게시글 정보 저장*/
             axios
-                .post("http://localhost:8080/studyPost/share", formData)
+                .post("https://sooksook.herokuapp.com/studyPost/share", formData)
                 .then((response) => {
                     console.log(formData.get("files"));
                 });

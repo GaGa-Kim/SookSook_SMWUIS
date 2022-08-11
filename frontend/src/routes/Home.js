@@ -132,7 +132,7 @@ const HotStudy = () => {
     const [hotStudyList, setHotStudyList] = React.useState([]);
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyBoard/famous")
+            .get("https://sooksook.herokuapp.com/studyBoard/famous")
             .then((response) => {
                 setHotStudyList(response.data);
             });
@@ -148,7 +148,7 @@ const NewStudy = () => {
     const [newStudyList, setNewStudyList] = React.useState([]);
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyBoard/famous")
+            .get("https://sooksook.herokuapp.com/studyBoard/famous")
             .then((response) => {
                 setNewStudyList(response.data);
             });
@@ -160,7 +160,7 @@ const NewStudy = () => {
 const HighStudy = () => {
     const [highStudyList, setHighStudyList] = React.useState([]);
     React.useEffect(() => {
-        axios.get("http://localhost:8080/studyBoard/hard").then((response) => {
+        axios.get("https://sooksook.herokuapp.com/studyBoard/hard").then((response) => {
             setHighStudyList(response.data);
         });
     }, []);

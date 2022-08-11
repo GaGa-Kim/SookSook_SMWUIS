@@ -71,9 +71,9 @@ const ButtonBox = styled.div`
     align-items: center;
 `;
 const Openstudy2 = () => {
-    const navigate=useNavigate();
-    const email=useSelector(state=>state.email);
-    
+    const navigate = useNavigate();
+    const email = useSelector(state => state.email);
+
     const [category, setCategory] = React.useState("토익/토플");
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
@@ -110,7 +110,7 @@ const Openstudy2 = () => {
             return;
         } else {
             axios
-                .post("http://localhost:8080/studyBoard/notLecture", {
+                .post("https://sooksook.herokuapp.com/studyBoard/notLecture", {
                     content: content,
                     category: category,
                     email: email,
@@ -121,7 +121,7 @@ const Openstudy2 = () => {
                     subject: subject,
                     title: title,
                 });
-                navigate(`/board2`);
+            navigate(`/board2`);
         }
         /*db에 게시글 정보 저장*/
     };

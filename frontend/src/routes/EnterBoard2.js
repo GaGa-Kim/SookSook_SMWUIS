@@ -118,7 +118,7 @@ const EnterBoard = () => {
 
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/user/myInfo", {
+            .get("https://sooksook.herokuapp.com/user/myInfo", {
                 params: {
                     email: emailL,
                 },
@@ -127,7 +127,7 @@ const EnterBoard = () => {
                 nicknameL = response.data.nickname;
             });
         axios
-            .get("http://localhost:8080/studyBoard", {
+            .get("https://sooksook.herokuapp.com/studyBoard", {
                 params: {
                     id: dataKey,
                 },
@@ -162,7 +162,7 @@ const EnterBoard = () => {
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
-            .get("http://localhost:8080/passwordComment/all", {
+            .get("https://sooksook.herokuapp.com/passwordComment/all", {
                 params: {
                     studyBoardId: dataKey,
                 },
@@ -244,7 +244,7 @@ const EnterBoard = () => {
         //멤버라면 바로 입장
         axios
             .post(
-                `http://localhost:8080/studyMember?email=${emailL}&studyBoardId=${dataKey}`
+                `https://sooksook.herokuapp.com/studyMember?email=${emailL}&studyBoardId=${dataKey}`
             )
             .then((response) => {
                 if (response.data === true) {
@@ -259,7 +259,7 @@ const EnterBoard = () => {
         setIsOpen(false);
         //비밀번호 확인
         if (password === pw) {
-            axios.post("http://localhost:8080/studyMember/password", {
+            axios.post("https://sooksook.herokuapp.com/studyMember/password", {
                 email: emailL,
                 password: pw,
                 studyBoardId: dataKey,
@@ -274,7 +274,7 @@ const EnterBoard = () => {
     };
     const handlePlusClick = () => {
         axios
-            .post("http://localhost:8080/passwordComment", {
+            .post("https://sooksook.herokuapp.com/passwordComment", {
                 content: comment,
                 email: emailL,
                 studyBoardId: dataKey,
@@ -294,7 +294,7 @@ const EnterBoard = () => {
     };
     const handleRecommentClick = () => {
         axios
-            .post("http://localhost:8080/passwordComment", {
+            .post("https://sooksook.herokuapp.com/passwordComment", {
                 content: comment,
                 email: emailL,
                 studyBoardId: dataKey,
