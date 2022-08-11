@@ -45,12 +45,12 @@ const Join = () => {
                 name: name,
             })
             .then(() => {
-                
-                    alert("회원가입이 완료되었습니다");
-                    navigate("/login");
-                
+
+                alert("회원가입이 완료되었습니다");
+                navigate("/login");
+
             })
-            .catch((error)=>{
+            .catch((error) => {
                 if (error.response.status === 500) {
                     if (
                         error.response.data.message ===

@@ -142,9 +142,18 @@ const SetBoardShare = () => {
                 formData.append("files", addFormData[i]);
             }
             /*db에 게시글 정보 저장*/
+
             upload();
 
             navigate("/share",{state:id});
+
+
+            axios
+                .post("https://sooksook.herokuapp.com/studyPost/share", formData)
+                .then((response) => {
+                    console.log(formData.get("files"));
+                });
+            navigate("/share");
 
         }
     };

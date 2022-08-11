@@ -44,6 +44,20 @@ const Board1 = () => {
             getAll();
         } else {
             getDpt();
+            axios
+                .get("https://sooksook.herokuapp.com/studyBoards/list?lecture=true")
+                .then((response) => {
+                    setData(response.data);
+                });
+        } else {
+            axios
+                .get("/studyBoards/department", {
+                    params: {
+                        department: dpt
+                    }
+                })
+                .then((response) => {
+                    setData(response.data);
         }
     }, [getAll, getDpt]);
 

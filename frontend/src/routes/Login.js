@@ -3,7 +3,7 @@ import React from "react";
 import { Form } from "antd";
 import GlobalStyle from "./components/GlobalStyle";
 import "antd/dist/antd.css";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Logo from "./components/Logo.js";
 import Block from "./components/Block.js";
 import Header from "./components/Header.js";
@@ -31,14 +31,14 @@ const Login = () => {
                     loginId: id,
                     password: pw,
                 },
-                validateStatus:function(status){
-                    return status===500||status===200;
+                validateStatus: function (status) {
+                    return status === 500 || status === 200;
                 }
             })
             .then((response) => {
-                if(response.status===500){
+                if (response.status === 500) {
                     alert("아이디 또는 비밀번호를 확인하세요");
-                }else{
+                } else {
 
                     id = response.data.loginId;
                     pw = response.data.password;
@@ -46,14 +46,14 @@ const Login = () => {
                         type: INPUT_VALUE,
                         loginId: id,
                         password: pw,
-                        isLogin:true,
-                        email:response.data.email
+                        isLogin: true,
+                        email: response.data.email
                     });
                     navigate("/");
                 }
             })
-            
-            
+
+
     };
 
     const onFinishFailed = (errorInfo) => {

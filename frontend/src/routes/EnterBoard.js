@@ -438,7 +438,7 @@ const EnterBoard = () => {
                         <Quest ftSize="25px">오프라인</Quest>
                     </InputBox>
                     <InputBox>
-                        
+
 
                         {isShow && (
                             <Box left="10px" top="2px">

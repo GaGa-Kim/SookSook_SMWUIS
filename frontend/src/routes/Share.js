@@ -50,12 +50,29 @@ const Share = () => {
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
+
         setId(state);
         getId();
     }, [state]);
 
     React.useEffect(() => {
         getData();
+        axios
+            .get("https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
+            .then((response) => {
+                setId(response.data);
+            });
+
+        for (let i = 0; i < id.length; i++) {
+            axios.get(`https://sooksook.herokuapp.com/studyPost/info?id=${id[i]}`)
+                .then((response) => {
+                    if (data.some((element) => element.id === id[i]) === false) {
+                        const temp = data.concat(response.data);
+                        setData(temp);
+                    }
+                });
+        }
+
     }, [id]);
 
     const columns = [

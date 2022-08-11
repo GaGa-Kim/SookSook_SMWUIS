@@ -30,13 +30,13 @@ const Sell = () => {
     const [id, setId] = useState([]);
     React.useEffect(() => {
         axios
-            .get("http://localhost:8080/studyPosts/category?category=%ED%8C%90%EB%A7%A4%2F%EB%82%98%EB%88%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
+            .get("https://sooksook.herokuapp.com/studyPosts/category?category=%ED%8C%90%EB%A7%A4%2F%EB%82%98%EB%88%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
             .then((response) => {
                 setId(response.data);
             });
 
         for (let i = 0; i < id.length; i++) {
-            axios.get(`http://localhost:8080/studyPost/info?id=${id[i]}`)
+            axios.get(`https://sooksook.herokuapp.com/studyPost/info?id=${id[i]}`)
                 .then((response) => {
                     if (data.some((element) => element.id === id[i]) === false) {
                         const temp = data.concat(response.data);

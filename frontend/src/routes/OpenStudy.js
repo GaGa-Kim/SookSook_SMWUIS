@@ -121,7 +121,7 @@ const Openstudy = () => {
                 title: title,
             });
 
-           navigate(`/board1`);
+            navigate(`/board1`);
         }
         /*db에 게시글 정보 저장*/
     };
@@ -150,7 +150,7 @@ const Openstudy = () => {
         setOnoff(off.target.value);
     };
     const getNumber = (text) => {
-        const num=parseInt(text);
+        const num = parseInt(text);
         setNumber(num);
     };
 

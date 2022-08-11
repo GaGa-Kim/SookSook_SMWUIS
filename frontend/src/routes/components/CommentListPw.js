@@ -49,7 +49,7 @@ const SendImg = styled.img`
     }
 `;
 const handleXclick = (email, id) => {
-    
+
     axios.delete("/passwordComment", {
         params: {
             email: email,
@@ -62,6 +62,7 @@ const Recomment = ({ id, emailL }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
+
     const [get,setGet]=React.useState(false);
     const getRecomment=async ()=>{
         const response=await axios
@@ -84,6 +85,24 @@ const Recomment = ({ id, emailL }) => {
        getRecomment();
             
     }, [get]);
+
+    const [xClick, setXClick] = React.useState(0);
+    React.useEffect(() => {
+        axios
+            .get("https://sooksook.herokuapp.com/passwordComment", {
+                params: {
+                    email: emailL,
+                    id: id,
+                },
+            })
+            .then((response) => {
+                setNickname(response.data.nickname);
+                setContent(response.data.content);
+                setEmail(response.data.email);
+            });
+        setXClick(xClick + 1);
+    }, [xClick]);
+
     return (
         <List>
             <Box left="35px">
@@ -136,6 +155,8 @@ const CommentList = ({
         /*db에서 댓글 가져오기*/
         axios
             .get("https://sooksook.herokuapp.com/passwordComment", {
+        axios
+            .get("https://sooksook.herokuapp.com/passwordComment/all", {
                 params: {
                     email:emailL,
                     id:String(id)
@@ -172,10 +193,10 @@ const CommentList = ({
                         //         src={cut}
                         //         onClick={() => handleXclick(email, id)}
                         //     ></CutImg>
-                            <XImg
-                                src={x}
-                                onClick={() => handleXclick(email, id)}
-                            ></XImg>
+                        <XImg
+                            src={x}
+                            onClick={() => handleXclick(email, id)}
+                        ></XImg>
                         // </div>
                     )}
                     </Box>
