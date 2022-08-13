@@ -1,12 +1,14 @@
 package com.smwuis.sooksook.config;
 
 import com.amazonaws.HttpMethod;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@RequiredArgsConstructor
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
@@ -31,7 +33,8 @@ public class WebConfiguration implements WebMvcConfigurer {
                         HttpMethod.PUT.name(),
                         HttpMethod.DELETE.name(),
                         HttpMethod.PATCH.name()
-                );
+                )
+                .allowCredentials(false);
     }
 
 }

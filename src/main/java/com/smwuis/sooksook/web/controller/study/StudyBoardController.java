@@ -20,7 +20,6 @@ import java.util.Map;
 
 @Api(tags = "StudyBoard API (스터디 게시판 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class StudyBoardController {
 

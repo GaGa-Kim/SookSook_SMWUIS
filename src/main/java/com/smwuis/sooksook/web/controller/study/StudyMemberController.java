@@ -18,7 +18,6 @@ import java.util.List;
 
 @Api(tags = "StudyMember API (스터디 게시판 부원 정보 API)")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class StudyMemberController {
 
