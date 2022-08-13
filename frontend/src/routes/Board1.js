@@ -49,16 +49,7 @@ const Board1 = () => {
                 .then((response) => {
                     setData(response.data);
                 });
-        } else {
-            axios
-                .get("/studyBoards/department", {
-                    params: {
-                        department: dpt
-                    }
-                })
-                .then((response) => {
-                    setData(response.data);
-        }
+        } 
     }, [getAll, getDpt]);
 
     const onChangeDpt = async (e) => {
