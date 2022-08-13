@@ -3,7 +3,7 @@ import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React, { useState } from "react";
 import { Table } from "antd";
-import { Link, useParams,useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -62,7 +62,7 @@ const spcolumns = [
     },
 ];
 
-const Private = () => {
+const Private2 = () => {
     const { key } = useParams();
     const [spdata, setSpdata] = React.useState([]);
     const [piedata, setPiedata] = React.useState([]);
@@ -97,7 +97,7 @@ const Private = () => {
     //게시글
     const getId = async () => {
         const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%99%B8%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
         setId(...id, response.data);
     };
@@ -134,7 +134,7 @@ const Private = () => {
             key: "title",
             render: (text, record, index) => (
                 <Link
-                    to={`/detailboard/${id[index]}`}
+                    to={`/detailboard2/${id[index]}`}
                     state={{ boardId: id[index] }}
                 >
                     {text}
@@ -188,4 +188,4 @@ const Private = () => {
     );
 };
 
-export default Private;
+export default Private2;
