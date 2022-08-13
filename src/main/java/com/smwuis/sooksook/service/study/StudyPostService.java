@@ -64,24 +64,7 @@ public class StudyPostService {
         return new StudyPostResponseDto(studyPost, findFileId(studyPost.getId()));
     }
     
-    // 게시글 수정 - 첨부파일 없을 때
-    @Transactional
-    public StudyPostResponseDto update(Long id, StudyPostUpdateRequestDto updateRequestDto) {
-        User user = userRepository.findByEmail(updateRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
-        StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
-
-        if(user.equals(studyPost.getUserId())) {
-            studyPost.update(updateRequestDto.getTitle(),
-                    updateRequestDto.getContent());
-
-            return new StudyPostResponseDto(studyPost, null);
-        }
-        else {
-            throw new RuntimeException("게시글 수정에 실패했습니다.");
-        }
-    }
-    
-    // 게시글 수정 - 첨부파일 있을 때
+    // 게시글 수정
     @Transactional
     public StudyPostResponseDto updateWithFiles(Long id, StudyPostUpdateRequestDto updateRequestDto, List<MultipartFile> files) throws Exception {
         User user = userRepository.findByEmail(updateRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));

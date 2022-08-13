@@ -115,10 +115,6 @@ public class StudyPostController {
     }
 
     // 스터디 게시글 수정
-    /*
-      첨부파일이 있을 경우, 원래의 첨부파일은 지워지고 새롭게 올라온 첨부파일만 저장됨
-      첨부파일이 없을 경우, 원래의 첨부파일 유지
-     */
     @PutMapping(value = "/studyPost")
     @ApiOperation(value = "게시글 수정 (Postman 이용)", notes = "게시글 수정 API")
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
@@ -154,7 +150,7 @@ public class StudyPostController {
 
                 for (StudyFiles dbStudyFiles : dbFilesList) {
                     StudyPostFileResponseDto dbStudyPostFileResponseDto = studyFilesService.findByFileId(dbStudyFiles.getId());
-                    String dbOrigFileName = dbStudyFiles.getOrigFileName();
+                    String dbOrigFileName = dbStudyPostFileResponseDto.getOrigFileName();
 
                     if (!multipartList.contains(dbOrigFileName)) {
                         awsS3Service.deleteS3(dbStudyFiles.getFileName());
