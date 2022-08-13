@@ -70,18 +70,38 @@ const ButtonBox = styled.div`
 const SetBoardQa = () => {
     const navigate = useNavigate();
     const emailL = useSelector((state) => state.email);
+
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
     const [filename, setFilename] = React.useState("파일 선택하기");
-    const [addFormData, setAddFormData] = React.useState([]);
-    const formData = new FormData();
+
+    const [id,setId]=React.useState([]);
+    const getId = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+        );
+        setId(...id, response.data);
+    };
+
     React.useEffect(()=>{
         if(emailL===""){
             alert("로그인이 필요합니다.");
             navigate("/login");  
         }
-    })
+    },[emailL])
+    const getText = (text) => {
+        setTitle(text);
+    };
+    const getArea = (text) => {
+        setContent(text);
+    };
+    const [addFormData, setAddFormData] = React.useState([]);
+    const formData = new FormData();
+    const handleFileClick=()=>{
+        setAddFormData([]);
+    }
     const handleFileChange = (e) => {
+        const nowFile=[...addFormData];
         if (e.target.value === "") {
             setFilename("파일 선택하기");
         } else {
@@ -94,15 +114,21 @@ const SetBoardQa = () => {
                     setFilename(e.target.value);
                 }
             }
-            setAddFormData([]);
-            for (let i = 0; i < e.target.files.length; i++) {
-                const temp = addFormData.concat(e.target.files[i]);
-                setAddFormData(temp);
-            }
         }
+        for (let i = 0; i < e.target.files.length; i++) {
+            nowFile.push(e.target.files[i]);
+        }
+        setAddFormData(nowFile);
     };
-
-    const handleUploadClick = () => {
+    const upload=async ()=>{
+        await axios
+        .post("https://sooksook.herokuapp.com/studyPost/question", formData)
+        .then((response) => {
+            console.log(response.data);
+            getId();
+        });
+    }
+    const handleUploadClick = (e) => {
         if (title === "") {
             alert("제목을 입력하세요");
             return;
@@ -118,21 +144,12 @@ const SetBoardQa = () => {
                 formData.append("files", addFormData[i]);
             }
             /*db에 게시글 정보 저장*/
-            axios
-                .post("https://sooksook.herokuapp.com/studyPost/question", formData)
-                .then((response) => {
-                    console.log(formData.get("files"));
-                });
-            navigate("/qaboard");
-        }
 
+            upload();
+
+            navigate("/qaboard",{state:id});
+        }
     };
-    const getText = (text) => {
-        setTitle(text);
-    };
-    const getArea = (text) => {
-        setContent(text);
-    }
 
     return (
         <Root>
@@ -168,6 +185,7 @@ const SetBoardQa = () => {
                             multiple="multiple"
                             style={{ display: "none" }}
                             onChange={handleFileChange}
+                            onClick={handleFileChange}
                         />
                     </Box>
                 </InputBox>

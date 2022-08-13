@@ -1,6 +1,6 @@
 import "../css/qacss.css";
 import { Table } from "antd";
-import { Link } from 'react-router-dom';
+import { Link,useLocation } from 'react-router-dom';
 import GlobalStyle from "./components/GlobalStyle";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
@@ -26,29 +26,38 @@ const Cwrite = () => {
 };
 
 const Qaboard = () => {
+    const getId = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+        );
+        setId(...id, response.data);
+    };
+    const getData =  () => {
+        (id || []).reduce((prev, cur) => {
+            return prev.then(async () => {
+                await axios
+                    .get(
+                        `https://sooksook.herokuapp.com/studyPost/info?id=${cur}`
+                    )
+                    .then((res) => {
+                        setData((prev) => [...prev, res.data]);
+                    });
+            });
+        }, Promise.resolve());
+    };
+    const {state}=useLocation();
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
-        axios
-            .get("https://sooksook.herokuapp.com/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80")
-            .then((response) => {
 
-                setId(response.data);
-            });
+        setId(state);
+        getId();
+    }, [state]);
 
-        for (let i = 0; i < id.length; i++) {
-            axios.get(`https://sooksook.herokuapp.com/studyPost/info?id=${id[i]}`)
-                .then((response) => {
-                    if (data.some((element) => element.id === id[i]) === false) {
-                        const temp = data.concat(response.data);
-                        setData(temp);
-                    }
-                });
-        }
+    React.useEffect(() => {
+        getData();
+
     }, [id]);
-    data.sort((a, b) => {
-        return a.id - b.id;
-    });
 
     const columns = [
         {

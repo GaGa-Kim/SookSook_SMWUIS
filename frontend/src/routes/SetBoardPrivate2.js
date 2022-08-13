@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link, useNavigate,useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation,useParams } from "react-router-dom";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
 
@@ -68,6 +68,7 @@ const ButtonBox = styled.div`
 const SetBoardShare = () => {
     const navigate = useNavigate();
     const emailL = useSelector((state) => state.email);
+    const params=useParams();
 
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
@@ -76,7 +77,7 @@ const SetBoardShare = () => {
     const [id,setId]=React.useState([]);
     const getId = async () => {
         const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%99%B8%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
         setId(...id, response.data);
     };
@@ -120,7 +121,7 @@ const SetBoardShare = () => {
     };
     const upload=async ()=>{
         await axios
-        .post("https://sooksook.herokuapp.com/studyPost/share", formData)
+        .post("https://sooksook.herokuapp.com/studyPost/lecture", formData)
         .then((response) => {
             console.log(response.data);
             getId();
@@ -145,9 +146,10 @@ const SetBoardShare = () => {
 
             upload();
 
-            navigate("/share",{state:id});
+            navigate(`/private2/${params}`,{state:id});
         }
     };
+
 
     return (
         <Root>
@@ -193,7 +195,7 @@ const SetBoardShare = () => {
                     업로드
                 </Button>
 
-                <Link to="/share">
+                <Link to={`/private/${params}`}>
                     <Button width="70px" mg="30px">
                         목록
                     </Button>
