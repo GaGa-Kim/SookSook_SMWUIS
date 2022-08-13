@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useParams } from "react-router-dom";
 import "../fonts/Font.css";
 import React from "react";
 import { DatePicker, Space } from "antd";
@@ -73,6 +73,7 @@ const ButtonBox = styled.div`
 const Openstudy = () => {
     const navigate = useNavigate();
     const email = useSelector((state) => state.email);
+    const params=useParams();
 
     const [dpt, setDpt] = React.useState("문과대학");
     const [title, setTitle] = React.useState("");

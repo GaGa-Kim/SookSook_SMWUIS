@@ -65,7 +65,7 @@ const ButtonBox = styled.div`
     justify-content: center;
     align-items: center;
 `;
-const SetBoardShare = () => {
+const SetBoardPrivate2 = () => {
     const navigate = useNavigate();
     const emailL = useSelector((state) => state.email);
     const params=useParams();
@@ -195,7 +195,7 @@ const SetBoardShare = () => {
                     업로드
                 </Button>
 
-                <Link to={`/private/${params}`}>
+                <Link to={`/private2/${params}`}>
                     <Button width="70px" mg="30px">
                         목록
                     </Button>
@@ -204,4 +204,4 @@ const SetBoardShare = () => {
         </Root>
     );
 };
-export default SetBoardShare;
+export default SetBoardPrivate2;

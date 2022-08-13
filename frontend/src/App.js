@@ -8,7 +8,7 @@ import MemberGrade from './routes/MemberGrade';
 import Board1 from './routes/Board1';
 import Board2 from './routes/Board2';
 import Private from './routes/Private';
-import Private2 from '.routes/Private2';
+import Private2 from './routes/Private2'
 import Login from './routes/Login';
 import Join from './routes/Join';
 import Share from './routes/Share';

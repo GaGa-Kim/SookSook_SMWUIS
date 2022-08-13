@@ -1,5 +1,5 @@
 import "../css/board1.css";
-import { Link } from "react-router-dom";
+import { Link,useParams,useLocation, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { Table } from "antd";
 import styled from "styled-components";
@@ -25,6 +25,9 @@ const Select = styled.select`
 const Board1 = () => {
     const [data, setData] = useState("");
     const [dpt, setDpt] = React.useState("전체");
+    const location=useLocation().key;
+    const [rerender,setRerender]=useState("");
+   
     const getAll = async () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyBoards/list?lecture=true"
@@ -39,18 +42,18 @@ const Board1 = () => {
         });
         setData(response.data);
     };
+    React.useEffect(()=>{
+        setRerender(location);
+        console.log(location);
+    },[location]);
     React.useEffect(() => {
         if (dpt === "전체") {
             getAll();
         } else {
             getDpt();
-            axios
-                .get("https://sooksook.herokuapp.com/studyBoards/list?lecture=true")
-                .then((response) => {
-                    setData(response.data);
-                });
+
         } 
-    }, [getAll, getDpt]);
+    }, [rerender,dpt]);
 
     const onChangeDpt = async (e) => {
         const dpt = await setDpt(e.target.value);

@@ -3,7 +3,7 @@ import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React, { useState } from "react";
 import { Table } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useLocation } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -89,8 +89,8 @@ const Private2 = () => {
             let pieTemp = piedata.concat({
                 title: memberInfo[i].nickname,
                 value: memberInfo[i].posts + memberInfo[i].comments,
-                color: "#" + (0xbfbfaf + i * 16)
-            })
+                color: "#" + (0xbfbfaf + i * 16),
+            });
             setPiedata(pieTemp);
         }
     }
@@ -101,7 +101,7 @@ const Private2 = () => {
         );
         setId(...id, response.data);
     };
-    const getData =  () => {
+    const getData = () => {
         (id || []).reduce((prev, cur) => {
             return prev.then(async () => {
                 await axios
@@ -114,18 +114,16 @@ const Private2 = () => {
             });
         }, Promise.resolve());
     };
-    const {state}=useLocation();
+    const { state } = useLocation();
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
-
         setId(state);
         getId();
     }, [state]);
 
     React.useEffect(() => {
         getData();
-
     }, [id]);
     const columns = [
         {
