@@ -252,7 +252,7 @@ const EnterBoard = () => {
             )
             .then((response) => {
                 if (response.data === true) {
-                    navigate(`/private/${dataKey}`);
+                    navigate(`/private2/${dataKey}`);
                 } else {
                     setIsOpen(true);
                 }
