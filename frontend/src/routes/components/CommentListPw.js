@@ -154,8 +154,6 @@ const CommentList = ({
     React.useEffect(() => {
         /*db에서 댓글 가져오기*/
         axios
-            .get("https://sooksook.herokuapp.com/passwordComment", {
-        axios
             .get("https://sooksook.herokuapp.com/passwordComment/all", {
                 params: {
                     email:emailL,
