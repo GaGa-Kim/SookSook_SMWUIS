@@ -178,18 +178,64 @@ const DetailBoard2 = () => {
         setContent(text);
     };
     // 게시글 수정 정보 저장
+    const [filename, setFilename] = React.useState("파일 추가하기");
+    const [addFormData, setAddFormData] = React.useState([]);
+    const [delFileId,setDelFileId]=React.useState([]);
+    const formData = new FormData();
+    const handleDelFile=(id)=>{
+        console.log("삭제");
+        fileInfo[id].isDel=true;
+    }
+    const handleFileClick=()=>{
+        setAddFormData([]);
+    }
+    const handleFileChange = (e) => {
+        const nowFile=[...addFormData];
+        if (e.target.value === "") {
+            setFilename("파일 추가하기");
+        } else {
+            if (e.target.files.length > 1) {
+                setFilename("파일" + e.target.files.length + "개");
+            } else {
+                if (e.target.value.length > 10) {
+                    setFilename(e.target.value.substr(0, 11) + "...");
+                } else {
+                    setFilename(e.target.value);
+                }
+            }
+        }
+        for (let i = 0; i < e.target.files.length; i++) {
+            nowFile.push(e.target.files[i]);
+        }
+        setAddFormData(nowFile);
+    };
+    const upload=async()=>{
+        await axios
+        .put(`/studyPost`, formData);
+        setIsDisable(true);
+    };
     const handleUploadClick = () => {
-        axios
-            .put(`/studyPost`, {
-                params: {
-                    id: dataKey,
-
-                    email: email,
-                    title: title,
-                    content: content,
-                },
-            })
-            .then(setIsDisable(true));
+        if (title === "") {
+            alert("제목을 입력하세요");
+            return;
+        } else if (content === "") {
+            alert("내용을 입력하세요");
+            return;
+        } else {
+            formData.append("title", title);
+            formData.append("email", emailL);
+            formData.append("content", content);
+            formData.append("id",key)
+            console.log(addFormData);
+            for (let i = 0; i < addFormData.length; i++) {
+                formData.append("files", addFormData[i]);
+            }
+            for(let i=0;i<delFileId.length;i++){
+                formData.append("deleteId",delFileId[i])
+            }
+        }
+            upload();
+       
     };
     //게시글 삭제
     const [id, setId] = React.useState([]);
