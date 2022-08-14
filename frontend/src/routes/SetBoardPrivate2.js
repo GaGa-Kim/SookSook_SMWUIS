@@ -75,12 +75,6 @@ const SetBoardPrivate2 = () => {
     const [filename, setFilename] = React.useState("파일 선택하기");
 
     const [id,setId]=React.useState([]);
-    const getId = async () => {
-        const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%99%B8%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
-        );
-        setId(...id, response.data);
-    };
 
     React.useEffect(()=>{
         if(emailL===""){
@@ -121,10 +115,10 @@ const SetBoardPrivate2 = () => {
     };
     const upload=async ()=>{
         await axios
-        .post("https://sooksook.herokuapp.com/studyPost/lecture", formData)
+        .post("https://sooksook.herokuapp.com/studyPost/notLecture", formData)
         .then((response) => {
             console.log(response.data);
-            getId();
+            navigate(`/private2/${params}`);
         });
     }
     const handleUploadClick = (e) => {
@@ -146,7 +140,7 @@ const SetBoardPrivate2 = () => {
 
             upload();
 
-            navigate(`/private2/${params}`,{state:id});
+           
         }
     };
 
