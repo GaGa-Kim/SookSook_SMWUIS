@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
@@ -11,10 +11,12 @@ import Button from "./components/Button";
 import Logo from "./components/Logo";
 import ListBox from "./components/ListBox";
 import CommentList from "./components/CommentList";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSelector } from "react-redux";
 import "../fonts/Font.css";
 
 import { Input } from "antd";
-import { Link, useParams, useLocation } from "react-router-dom";
 const { TextArea } = Input;
 const Title = styled.div`
     position: absolute;
@@ -82,144 +84,264 @@ const CommentBox = styled.div`
 `;
 const CommentTitle = styled.div`
     width: 100%;
-    padding:10px 0px 7px 35px;
+    padding: 10px 0px 7px 35px;
     display: flex;
     align-items: center;
     font-size: 17px;
     border-bottom: thin solid #c1daff;
-    background-color:#c1daff;
+    background-color: #c1daff;
 `;
 const DetailBoard = () => {
-    const { key } = useParams();
+    const {key}=useParams();
     const location = useLocation();
-    const dataKey = location.state.key;
-    //현재 로그인 중인 id 받기
-    const id = "가송";
-    //게시글 정보 db에서 key 값이 dataKey인 정보 받아오기
-    const [title, setTitle] = React.useState(dataKey);
-    const [content, setContent] = React.useState(dataKey);
-    // const file=
-    // const name=
+    const dataKey = location.state.boardId;
+    const navigate = useNavigate();
+    //현재 로그인 중인 email 받기
+    const emailL = useSelector((state) => state.email);
 
-    const [isShow, setIsShow] = React.useState(true);
-    /*로그인 id랑 작성자 이름이랑 같으면 수정 삭제 버튼 보이도록
-    id === name ? setIsModify(true) : setIsModify(false);
-    */
+    //수정 삭제 버튼 유무
+    const [isShow, setIsShow] = React.useState(false);
+    //게시글 정보 가져오기
+    const [title, setTitle] = React.useState("");
+    const [content, setContent] = React.useState("");
+    const [fileId, setFileId] = React.useState([]);
+    const [fileInfo, setFileInfo] = React.useState([]);
+    const [email, setEmail] = React.useState("");
+    const fileName = useRef();
+    const fileDownload = useRef();
+    const getPost = async () => {
+        const response = await axios.get(
+            `https://sooksook.herokuapp.com/studyPost/info?id=${dataKey}`
+        );
+        setTitle(response.data.title);
+        setContent(response.data.content);
+        setFileId((prev) => prev.concat(response.data.fileId));
+        setEmail(response.data.email);
+        if (emailL === response.data.email) {
+            setIsShow(true);
+        } else {
+            setIsShow(false);
+        }
+    };
+
+    React.useEffect(() => {
+        if (emailL === "") {
+            alert("로그인이 필요합니다.");
+            navigate("/login");
+        }
+        getPost();
+    }, []);
+
+    const getFile = () => {
+        (fileId || []).reduce((prev, cur) => {
+            return prev.then(async () => {
+                await axios
+                    .get(
+                        `https://sooksook.herokuapp.com/studyPost/fileInfo?id=${cur}`
+                    )
+                    .then((res) => {
+                        fileName.current = res.data.origFileName;
+                    });
+                await axios
+                    .get(
+                        `https://sooksook.herokuapp.com/studyPost/fileDownload?id=${cur}`,
+                        {
+                            responseType: "arraybuffer",
+                        }
+                    )
+                    .then((res) => {
+                        const file = new Blob([res.data]);
+                        fileDownload.current = window.URL.createObjectURL(file);
+                    });
+                const temp = {
+                    fileName: fileName.current,
+                    fileDownload: fileDownload.current,
+                };
+                setFileInfo((prev) => [...prev, temp]);
+            });
+        }, Promise.resolve());
+    };
+    React.useEffect(() => {
+        getFile();
+    }, [fileId]);
+
     const [isModify, setIsModify] = React.useState(false);
+    const [isDisable, setIsDisable] = React.useState(true);
     const handleModifyClick = () => {
         setIsModify(true);
+        setIsDisable(false);
+        console.log(key);
     };
+    const getTitle = (text) => {
+        setTitle(text);
+    };
+    const getArea = (text) => {
+        setContent(text);
+    };
+    // 게시글 수정 정보 저장
     const handleUploadClick = () => {
-        // 게시글 정보 저장
+        axios
+            .put(`/studyPost`, {
+                params: {
+                    id:parseInt(key) ,
+                    studyBoardId:dataKey,
+                    email: email,
+                    title: title,
+                    content: content,
+                },
+            })
+            .then(setIsDisable(true));
     };
-    const onChangeText = (e) => {
-        setTitle(e.target.value);
+    //게시글 삭제
+    const [id, setId] = React.useState([]);
+    const getId = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+        );
+        setId(...id, response.data);
     };
-    const onChangeArea = (e) => {
-        setContent(e.target.area);
+    const handleDeleteClick = () => {
+        const removePost = async () => {
+            const response = await axios.delete("/studyPost", {
+                params: {
+                    email: email,
+                    id: dataKey,
+                },
+            });
+            if (response.data) {
+                getId();
+                navigate(`/private/${dataKey}`);
+            }
+        };
+        removePost();
     };
+    /*댓글*/
     const [comment, setComment] = React.useState("");
-    const [commentList, setCommentList] = React.useState([
-        /*db에서 가져오기*/
-    ]);
+    const [commentList, setCommentList] = React.useState([]);
     const getText = (text) => {
         setComment(text);
     };
-    const [nextKey, setNextKey] = React.useState(1);
-    const handleXclick = (listKey) => {
-        const nextComment = commentList.filter(
-            (comment) => comment.key !== listKey
+    //댓글 가져오기
+    const getComment = async () => {
+        const res = await axios.get(
+            "https://sooksook.herokuapp.com/studyComments/all",
+            {
+                params: {
+                    studyPostId: dataKey,
+                },
+            }
         );
-        setCommentList(nextComment);
+        setCommentList(res.data);
+    };
+    React.useEffect(() => {
+        getComment();
+    }, [location.key]);
+    //댓글 추가하기
+    const addComment = async () => {
+        const res = await axios.post(
+            "https://sooksook.herokuapp.com/studyComment",
+            {
+                content: comment,
+                email: emailL,
+                studyPostId: dataKey,
+                upIndex: "null",
+            }
+        );
+
+        setComment("");
+        getComment();
     };
     const handlePlusClick = () => {
-        const nextCommentList = commentList.concat({
-            key: nextKey,
-            parent: null,
-            id: id,
-            comment: comment,
-        });
-        setCommentList(nextCommentList);
-        setNextKey(nextKey + 1);
-        setComment("");
+        addComment();
     };
-    //const commentCount=접속한 id의 comment개수 받아오기;
-        //commentCount++;
-        //다시 commentCount 값 보내기
+    const handleXclick = async (email, id) => {
+        console.log(1);
+        const res = await axios.delete("/studyComment", {
+            params: {
+                email: email,
+                id: id,
+            },
+        });
+        getComment();
+    };
     const [isRecomment, setIsRecomment] = React.useState(false);
-    let parentIndex;
-    const handleSendClick = (listKey) => {
+    const [upIndex, setUpIndex] = React.useState();
+    const handleSendClick = (id) => {
         setIsRecomment(true);
-        parentIndex = listKey;
+        setUpIndex(id);
+    };
+    //대댓글 추가
+    const addRecomment = async () => {
+        const res = await axios.post(
+            "https://sooksook.herokuapp.com/studyComment",
+            {
+                content: comment,
+                email: emailL,
+                studyPostId: dataKey,
+                upIndex: upIndex,
+            }
+        );
+
+        setComment("");
+        getComment();
     };
     const handleRecommentClick = () => {
-        const addRecomment = commentList.concat({
-            key: nextKey,
-            parent: parentIndex,
-            id: id,
-            comment: comment,
-        });
-        setCommentList(addRecomment);
-        setNextKey(nextKey + 1);
-        setComment("");
+        addRecomment();
     };
     const handleCommentClick = () => {
         setIsRecomment(false);
     };
-        
+
     return (
         <Root>
             <GlobalStyle />
             <Logo />
             <ColorBox height="90px">
-                <Title>{dataKey}</Title>
+                <Title>게시판</Title>
             </ColorBox>
             <Main>
                 <InputBox>
                     <Quest>제목</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        {!isModify && (
-                            <InputText text={dataKey} disable="true" />
-                        )}
-                        {isModify && (
-                            <Input
-                                value={title}
-                                onChange={onChangeText}
-                                style={{ borderRadius: "70px" }}
-                            />
-                        )}
+                        <InputText
+                            value={title}
+                            disable={isDisable}
+                            getText={getTitle}
+                        />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="62px">
                     <Quest>내용</Quest>
                     <Box width="200px" left="100px" top="7px">
-                        {!isModify && (
-                            <InputArea
-                                area={dataKey}
-                                bg="#F0F0F0"
-                                disable="true"
-                            />
-                        )}
-                        {isModify && (
-                            <TextArea
-                                value={content}
-                                rows={4}
-                                onChange={onChangeArea}
-                                style={{
-                                    borderRadius: "20px",
-                                    backgroundColor: "#F0F0F0",
-                                }}
-                            />
-                        )}
+                        <InputArea
+                            value={content}
+                            bg="#F0F0F0"
+                            disable={isDisable}
+                            getArea={getArea}
+                        />
                     </Box>
                 </InputBox>
                 <InputBox mgBot="50px">
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
-                        {/* 기존파일추가 */}
-                        {isShow && (
+                        {/* 파일 정보 */}
+
+                        {fileInfo &&
+                            fileInfo.map((item) => {
+                                return (
+                                    <div>
+                                        <a
+                                            href={item.fileDownload}
+                                            download={item.fileName}
+                                        >
+                                            {item.fileName}
+                                        </a>
+                                    </div>
+                                );
+                            })}
+                        {!isDisable && (
                             <>
-                                <LabelFile for="inputFile" onclick="focus()">
+                                <LabelFile for="inputFile">
                                     파일 선택하기
                                 </LabelFile>
                                 <InputFile
@@ -233,50 +355,57 @@ const DetailBoard = () => {
                 </InputBox>
             </Main>
             <ButtonBox mgRight="50px">
-                {isShow && !isModify && (
+                {isShow && (
                     <>
+                        {isDisable && (
+                            <Button
+                                width="70px"
+                                mg="30px"
+                                onClick={handleModifyClick}
+                            >
+                                수정
+                            </Button>
+                        )}
+                        {!isDisable && (
+                            <Button
+                                width="70px"
+                                mg="30px"
+                                onClick={handleUploadClick}
+                            >
+                                업로드
+                            </Button>
+                        )}
                         <Button
                             width="70px"
                             mg="30px"
-                            onClick={handleModifyClick}
+                            onClick={handleDeleteClick}
                         >
-                            수정
-                        </Button>
-                        <Button width="70px" mg="30px">
                             삭제
                         </Button>
                     </>
                 )}
-                {isModify && isShow && (
-                    <Link to="/private">
-                        <Button width="70px" mg="30px">
-                            업로드
-                        </Button>
-                    </Link>
-                )}
-                <Link to="/private">
+
+                <Link to={`/private/${dataKey}`}>
                     <Button width="70px" mg="30px">
                         목록
                     </Button>
                 </Link>
             </ButtonBox>
-            {/* 댓글창 */}
-            {!isModify && (
-                <>
-                    <Footer>
+            <Footer>
                 <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
                 <ListBox>
-                    {commentList.map((comment) => (
-                        <CommentList
-
-                            listKey={comment.key}
-                            id={comment.id}
-                            parent={comment.parent}
-                            comment={comment.comment}
-                            handleXclick={handleXclick}
-                            handleSendClick={handleSendClick}
-                        />
-                    ))}
+                    {commentList &&
+                        commentList.map((comment) => (
+                            <CommentList
+                                email={comment.email}
+                                writeEmail={email}
+                                handleSendClick={handleSendClick}
+                                id={comment.id}
+                                dataKey={dataKey}
+                                childList={comment.childList}
+                                handleXclick={handleXclick}
+                            />
+                        ))}
                 </ListBox>
                 {!isRecomment && (
                     <CommentBox>
@@ -307,8 +436,6 @@ const DetailBoard = () => {
                     </CommentBox>
                 )}
             </Footer>
-                </>
-            )}
         </Root>
     );
 };

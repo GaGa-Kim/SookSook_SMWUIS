@@ -139,7 +139,7 @@ const HotStudy = () => {
     }, []);
     return hotStudyList.map((study, index) => (
         <StudyList key={index}>
-            {index + 1}위 <Link to={`/enterboard/ ${study.studyBoardId}`} >{study.title}</Link>
+            {index + 1}위 <Link to={`/enterboard/${study.studyBoardId}`} >{study.title}</Link>
         </StudyList>
     ));
 };
@@ -153,7 +153,7 @@ const NewStudy = () => {
                 setNewStudyList(response.data);
             });
     }, []);
-    return newStudyList.map((study) => <StudyList>∘<Link to={`/enterboard/ ${study.studyBoardId}`}
+    return newStudyList.map((study) => <StudyList>∘<Link to={`/enterboard/${study.studyBoardId}`}
     >&nbsp;{study.title}</Link></StudyList>);
 };
 
@@ -167,7 +167,7 @@ const HighStudy = () => {
     return highStudyList.map((study, index) => (
         <StudyList key={index}>
             {index + 1}위
-            <Link to={`/enterboard/ ${study.studyBoardId}`}>&nbsp;{study.title}</Link>
+            <Link to={`/enterboard/${study.studyBoardId}`}>&nbsp;{study.title}</Link>
         </StudyList>
     ));
 };

@@ -283,39 +283,69 @@ const EnterBoard = () => {
     const handleRequestCloseFunc = () => {
         setIsOpen(false);
     };
-    const handlePlusClick = () => {
-        axios
-            .post("https://sooksook.herokuapp.com/passwordComment", {
-                content: comment,
-                email: emailL,
+     /*댓글*/
+
+    //댓글 가져오기
+    const getComment=async()=>{
+        const res=await axios
+        .get("https://sooksook.herokuapp.com/passwordComment/all", {
+            params: {
                 studyBoardId: dataKey,
-                upIndex: "null",
-            })
-            .then((response) => {
-                const addCommentList = commentList.concat(response.data);
-                setCommentList(addCommentList);
-            });
+            },
+        });
+        setCommentList(res.data);
+    }
+    React.useEffect(() => {
+       getComment();
+    }, [location.key]);
+    //댓글 추가하기
+    const addComment=async ()=>{
+        const res=await axios
+        .post("https://sooksook.herokuapp.com/passwordComment", {
+            content: comment,
+            email: emailL,
+            studyBoardId: dataKey,
+            upIndex: "null",
+        });
+        
         setComment("");
+        getComment();
+    }
+    const handlePlusClick = () => {
+        addComment();
     };
+    const handleXclick = async (email,id) => {
+         console.log(1);
+        const res=await axios.delete("/passwordComment", {
+            params: {
+                email: email,
+                id: id,
+            },
+        });
+        getComment();
+        };
     const [isRecomment, setIsRecomment] = React.useState(false);
     const [upIndex, setUpIndex] = React.useState();
     const handleSendClick = (id) => {
         setIsRecomment(true);
         setUpIndex(id);
+
     };
+    //대댓글 추가
+    const addRecomment=async ()=>{
+        const res=await axios
+        .post("https://sooksook.herokuapp.com/passwordComment", {
+            content: comment,
+            email: emailL,
+            studyBoardId: dataKey,
+            upIndex: upIndex,
+        });
+
+        setComment('');
+        getComment();
+    }
     const handleRecommentClick = () => {
-        axios
-            .post("https://sooksook.herokuapp.com/passwordComment", {
-                content: comment,
-                email: emailL,
-                studyBoardId: dataKey,
-                upIndex: upIndex,
-            })
-            .then((response) => {
-                const addCommentList = commentList.concat(response.data);
-                setCommentList(addCommentList);
-            });
-        setComment("");
+       addRecomment();
     };
     const handleCommentClick = () => {
         setIsRecomment(false);
@@ -506,13 +536,13 @@ const EnterBoard = () => {
                     {commentList &&
                         commentList.map((comment) => (
                             <CommentListPw
-                                nickname={comment.nickname}
-                                email={comment.email}
-                                content={comment.content}
-                                handleSendClick={handleSendClick}
-                                id={comment.id}
-                                dataKey={dataKey}
-                                childList={comment.childList}
+                            email={comment.email}
+                            writeEmail={email}
+                            handleSendClick={handleSendClick}
+                            id={comment.id}
+                            dataKey={dataKey}
+                            childList={comment.childList}
+                            handleXclick={handleXclick}
                             />
                         ))}
                 </ListBox>

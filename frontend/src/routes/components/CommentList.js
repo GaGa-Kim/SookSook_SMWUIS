@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 import styled from "styled-components";
 import List from "./List";
 import Box from "./Box";
@@ -22,7 +23,7 @@ const XImg = styled.img`
     }
 `;
 const CutImg = styled.img`
-    margin-right:10px;
+    margin-right: 10px;
     width: 20px;
     height: 30px;
     display: block;
@@ -48,42 +49,40 @@ const SendImg = styled.img`
         height: 22px;
     }
 `;
-const handleXclick = (email, id) => {
-    
-    axios.delete("/studyComment", {
-        params: {
-            email: email,
-            id: id,
-        },
-    });
-};
 
-const Recomment = ({ id, emailL }) => {
+const Recomment = ({ id, emailL, getComment }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [get,setGet]=React.useState(false);
-    const getRecomment=async ()=>{
-        const response=await axios
-        .get("https://sooksook.herokuapp.com/studyComment", {
+
+    const getRecomment = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyComment/info",
+            {
+                params: {
+                    id: id,
+                },
+            }
+        );
+        setNickname(response.data.nickname);
+        setContent(response.data.content);
+        setEmail(response.data.email);
+    };
+    const handleXclick = async (email, id) => {
+ 
+        const res = await axios.delete("/studyComment", {
             params: {
-                email: emailL,
+                email: email,
                 id: id,
             },
-        })
-        //.then((response) => {
-            setNickname(response.data.nickname);
-            setContent(response.data.content);
-            setEmail(response.data.email);
-            setGet(true);
-       // });
-    }
-    getRecomment();
+        });
+        getRecomment();
+    };
     React.useEffect(() => {
-        setGet(false);
-       getRecomment();
-            
-    }, [get]);
+        
+        getRecomment();
+    }, []);
+
     return (
         <List>
             <Box left="35px">
@@ -96,11 +95,8 @@ const Recomment = ({ id, emailL }) => {
                 <ListText>{content}</ListText>
             </Box>
             {emailL === email ? (
-                <Box right="35px">
-                    <XImg
-                        src={x}
-                        onClick={() => handleXclick(email, id)}
-                    ></XImg>
+                <Box right="35px" onClick={() => handleXclick(email, id)}>
+                    <XImg src={x}></XImg>
                 </Box>
             ) : null}
         </List>
@@ -112,9 +108,12 @@ const CommentList = ({
     email,
     dataKey,
     childList,
-    writeEmail
+    writeEmail,
+    handleXclick,
 }) => {
+    //댓글 작성자 닉네임
     let nicknameL = "";
+    //현재 로그인 중인 닉네임
     const emailL = useSelector((state) => state.email);
     React.useEffect(() => {
         axios
@@ -126,31 +125,30 @@ const CommentList = ({
             .then((response) => {
                 nicknameL = response.data.nickname;
             });
-    }, []); //현재 로그인 중인 닉네임
+    }, []);
     const [isDelete, setIsDelete] = React.useState(true);
-    const [isSend,setIsSend]=React.useState(false);
-    //데이터 받아오기
     const [nickname,setNickname]=React.useState("");
     const [content,setContent]=React.useState("");
-    React.useEffect(() => {
-        /*db에서 댓글 가져오기*/
-        axios
-            .get("https://sooksook.herokuapp.com/studyComment", {
+  
+    const getComment = async () => {
+        const response = await axios.get(
+            "https://sooksook.herokuapp.com/studyComment/info",
+            {
                 params: {
-                    email:emailL,
-                    id:String(id)
+                    id: id,
                 },
-            })
-            .then((response) => {
-                setNickname(response.data.nickname);
-                setContent(response.data.content);
-            });
-    }, []);
-
+            }
+        );
+        setNickname(response.data.nickname);
+        setContent(response.data.content);
+    };
+    useEffect(()=>{
+        
+        getComment();
+    },[]);
     React.useState(() => {
         emailL === email ? setIsDelete(true) : setIsDelete(false);
-        emailL===writeEmail||emailL===email? setIsSend(true):setIsSend(false);
-    }, []);
+    }, [emailL,email]);
     return (
         <>
             <List>
@@ -160,7 +158,12 @@ const CommentList = ({
                 <Box left="100px">
                     <ListText>{content}</ListText>
                 </Box>
-                <Box right="0px" width="65px">
+                <Box
+                    right="35px"
+                    width="30px"
+                    onClick={() => handleXclick(email, id)}
+                    style={{ overflow: "hidden" }}
+                >
                     {isDelete && (
                         // <div
                         //     style={{
@@ -172,22 +175,27 @@ const CommentList = ({
                         //         src={cut}
                         //         onClick={() => handleXclick(email, id)}
                         //     ></CutImg>
-                            <XImg
-                                src={x}
-                                onClick={() => handleXclick(email, id)}
-                            ></XImg>
+                        <XImg src={x}></XImg>
                         // </div>
                     )}
-                    </Box>
-                    <Box right="20px" width="65px">
-                        {isSend&&<SendImg
+                </Box>
+                <Box right="60px" width="30px">
+                    
+                        <SendImg
                             src={send}
                             onClick={() => handleSendClick(id)}
-                        ></SendImg>}
-                    </Box>
+                        ></SendImg>
+                    
+                </Box>
             </List>
             {childList &&
-                childList.map((id) => <Recomment id={id} emailL={emailL} />)}
+                childList.map((id) => (
+                    <Recomment
+                        id={id}
+                        emailL={emailL}
+                        getComment={getComment}
+                    />
+                ))}
         </>
     );
 };

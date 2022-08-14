@@ -204,79 +204,78 @@ const DetailSell = () => {
             });
             if (response.data) {
                 getId();
-                navigate("/share");
+                navigate("/sell");
             }
         };
         removePost();
     };
+    /*댓글*/
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([]);
-    //댓글 가져오는 함수
-    const getComment = async () => {
-        const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyComments/all",
-            {
-                params: {
-                    studyPostId: dataKey,
-                },
-            }
-        );
-        setCommentList(response.data);
-    };
-    React.useEffect(() => {
-        // axios
-        //     .get("https://sooksook.herokuapp.com/studyComments/all", {
-        //         params: {
-        //             studyPostId: dataKey,
-        //         },
-        //     })
-        //     .then((response) => {
-        //         setCommentList(response.data);
-        //     });
-        getComment();
-    }, []);
     const getText = (text) => {
         setComment(text);
     };
-
-    const handlePlusClick = () => {
-        axios
-            .post("https://sooksook.herokuapp.com/studyComment", {
-                content: comment,
-                email: emailL,
-                studyBoardId: dataKey,
-                upIndex: "null",
-            })
-            .then((response) => {
-                const addCommentList = commentList.concat(response.data);
-                setCommentList(addCommentList);
-            });
+    //댓글 가져오기
+    const getComment=async()=>{
+        const res=await axios
+        .get("https://sooksook.herokuapp.com/studyComments/all", {
+            params: {
+                studyPostId: dataKey,
+            },
+        });
+        setCommentList(res.data);
+    };
+    React.useEffect(() => {
+       getComment();
+    }, [location.key]);
+    //댓글 추가하기
+    const addComment=async ()=>{
+        const res=await axios
+        .post("https://sooksook.herokuapp.com/studyComment", {
+            content: comment,
+            email: emailL,
+            studyPostId: dataKey,
+            upIndex: "null",
+        });
+        
         setComment("");
         getComment();
     };
-
+    const handlePlusClick = () => {
+        addComment();
+    };
+    const handleXclick = async (email,id) => {
+         console.log(1);
+        const res=await axios.delete("/studyComment", {
+            params: {
+                email: email,
+                id: id,
+            },
+        });
+        getComment();
+        };
     const [isRecomment, setIsRecomment] = React.useState(false);
     const [upIndex, setUpIndex] = React.useState();
     const handleSendClick = (id) => {
         setIsRecomment(true);
         setUpIndex(id);
+
     };
-    const handleRecommentClick = async () => {
-        const response = await axios.post(
-            "https://sooksook.herokuapp.com/studyComment",
-            {
-                content: comment,
-                email: emailL,
-                studyBoardId: dataKey,
-                upIndex: upIndex,
-            }
-        );
-        //.then((response) => {
-        const addCommentList = commentList.concat(response.data);
-        setCommentList(addCommentList);
-        //});
-        setComment("");
+    //대댓글 추가
+    const addRecomment=async ()=>{
+        const res=await axios
+        .post("https://sooksook.herokuapp.com/studyComment", {
+            content: comment,
+            email: emailL,
+            studyPostId: dataKey,
+            upIndex: upIndex,
+        });
+
+        setComment('');
         getComment();
+    }
+    const handleRecommentClick = () => {
+       addRecomment();
     };
     const handleCommentClick = () => {
         setIsRecomment(false);
@@ -314,7 +313,7 @@ const DetailSell = () => {
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
                         {/* 파일 정보 */}
-                        {fileInfo &&
+                        {fileInfo && !isShow&&
                             fileInfo.map((item) => {
                                 return (
                                     <div>
@@ -373,7 +372,7 @@ const DetailSell = () => {
                     </>
                 )}
 
-                <Link to="/share">
+                <Link to="/sell">
                     <Button width="70px" mg="30px">
                         목록
                     </Button>
@@ -382,7 +381,7 @@ const DetailSell = () => {
             <Footer>
                 <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
                 <ListBox>
-                    {/* {commentList &&
+                {commentList &&
                         commentList.map((comment) => (
                             <CommentList
                                 email={comment.email}
@@ -391,8 +390,10 @@ const DetailSell = () => {
                                 id={comment.id}
                                 dataKey={dataKey}
                                 childList={comment.childList}
+                                handleXclick={handleXclick}
+                               
                             />
-                        ))} */}
+                        ))}
                 </ListBox>
                 {!isRecomment && (
                     <CommentBox>
