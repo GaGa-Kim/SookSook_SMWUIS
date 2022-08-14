@@ -20,17 +20,19 @@ const Cwrite = () => {
     return (
         <section>
             <button className="newstudy" style={{ marginLeft: "0px" }}>
-                <Link to="/setboard_sell">글 작성하기</Link></button>
+                <Link to="/setboard_sell">글 작성하기</Link>
+            </button>
         </section>
     );
 };
 
 const Sell = () => {
+    const location = useLocation().key;
     const getId = async () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyPosts/category?category=%ED%8C%90%EB%A7%A4%2F%EB%82%98%EB%88%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
-        setId(...id, response.data);
+        setId(() => response.data);
     };
     const getData = () => {
         (id || []).reduce((prev, cur) => {
@@ -45,18 +47,16 @@ const Sell = () => {
             });
         }, Promise.resolve());
     };
-    const { state } = useLocation();
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
-
-        setId(state);
         getId();
-    }, [state]);
+
+        console.log(location);
+    }, [location]);
 
     React.useEffect(() => {
         getData();
-
     }, [id]);
 
     const columns = [
@@ -77,8 +77,8 @@ const Sell = () => {
         {
             title: <div className="user">작성자</div>,
             dataIndex: "nickname",
-            key: "key"
-        }
+            key: "key",
+        },
     ];
 
     return (
@@ -90,7 +90,7 @@ const Sell = () => {
                 <Table columns={columns} dataSource={data} />;
             </section>
         </>
-    )
+    );
 };
 
 export default Sell;

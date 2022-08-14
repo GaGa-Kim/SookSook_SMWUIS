@@ -26,11 +26,12 @@ const Cwrite = () => {
 };
 
 const Qaboard = () => {
+    const location = useLocation().key;
     const getId = async () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
-        setId(...id, response.data);
+        setId(()=> response.data);
     };
     const getData =  () => {
         (id || []).reduce((prev, cur) => {
@@ -49,14 +50,13 @@ const Qaboard = () => {
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
-
-        setId(state);
         getId();
-    }, [state]);
+
+        console.log(location);
+    }, [location]);
 
     React.useEffect(() => {
         getData();
-
     }, [id]);
 
     const columns = [

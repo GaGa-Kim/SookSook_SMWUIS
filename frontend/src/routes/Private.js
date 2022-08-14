@@ -67,11 +67,15 @@ const Private = () => {
     const [spdata, setSpdata] = React.useState([]);
     const [piedata, setPiedata] = React.useState([]);
     const [memberInfo, setMememberInfo] = useState([]);
+    const location = useLocation().key;
     //멤버정보
+    const getMember=async()=>{
+        const res=await axios.get(`/studyMember?studyBoardId=${parseInt(key)}`);
+            setMememberInfo(res.data);
+    
+    }
     React.useEffect(() => {
-        axios.get(`/studyMember?studyBoardId=${key}`).then((response) => {
-            setMememberInfo(response.data);
-        });
+        getMember();
     }, []);
     //참여율 데이터
     for (let i = 0; i < memberInfo.length; i++) {
@@ -99,7 +103,7 @@ const Private = () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
-        setId(...id, response.data);
+        setId(()=> response.data);
     };
     const getData =  () => {
         (id || []).reduce((prev, cur) => {
@@ -118,14 +122,13 @@ const Private = () => {
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
-
-        setId(state);
         getId();
-    }, [state]);
+
+        console.log(location);
+    }, [location]);
 
     React.useEffect(() => {
         getData();
-
     }, [id]);
     const columns = [
         {
