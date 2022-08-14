@@ -51,12 +51,21 @@ const MemberButton = styled.button`
     border-radius: 50px;
     margin: 4px;
     border: thin solid #d9d9d9;
-`;
-
-const Badge = styled.div`
-    border: thin solid #e8eef4;
-    background-color:${(props) => props.rnd};
-    rnd={RandomColor};
+    &:focus {
+        border-color: #4aacfc;
+        box-shadow: 0px 0px 0 2px #c7e4fe;
+        transition: 0.5s;
+    }
+    &:active{
+        border-color: #4aacfc;
+        box-shadow: 0px 0px 0 2px #c7e4fe;
+        transition: 0.5s;
+    }
+    &:selected{
+        border-color: #4aacfc;
+        box-shadow: 0px 0px 0 2px #c7e4fe;
+        transition: 0.5s;
+    }
 `;
 
 const MemberGrade = () => {
@@ -115,11 +124,7 @@ const MemberGrade = () => {
             setInputVisible(false);
             setInputValue("");
         };
-        const RandomColor = () => {
-            return (
-                "#" + Math.round(Math.random() * 0xfffffe + 0x000002).toString(16)
-            );
-        };
+
         const forMap = (tag) => {
             const tagElem = (
                 <Tag
@@ -129,7 +134,7 @@ const MemberGrade = () => {
                         "paddingTop": "2.5px",
                         "marginBottom": "5px", "borderRadius": "30px"
                     }
-                    } rnd={RandomColor}
+                    }
                     closable
                     onClose={(e) => {
                         e.preventDefault();
@@ -183,11 +188,7 @@ const MemberGrade = () => {
     const navigate = useNavigate();
     const { Key } = useParams();
     const rates = [1, 2, 3, 4, 5];
-    const RandomColor = () => {
-        return (
-            "#" + Math.round(Math.random() * 0xfffffe + 0x000002).toString(16)
-        );
-    };
+
     const RateMem = () => {
         const [value, setValue] = useState(3);
         return (
@@ -199,7 +200,7 @@ const MemberGrade = () => {
     }
 
     const [rate, setRate] = React.useState("");
-
+    const [remail, setRemail] = React.useState("");
     const getRate = (value) => {
         const num = parseInt(value);
         setRate(num);
@@ -210,33 +211,34 @@ const MemberGrade = () => {
             score: rate,
             comment: tags,
             giverEmail: email,
-            // receriverEmail: ,
+            receiverEmail: remail,
             studyBoardId: Key,
         });
         navigate(`/private/${Key}`);
-    }
-
-    const Mem = (props) => {
-        return (
-            <MemberButton>{props.name}</MemberButton>
-        )
     };
 
-    const Member = () => {
-        const [memberInfo, setMememberInfo] = useState([]);
-        React.useEffect(() => {
-            axios.get(`/ studyMember ? studyBoardId = ${Key}`).then((response) => {
-                setMememberInfo(response.data);
-            });
-        }, []);
-        // 멤버정보
-        // const memberInfo = ['송송', '송파', '파파'];
-        const memberList = memberInfo.map((memberInfo) => (<Mem name={memberInfo} />))
+    const handleNameClick = () => {
+        axios.get(`/ studyMember ? studyBoardId = ${Key}`).then((response) => {
+            setRemail(response.data.email);
+        })
+    };
+    const [memberInfo, setMememberInfo] = useState([]);
+    React.useEffect(() => {
+        axios.get(`/ studyMember ? studyBoardId = ${Key}`).then((response) => {
+            setMememberInfo(response.data);
+
+        });
+    }, []);
+    // 멤버정보
+    // const memberInfo = ['송송', '송파', '파파'];
+    const Mem = (props) => {
         return (
-            <div>
-                {memberList}</div>
+            <MemberButton onClick={handleNameClick}>{props.name}</MemberButton>
         )
-    }
+    };
+    const memberList = memberInfo.map((memberInfo) => (<Mem name={memberInfo} />))
+
+
 
     return (
         <Root >
@@ -249,7 +251,7 @@ const MemberGrade = () => {
                 <InputBox>
                     <Quest>스터디원 선택</Quest>
                     <Box width="700px" left="140px" top="4px">
-                        <Member />
+                        {memberList}
                     </Box>
                 </InputBox>
                 <InputBox>
