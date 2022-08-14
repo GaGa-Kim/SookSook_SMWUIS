@@ -32,7 +32,7 @@ const Sell = () => {
         );
         setId(...id, response.data);
     };
-    const getData =  () => {
+    const getData = () => {
         (id || []).reduce((prev, cur) => {
             return prev.then(async () => {
                 await axios
@@ -45,7 +45,7 @@ const Sell = () => {
             });
         }, Promise.resolve());
     };
-    const {state}=useLocation();
+    const { state } = useLocation();
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
