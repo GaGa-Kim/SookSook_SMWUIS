@@ -49,10 +49,11 @@ const SendImg = styled.img`
     }
 `;
 
-const Recomment = ({ id, emailL, getComment }) => {
+const Recomment = ({ id, emailL, upRemoved }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const [removed,setRemoved]=React.useState(true);
 
     const getRecomment = async () => {
         const response = await axios.get(
@@ -67,6 +68,8 @@ const Recomment = ({ id, emailL, getComment }) => {
         setNickname(response.data.nickname);
         setContent(response.data.content);
         setEmail(response.data.email);
+        setRemoved(response.data.removed);
+        
     };
     const handleXclick = async (email, id) => {
  
@@ -80,7 +83,7 @@ const Recomment = ({ id, emailL, getComment }) => {
     };
     React.useEffect(() => {
         getRecomment();
-    }, []);
+    }, [removed]);
 
     return (
         <List>
@@ -93,7 +96,7 @@ const Recomment = ({ id, emailL, getComment }) => {
             <Box left="100px">
                 <ListText>{content}</ListText>
             </Box>
-            {emailL === email ? (
+            {emailL === email && !removed && !upRemoved? (
                 <Box right="35px" onClick={() => handleXclick(email, id)}>
                     <XImg src={x}></XImg>
                 </Box>
@@ -109,6 +112,7 @@ const CommentListPw = ({
     childList,
     writeEmail,
     handleXclick,
+    removed
 }) => {
     //댓글 작성자 닉네임
     let nicknameL = "";
@@ -127,9 +131,9 @@ const CommentListPw = ({
     }, []);
     const [isDelete, setIsDelete] = React.useState(true);
     const [isSend, setIsSend] = React.useState(false);
-
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
+    const [upRemoved,setUpRemoved]=React.useState(false);
 
     const getComment = async () => {
         const response = await axios.get(
@@ -143,12 +147,13 @@ const CommentListPw = ({
         );
         setNickname(response.data.nickname);
         setContent(response.data.content);
+        setUpRemoved(response.data.removed);
     };
     useEffect(() => {
         getComment();
-    }, []);
+    }, [removed]);
     React.useState(() => {
-        emailL === email ? setIsDelete(true) : setIsDelete(false);
+        emailL === email  ? setIsDelete(true) : setIsDelete(false);
         emailL === writeEmail || emailL === email
             ? setIsSend(true)
             : setIsSend(false);
@@ -168,7 +173,7 @@ const CommentListPw = ({
                     onClick={() => handleXclick(email, id)}
                     style={{ overflow: "hidden" }}
                 >
-                    {isDelete && (
+                    {isDelete && !removed &&(
                         // <div
                         //     style={{
                         //         display: "flex",
@@ -184,7 +189,7 @@ const CommentListPw = ({
                     )}
                 </Box>
                 <Box right="60px" width="30px">
-                    {isSend && (
+                    {isSend && !removed && (
                         <SendImg
                             src={send}
                             onClick={() => handleSendClick(id)}
@@ -198,6 +203,7 @@ const CommentListPw = ({
                         id={id}
                         emailL={emailL}
                         getComment={getComment}
+                        upRemoved={upRemoved}
                     />
                 ))}
         </>

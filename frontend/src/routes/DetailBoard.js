@@ -450,6 +450,7 @@ const DetailBoard = () => {
                                 dataKey={dataKey}
                                 childList={comment.childList}
                                 handleXclick={handleXclick}
+                                removed={comment.removed}
                             />
                         ))}
                 </ListBox>

@@ -443,7 +443,7 @@ const DetailShare = () => {
                                 dataKey={dataKey}
                                 childList={comment.childList}
                                 handleXclick={handleXclick}
-                               removed={comment.removed}
+                                removed={comment.removed}
                                
                             />
                         ))}

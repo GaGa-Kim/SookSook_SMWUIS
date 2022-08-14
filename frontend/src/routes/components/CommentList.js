@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import List from "./List";
 import Box from "./Box";
@@ -50,11 +50,11 @@ const SendImg = styled.img`
     }
 `;
 
-const Recomment = ({ id, emailL, getComment }) => {
+const Recomment = ({ id, emailL, upRemoved }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
-
+    const [removed, setRemoved] = React.useState(true);
     const getRecomment = async () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyComment/info",
@@ -67,9 +67,9 @@ const Recomment = ({ id, emailL, getComment }) => {
         setNickname(response.data.nickname);
         setContent(response.data.content);
         setEmail(response.data.email);
+        setRemoved(response.data.removed);
     };
     const handleXclick = async (email, id) => {
- 
         const res = await axios.delete("/studyComment", {
             params: {
                 email: email,
@@ -79,9 +79,8 @@ const Recomment = ({ id, emailL, getComment }) => {
         getRecomment();
     };
     React.useEffect(() => {
-        
         getRecomment();
-    }, []);
+    }, [removed]);
 
     return (
         <List>
@@ -94,7 +93,7 @@ const Recomment = ({ id, emailL, getComment }) => {
             <Box left="100px">
                 <ListText>{content}</ListText>
             </Box>
-            {emailL === email ? (
+            {emailL === email && !removed && !upRemoved ? (
                 <Box right="35px" onClick={() => handleXclick(email, id)}>
                     <XImg src={x}></XImg>
                 </Box>
@@ -108,8 +107,8 @@ const CommentList = ({
     email,
     dataKey,
     childList,
-    writeEmail,
     handleXclick,
+    removed,
 }) => {
     //댓글 작성자 닉네임
     let nicknameL = "";
@@ -127,9 +126,9 @@ const CommentList = ({
             });
     }, []);
     const [isDelete, setIsDelete] = React.useState(true);
-    const [nickname,setNickname]=React.useState("");
-    const [content,setContent]=React.useState("");
-  
+    const [nickname, setNickname] = React.useState("");
+    const [content, setContent] = React.useState("");
+    const [upRemoved, setUpRemoved] = React.useState(false);
     const getComment = async () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyComment/info",
@@ -141,14 +140,14 @@ const CommentList = ({
         );
         setNickname(response.data.nickname);
         setContent(response.data.content);
+        setUpRemoved(response.data.removed);
     };
-    useEffect(()=>{
-        
+    useEffect(() => {
         getComment();
-    },[]);
+    }, [removed]);
     React.useState(() => {
         emailL === email ? setIsDelete(true) : setIsDelete(false);
-    }, [emailL,email]);
+    }, [emailL, email]);
     return (
         <>
             <List>
@@ -164,7 +163,7 @@ const CommentList = ({
                     onClick={() => handleXclick(email, id)}
                     style={{ overflow: "hidden" }}
                 >
-                    {isDelete && (
+                    {isDelete && !removed &&(
                         // <div
                         //     style={{
                         //         display: "flex",
@@ -180,12 +179,10 @@ const CommentList = ({
                     )}
                 </Box>
                 <Box right="60px" width="30px">
-                    
-                        <SendImg
-                            src={send}
-                            onClick={() => handleSendClick(id)}
-                        ></SendImg>
-                    
+                    {!removed&&(<SendImg
+                        src={send}
+                        onClick={() => handleSendClick(id)}
+                    ></SendImg>)}
                 </Box>
             </List>
             {childList &&
@@ -194,6 +191,7 @@ const CommentList = ({
                         id={id}
                         emailL={emailL}
                         getComment={getComment}
+                        upRemoved={upRemoved}
                     />
                 ))}
         </>
