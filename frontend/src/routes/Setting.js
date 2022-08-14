@@ -1,26 +1,24 @@
+import Logo from './components/Logo';
+import axios from "axios";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
 import Root from "./components/Root";
-import axios from "axios";
 import ColorBox from "./components/ColorBox";
 import InputBox from "./components/InputBox";
+import InputText from "./components/InputText";
 import Box from "./components/Box";
-import Button from "./components/Button";
-import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
-import ButtonBox from "./components/ButtonBox";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import Badge from "./components/Badge";
-import Logo from './components/Logo';
+import Button from './components/Button';
+import ButtonBox from './components/ButtonBox';
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
+import React, { useState } from "react";
 import "../fonts/Font.css";
-import { Rate, Input, Tag } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-
+import { useSelector } from 'react-redux';
+import { Input, Space } from "antd";
 
 const Title = styled.div`
     position: absolute;
     top: 30px;
-    left: 90px;
+    left: 100px;
     font-size: 36px;
     color: #ffffff;
     font-family: "Cafe24";
@@ -28,12 +26,12 @@ const Title = styled.div`
 
 const Main = styled.div`
     width: 100%;
-    height: 300px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 50px;
+    margin-bottom:50px;
     font-family: "DoHyeon";
 `;
 
@@ -44,204 +42,175 @@ const Quest = styled.div`
     font-size: 25px;
     align-items: center;
 `;
-
-const MemberButton = styled.button`
-    width: 49px;
-    height: 32px;
-    background-color: #d9d9d9;
-    border-radius: 50px;
-    margin: 4px;
-    border: thin solid #d9d9d9;
-`;
-const PlusButton = styled.button`
-    border:none;
-    border-radius: 30px;
-    width: 150px;
-    height: 25px;
-    text-align: center;
-    padding-top: 5px;
-    margin-left: ${(props) => props.mgLeft};
-    margin-bottom: ${(props) => props.mgBot};
-`;
-
-const Membertag = () => {
-    const [tags, setTags] = useState([
-        "성실해요",
-        "과제 제출이 빨라요",
-        "약속을 잘 지켜요",
-        "성실하지 않아요"
-    ]);
-    const [inputVisible, setInputVisible] = useState(false);
-    const [inputValue, setInputValue] = useState("");
-    const inputRef = useRef(null);
-    useEffect(() => {
-        if (inputVisible) {
-            inputRef.current?.focus();
-        }
-    });
-
-    const handleClose = (removedTag) => {
-        const newTags = tags.filter((tag) => tag !== removedTag);
-        console.log(newTags);
-        setTags(newTags);
-    };
-
-    const showInput = () => {
-        setInputVisible(true);
-    };
-
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-
-    const handleInputConfirm = () => {
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            setTags([...tags, inputValue]);
-        }
-
-        setInputVisible(false);
-        setInputValue("");
-    };
-
-    const forMap = (tag) => {
-        const tagElem = (
-            <Tag
-                closable
-                onClose={(e) => {
-                    e.preventDefault();
-                    handleClose(tag);
-                }}
-            >
-                {tag}
-            </Tag>
-        );
-        return <span key={tag}>{tagElem}</span>;
-    };
-
-    const tagChild = tags.map(forMap);
+const InputPassword = (item) => {
+    const onChange = (e) => {
+        item.getPw(e.target.value);
+    }
     return (
-        <>
-            <div
-                style={{
-                    "display": "flex",
-                    "flex-direction": "column"
-                }}
-            >
-                {tagChild}
-            </div>
-            {inputVisible && (
-                <Input
-                    ref={inputRef}
-                    type="text"
-                    size="small"
-                    style={{
-                        width: 78
-                    }}
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onBlur={handleInputConfirm}
-                    onPressEnter={handleInputConfirm}
-                />
-            )}
-            {!inputVisible && (
-                <Tag onClick={showInput}>
-                    <PlusOutlined />
-                </Tag>
-            )}
-        </>
+        <Input.Password
+            value={item.value}
+            onChange={onChange}
+            style={{ "border-radius": "70px" }}
+            disabled={item.disable}
+        />
     );
 };
 
-const MemberGrade = () => {
-    //현재 로그인 중인 email 받기
-    const email = useSelector((state) => state.email);
+const Setting = () => {
+
+    const handleDeleteClick = (e) => {
+        // 회원탈퇴
+        axios
+            .delete("https://sooksook.herokuapp.com/user", {
+                params: {
+                    email: email,
+                    id: id,
+                }
+            })
+            .then(() => {
+                alert("회원탈퇴가 완료되었습니다");
+                navigate("/");
+            })
+
+    };
+
+    const getPassword = (text) => {
+        setPassword(text);
+    };
+    const getNickname = (text) => {
+        setNickname(text);
+    };
+    const getIntroduction = (text) => {
+        setIntroduction(text);
+    };
+    const getEmail = (text) => {
+        setEmail(text);
+    };
+
+    const [nickname, setNickname] = React.useState("");
+    const [name, setName] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [introduction, setIntroduction] = React.useState("");
     const navigate = useNavigate();
-    const { key } = useParams();
-    const rates = [1, 2, 3, 4, 5]; const RandomColor = () => {
-        return (
-            "#" + Math.round(Math.random() * 0xfffffe + 0x000002).toString(16)
-        );
-    };
-    const RateMem = () => {
-        const [value, setValue] = useState(3);
-        return (
-            <span>
-                <Rate onChange={setValue} value={value} />
-                {value ? <span >&nbsp;&nbsp;&nbsp;{rates[value - 1]}&nbsp;</span> : ''}
-            </span>
-        );
-    }
+    const email = useSelector(state => state.email);
+    const setEmail = React.useState("");
+    const id = useSelector(state => state.loginId);
 
-    const [rate, setRate] = React.useState("");
-    const [contents, setContents] = React.useState("");
-
-    const getRate = (value) => {
-        const num = parseInt(value);
-        setRate(num);
-    };
-
-    const handleSaveClick = () => {
-        axios.post("https://sooksook.herokuapp.com/userRating", {
-            score: rate,
-        });
-        navigate(`/private`);
-    }
-
-    const Mem = (props) => {
-        return (
-            <MemberButton>{props.name}</MemberButton>
-        )
-    };
-
-    const Member = () => {
-        const [memberInfo, setMememberInfo] = useState([]);
-        React.useEffect(() => {
-            axios.get(`/ studyMember ? studyBoardId = ${key}`).then((response) => {
-                setMememberInfo(response.data);
+    React.useEffect(() => {
+        axios
+            .get(
+                "https://sooksook.herokuapp.com/user/myInfo", {
+                params: {
+                    email: email,
+                    id: id,
+                }
+            }
+            )
+            .then((response) => {
+                setNickname(response.data.nickname);
+                setIntroduction(response.data.introduction);
+                setPassword(response.data.password);
+                setName(response.data.name);
             });
-        }, []);
-        // 멤버정보
-        // const memberInfo = ['송송', '송파', '파파'];
-        const memberList = memberInfo.map((memberInfo) => (<Mem name={memberInfo} />))
-        return (
-            <div>
-                {memberList}</div>
-        )
-    }
+    }, []);
+
+    const handleUploadClick = () => {
+        // 유저 정보 수정후 저장
+        axios
+            .put(`/user?id=${id}`, {
+                email: email,
+                introduction: introduction,
+                nickname: nickname,
+                name: name,
+            })
+            .then(setIsDisable(true));
+
+    };
+
+    // const handlePasswordClick = () => {
+    //     //비밀번호 수정
+    //     axios
+    //     .put(`http://localhost:8080/studyMember?email=${email}`, {
+
+    //         newpassword: password,
+    //     })
+    //     .then(setIsDisable(true));
+    // };
+
+    const [isModify, setIsModify] = React.useState(false);
+    const [isDisable, setIsDisable] = React.useState(true);
+
+    const handleModifyClick = () => {
+        setIsModify(true);
+        setIsDisable(false);
+    };
 
     return (
-        <Root >
+        <Root>
             <GlobalStyle />
             <Logo />
             <ColorBox height="90px">
-                <Title>스터디원 평가하기</Title>
+                <Title>정보수정</Title>
             </ColorBox>
             <Main>
                 <InputBox>
-                    <Quest>스터디원 선택</Quest>
-                    <Box width="700px" left="140px" top="4px">
-                        <Member />
+                    <Quest>닉네임</Quest>
+                    <Box width="200px" left="150px" top="7px">
+                        <InputText value={nickname} disable={isDisable} getText={getNickname} />
                     </Box>
                 </InputBox>
                 <InputBox>
-                    <Quest>별점</Quest>
-                    <Box width="200px" left="145px" top="13px">
-                        <RateMem getText={getRate} />/&nbsp;5
+                    <Quest>현재 비밀번호</Quest>
+                    <Box width="200px" left="150px" disable={isDisable} top="7px" >
+                        <InputPassword value={password} disable={isDisable} getText={getPassword} />
                     </Box>
                 </InputBox>
                 <InputBox>
-                    <Quest>뱃지 선택</Quest>
-                    <Box width="400px" left="140px" top="15px">
-                        <Membertag />
+                    <Quest>새 비밀번호</Quest>
+                    <Box width="200px" left="150px" disable={isDisable} top="7px" >
+                        <InputPassword value={password} disable={isDisable} getText={getPassword} />
+                    </Box>
+                </InputBox>
+                <InputBox>
+                    <Quest>한 줄 소개</Quest>
+                    <Box width="200px" left="150px" top="7px" >
+                        <InputText value={introduction} disable={isDisable} text="입력하세요" getText={getIntroduction} />
+                    </Box>
+                </InputBox>
+                <InputBox>
+                    <Quest>이메일</Quest>
+                    <Box width="200px" left="150px" top="7px">
+                        <InputText value={email} disable={isDisable} type="email" getText={getEmail} />
                     </Box>
                 </InputBox>
             </Main>
+
             <ButtonBox mgRight="50px">
-                <Button width="100px" mg="30px" onClick={handleSaveClick}>
-                    저장하기
-                </Button>
+                {isDisable && (
+                    <Button
+                        width="100px"
+                        mg="30px"
+                        onClick={handleModifyClick}
+                    >
+                        수정
+                    </Button>
+                )}
+                {!isDisable && (
+                    <Button
+                        width="100px"
+                        mg="30px"
+                        onClick={handleUploadClick}
+                    >
+                        저장
+                    </Button>
+                )}
+
+                <Button width="100px" mg="30px" onClick={handleDeleteClick}>회원탈퇴</Button>
             </ButtonBox>
-        </Root >
+
+        </Root>
+
     );
 };
-export default MemberGrade;
+
+export default Setting;

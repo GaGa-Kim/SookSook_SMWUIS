@@ -115,65 +115,28 @@ public class StudyPostController {
     }
 
     // 스터디 게시글 수정
-    /*
-      첨부파일이 있을 경우, 원래의 첨부파일은 지워지고 새롭게 올라온 첨부파일만 저장됨
-      첨부파일이 없을 경우, 원래의 첨부파일 유지
-     */
     @PutMapping(value = "/studyPost")
     @ApiOperation(value = "게시글 수정 (Postman 이용)", notes = "게시글 수정 API")
     @ApiImplicitParam(name = "id", value = "게시글 id", example = "1")
-    public ResponseEntity<StudyPostResponseDto> update(@RequestParam Long id, StudyPostVO studyPostVO) throws Exception {
+    public ResponseEntity<StudyPostResponseDto> update(@RequestParam Long id, StudyUpdateVO studyUpdateVO) throws Exception {
 
         StudyPostUpdateRequestDto updateRequestDto = StudyPostUpdateRequestDto
                 .builder()
-                .email(studyPostVO.getEmail())
-                .title(studyPostVO.getTitle())
-                .content(studyPostVO.getContent())
+                .email(studyUpdateVO.getEmail())
+                .title(studyUpdateVO.getTitle())
+                .content(studyUpdateVO.getContent())
                 .build();
 
-        StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
-        List<StudyFiles> dbFilesList = studyFilesRepository.findAllByStudyPostId(studyPost);
-        List<MultipartFile> multipartList = studyPostVO.getFiles();
-        List<MultipartFile> addFileList = new ArrayList<>();
-
-        if (CollectionUtils.isEmpty(dbFilesList)) {
-            if (!CollectionUtils.isEmpty(multipartList)) {
-                for (MultipartFile multipartFile : multipartList)
-                    addFileList.add(multipartFile);
-            }
-        }
-
-        else {
-            if (CollectionUtils.isEmpty(multipartList)) {
-                for (StudyFiles dbStudyFiles : dbFilesList) {
-                    awsS3Service.deleteS3(dbStudyFiles.getFileName());
-                    studyFilesService.delete(dbStudyFiles.getId());
-                }
-            } else {
-                List<String> dbOriginNameList = new ArrayList<>();
-
-                for (StudyFiles dbStudyFiles : dbFilesList) {
-                    StudyPostFileResponseDto dbStudyPostFileResponseDto = studyFilesService.findByFileId(dbStudyFiles.getId());
-                    String dbOrigFileName = dbStudyFiles.getOrigFileName();
-
-                    if (!multipartList.contains(dbOrigFileName)) {
-                        awsS3Service.deleteS3(dbStudyFiles.getFileName());
-                        studyFilesService.delete(dbStudyFiles.getId());
-                    } else
-                        dbOriginNameList.add(dbOrigFileName);
-                }
-
-                for (MultipartFile multipartFile : multipartList) {
-                    String multipartOrigName = multipartFile.getOriginalFilename();
-                    if (!dbOriginNameList.contains(multipartOrigName)) {
-                        addFileList.add(multipartFile);
-                    }
-                }
+        // 삭제할 파일이 있다면 파일 삭제
+        if (!CollectionUtils.isEmpty(studyUpdateVO.getDeleteId())) {
+            for(Long deleteFileId: studyUpdateVO.getDeleteId()) {
+                awsS3Service.deleteS3(studyFilesService.findByFileId(deleteFileId).getFileName());
+                studyFilesService.delete(deleteFileId);
             }
         }
 
         logger.info("update (게시글 수정)");
-        return ResponseEntity.ok().body(studyPostService.updateWithFiles(id, updateRequestDto, addFileList));
+        return ResponseEntity.ok().body(studyPostService.update(id, updateRequestDto, studyUpdateVO.getFiles()));
     }
 
     // 스터디 게시글 삭제

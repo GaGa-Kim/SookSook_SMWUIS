@@ -10,6 +10,7 @@ import com.smwuis.sooksook.web.dto.study.StudyPostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -64,34 +65,18 @@ public class StudyPostService {
         return new StudyPostResponseDto(studyPost, findFileId(studyPost.getId()));
     }
     
-    // 게시글 수정 - 첨부파일 없을 때
+    // 게시글 수정
     @Transactional
-    public StudyPostResponseDto update(Long id, StudyPostUpdateRequestDto updateRequestDto) {
-        User user = userRepository.findByEmail(updateRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
-        StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
-
-        if(user.equals(studyPost.getUserId())) {
-            studyPost.update(updateRequestDto.getTitle(),
-                    updateRequestDto.getContent());
-
-            return new StudyPostResponseDto(studyPost, null);
-        }
-        else {
-            throw new RuntimeException("게시글 수정에 실패했습니다.");
-        }
-    }
-    
-    // 게시글 수정 - 첨부파일 있을 때
-    @Transactional
-    public StudyPostResponseDto updateWithFiles(Long id, StudyPostUpdateRequestDto updateRequestDto, List<MultipartFile> files) throws Exception {
+    public StudyPostResponseDto update(Long id, StudyPostUpdateRequestDto updateRequestDto, List<MultipartFile> files) throws Exception {
         User user = userRepository.findByEmail(updateRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
         StudyPost studyPost = studyPostRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
 
         if(user.equals(studyPost.getUserId())) {
 
-            List<StudyFiles> filesList = awsS3Service.uploadFile(files);
+            // 추가할 파일이 있다면 파일 추가
+            if(!CollectionUtils.isEmpty(files)) {
+                List<StudyFiles> filesList = awsS3Service.uploadFile(files);
 
-            if(!filesList.isEmpty()) {
                 for(StudyFiles studyFiles: filesList) {
                     studyPost.addStudyFiles(studyFilesRepository.save(studyFiles));
                 }
