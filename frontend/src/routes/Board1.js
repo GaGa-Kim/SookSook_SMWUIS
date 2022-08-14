@@ -42,18 +42,16 @@ const Board1 = () => {
         });
         setData(response.data);
     };
-    React.useEffect(()=>{
-        setRerender(location);
-        console.log(location);
-    },[location]);
+    
     React.useEffect(() => {
+        console.log(location);
         if (dpt === "전체") {
             getAll();
         } else {
             getDpt();
 
         } 
-    }, [rerender,dpt]);
+    }, [location,dpt]);
 
     const onChangeDpt = async (e) => {
         const dpt = await setDpt(e.target.value);
