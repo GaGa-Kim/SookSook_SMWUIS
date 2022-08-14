@@ -26,11 +26,6 @@ const Board2 = () => {
     const [data, setData] = useState("");
     const [category, setCategory] = React.useState("전체");
     const location=useLocation().key;
-    const [rerender,setRerender]=useState("");
-
-    React.useEffect(()=>{
-        setRerender(location);
-    },[location]);
 
     const getAll = async () => {
         const response = await axios.get(
@@ -53,7 +48,7 @@ const Board2 = () => {
         } else {
             getCategory();
         }
-    }, [rerender,category]);
+    }, [location,category]);
 
     const onChangeCategory = async (e) => {
         const category = setCategory(e.target.value);
