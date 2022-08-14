@@ -20,20 +20,22 @@ const Cwrite = () => {
     return (
         <section>
             <button className="newstudy" style={{ marginLeft: "0px" }}>
-                <Link to="/setboard_share" >글 작성하기</Link>
+                <Link to="/setboard_share">글 작성하기</Link>
             </button>
         </section>
     );
 };
 
 const Share = () => {
+    const location = useLocation().key;
+    //게시글 아이디 리스트 받아오는 함수
     const getId = async () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
-        setId(...id, response.data);
+        setId(() => response.data);
     };
-    const getData =  () => {
+    const getData = () => {
         (id || []).reduce((prev, cur) => {
             return prev.then(async () => {
                 await axios
@@ -46,18 +48,17 @@ const Share = () => {
             });
         }, Promise.resolve());
     };
-    const {state}=useLocation();
+
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
-
-        setId(state);
         getId();
-    }, [state]);
+
+        console.log(location);
+    }, [location]);
 
     React.useEffect(() => {
         getData();
-
     }, [id]);
 
     const columns = [

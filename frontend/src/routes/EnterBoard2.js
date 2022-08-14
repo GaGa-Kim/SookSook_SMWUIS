@@ -117,9 +117,9 @@ const EnterBoard = () => {
     const [isShow, setIsShow] = React.useState(false);
 
     React.useEffect(() => {
-        if(emailL===""){
+        if (emailL === "") {
             alert("로그인이 필요합니다.");
-            navigate("/login");  
+            navigate("/login");
         }
         axios
             .get("https://sooksook.herokuapp.com/user/myInfo", {
@@ -207,9 +207,9 @@ const EnterBoard = () => {
     const getNumber = (text) => {
         setNumber(Number(text));
     };
-    const handleUploadClick = () => {
-        // 게시글 정보 저장
-        axios
+    // 게시글 수정 정보 저장
+    const handleUploadClick = async () => {
+        await axios
             .put(`/studyBoard?id=${dataKey}`, {
                 category: category,
                 email: email,
@@ -220,23 +220,30 @@ const EnterBoard = () => {
                 subject: subject,
                 title: title,
                 content: content,
+                lecture: false,
             })
             .then(setIsDisable(true));
     };
-    const handleDeleteClick = () => {
-        axios
-            .delete("/studyBoard", {
-                params: {
-                    email: email,
-                    id: dataKey,
-                },
-            })
-            .then(navigate("/board2"));
+    //게시글 삭제
+    const del = async () => {
+        const res = await axios.delete("/studyBoard", {
+            params: {
+                email: email,
+                id: dataKey,
+            },
+        });
+        navigate("/board2");
+    };
+    const handleDeleteClick = async () => {
+        del();
     };
     const getText = (text) => {
         setComment(text);
     };
-
+    //목록 클릭
+    const handleListClick = () => {
+        navigate("/board2");
+    };
     //isOpen true이면 modal보임
     const [isOpen, setIsOpen] = React.useState(false);
     //입장버튼눌렀을때
@@ -252,7 +259,7 @@ const EnterBoard = () => {
             )
             .then((response) => {
                 if (response.data === true) {
-                    navigate(`/private/${dataKey}`);
+                    navigate(`/private2/${dataKey}`);
                 } else {
                     setIsOpen(true);
                 }
@@ -276,39 +283,69 @@ const EnterBoard = () => {
     const handleRequestCloseFunc = () => {
         setIsOpen(false);
     };
-    const handlePlusClick = () => {
-        axios
-            .post("https://sooksook.herokuapp.com/passwordComment", {
-                content: comment,
-                email: emailL,
+     /*댓글*/
+
+    //댓글 가져오기
+    const getComment=async()=>{
+        const res=await axios
+        .get("https://sooksook.herokuapp.com/passwordComment/all", {
+            params: {
                 studyBoardId: dataKey,
-                upIndex: "null",
-            })
-            .then((response) => {
-                const addCommentList = commentList.concat(response.data);
-                setCommentList(addCommentList);
-            });
+            },
+        });
+        setCommentList(res.data);
+    }
+    React.useEffect(() => {
+       getComment();
+    }, [location.key]);
+    //댓글 추가하기
+    const addComment=async ()=>{
+        const res=await axios
+        .post("https://sooksook.herokuapp.com/passwordComment", {
+            content: comment,
+            email: emailL,
+            studyBoardId: dataKey,
+            upIndex: "null",
+        });
+        
         setComment("");
+        getComment();
+    }
+    const handlePlusClick = () => {
+        addComment();
     };
+    const handleXclick = async (email,id) => {
+         console.log(1);
+        const res=await axios.delete("/passwordComment", {
+            params: {
+                email: email,
+                id: id,
+            },
+        });
+        getComment();
+        };
     const [isRecomment, setIsRecomment] = React.useState(false);
     const [upIndex, setUpIndex] = React.useState();
     const handleSendClick = (id) => {
         setIsRecomment(true);
         setUpIndex(id);
+
     };
+    //대댓글 추가
+    const addRecomment=async ()=>{
+        const res=await axios
+        .post("https://sooksook.herokuapp.com/passwordComment", {
+            content: comment,
+            email: emailL,
+            studyBoardId: dataKey,
+            upIndex: upIndex,
+        });
+
+        setComment('');
+        getComment();
+    }
     const handleRecommentClick = () => {
-        axios
-            .post("https://sooksook.herokuapp.com/passwordComment", {
-                content: comment,
-                email: emailL,
-                studyBoardId: dataKey,
-                upIndex: upIndex,
-            })
-            .then((response) => {
-                const addCommentList = commentList.concat(response.data);
-                setCommentList(addCommentList);
-            });
-        setComment("");
+       addRecomment();
     };
     const handleCommentClick = () => {
         setIsRecomment(false);
@@ -429,20 +466,8 @@ const EnterBoard = () => {
                         <Quest ftSize="25px">오프라인</Quest>
                     </InputBox>
                     <InputBox>
-                        {!isShow && (
-                            <Box left="130px" top="7px">
-                                <Button
-                                    width="100px"
-                                    height="32px"
-                                    mg="0px"
-                                    onClick={handleEnterClick}
-                                >
-                                    입장
-                                </Button>
-                            </Box>
-                        )}
                         {isShow && (
-                            <Box left="55px" top="7px">
+                            <Box left="10px" top="2px">
                                 {isDisable && (
                                     <Button
                                         width="100px"
@@ -463,6 +488,22 @@ const EnterBoard = () => {
                                         업로드
                                     </Button>
                                 )}
+                            </Box>
+                        )}
+
+                        <Box left="118px" top="7px">
+                            <Button
+                                width="100px"
+                                height="32px"
+                                mg="0px"
+                                onClick={handleListClick}
+                            >
+                                목록
+                            </Button>
+                        </Box>
+
+                        {isShow && (
+                            <Box left="221px" top="7px">
                                 <Button
                                     width="100px"
                                     height="32px"
@@ -473,6 +514,19 @@ const EnterBoard = () => {
                                 </Button>
                             </Box>
                         )}
+                        <Link to="/board1"></Link>
+                    </InputBox>
+                    <InputBox>
+                        <Box left="118px" top="13px">
+                            <Button
+                                width="100px"
+                                height="32px"
+                                mg="0px"
+                                onClick={handleEnterClick}
+                            >
+                                입장
+                            </Button>
+                        </Box>
                     </InputBox>
                 </Main>
             )}
@@ -482,13 +536,14 @@ const EnterBoard = () => {
                     {commentList &&
                         commentList.map((comment) => (
                             <CommentListPw
-                                nickname={comment.nickname}
-                                email={comment.email}
-                                content={comment.content}
-                                handleSendClick={handleSendClick}
-                                id={comment.id}
-                                dataKey={dataKey}
-                                childList={comment.childList}
+                            email={comment.email}
+                            writeEmail={email}
+                            handleSendClick={handleSendClick}
+                            id={comment.id}
+                            dataKey={dataKey}
+                            childList={comment.childList}
+                            handleXclick={handleXclick}
+                            removed={comment.removed}
                             />
                         ))}
                 </ListBox>

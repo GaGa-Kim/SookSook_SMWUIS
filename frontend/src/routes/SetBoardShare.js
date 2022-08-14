@@ -74,12 +74,7 @@ const SetBoardShare = () => {
     const [filename, setFilename] = React.useState("파일 선택하기");
 
     const [id,setId]=React.useState([]);
-    const getId = async () => {
-        const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%9E%90%EB%A3%8C%20%EA%B3%B5%EC%9C%A0%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
-        );
-        setId(...id, response.data);
-    };
+    
 
     React.useEffect(()=>{
         if(emailL===""){
@@ -123,7 +118,8 @@ const SetBoardShare = () => {
         .post("https://sooksook.herokuapp.com/studyPost/share", formData)
         .then((response) => {
             console.log(response.data);
-            getId();
+            
+            navigate("/share");
         });
     }
     const handleUploadClick = (e) => {
@@ -145,7 +141,7 @@ const SetBoardShare = () => {
 
             upload();
 
-            navigate("/share",{state:id});
+           
         }
     };
 

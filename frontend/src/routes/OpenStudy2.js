@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../fonts/Font.css";
 import React from "react";
 import { DatePicker, Space } from "antd";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 const Title = styled.div`
     position: absolute;
@@ -72,7 +72,7 @@ const ButtonBox = styled.div`
 `;
 const Openstudy2 = () => {
     const navigate = useNavigate();
-    const email = useSelector(state => state.email);
+    const email = useSelector((state) => state.email);
 
     const [category, setCategory] = React.useState("토익/토플");
     const [title, setTitle] = React.useState("");
@@ -82,6 +82,24 @@ const Openstudy2 = () => {
     const [date, setDate] = React.useState("");
     const [number, setNumber] = React.useState();
     const [onoff, setOnoff] = React.useState("");
+
+    const postInfo = async () => {
+        await axios.post(
+            "https://sooksook.herokuapp.com/studyBoard/notLecture",
+            {
+                content: content,
+                category: category,
+                email: email,
+                number: number,
+                onoff: onoff,
+                password: pw,
+                period: date,
+                subject: subject,
+                title: title,
+            }
+        );
+        navigate(`/board2`);
+    };
 
     const handleUploadClick = (e) => {
         if (subject === "") {
@@ -109,19 +127,7 @@ const Openstudy2 = () => {
             alert("온라인 또는 오프라인을 체크하세요");
             return;
         } else {
-            axios
-                .post("https://sooksook.herokuapp.com/studyBoard/notLecture", {
-                    content: content,
-                    category: category,
-                    email: email,
-                    number: number,
-                    onoff: onoff,
-                    password: pw,
-                    period: date,
-                    subject: subject,
-                    title: title,
-                });
-            navigate(`/board2`);
+            postInfo();
         }
         /*db에 게시글 정보 저장*/
     };

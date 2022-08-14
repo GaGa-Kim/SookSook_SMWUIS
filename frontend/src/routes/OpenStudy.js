@@ -10,7 +10,7 @@ import Box from "./components/Box";
 import InputArea from "./components/InputArea";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../fonts/Font.css";
 import React from "react";
 import { DatePicker, Space } from "antd";
@@ -73,6 +73,7 @@ const ButtonBox = styled.div`
 const Openstudy = () => {
     const navigate = useNavigate();
     const email = useSelector((state) => state.email);
+    const params = useParams();
 
     const [dpt, setDpt] = React.useState("문과대학");
     const [title, setTitle] = React.useState("");
@@ -82,6 +83,21 @@ const Openstudy = () => {
     const [date, setDate] = React.useState("");
     const [number, setNumber] = React.useState();
     const [onoff, setOnoff] = React.useState("");
+
+    const postInfo = async () => {
+        await axios.post("https://sooksook.herokuapp.com/studyBoard/lecture", {
+            content: content,
+            department: dpt,
+            email: email,
+            number: number,
+            onoff: onoff,
+            password: pw,
+            period: date,
+            subject: subject,
+            title: title,
+        });
+        navigate(`/board1`);
+    };
 
     const handleUploadClick = (e) => {
         if (subject === "") {
@@ -109,21 +125,8 @@ const Openstudy = () => {
             alert("온라인 또는 오프라인을 체크하세요");
             return;
         } else {
-            axios.post("https://sooksook.herokuapp.com/studyBoard/lecture", {
-                content: content,
-                department: dpt,
-                email: email,
-                number: number,
-                onoff: onoff,
-                password: pw,
-                period: date,
-                subject: subject,
-                title: title,
-            });
-
-            navigate(`/board1`);
+            postInfo();
         }
-        /*db에 게시글 정보 저장*/
     };
     const getText = (text) => {
         setTitle(text);
@@ -176,7 +179,9 @@ const Openstudy = () => {
                             <option value="약학대학">약학대학</option>
                             <option value="미술대학">미술대학</option>
                             <option value="기초교양대학">기초교양대학</option>
-                            <option value="글로벌서비스학부">글로벌서비스학부</option>
+                            <option value="글로벌서비스학부">
+                                글로벌서비스학부
+                            </option>
                             <option value="영어영문학부">영어영문학부</option>
                             <option value="미디어대학">미디어학부</option>
                         </Select>

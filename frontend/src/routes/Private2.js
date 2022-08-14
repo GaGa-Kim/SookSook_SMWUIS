@@ -3,7 +3,7 @@ import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React, { useState } from "react";
 import { Table } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useLocation } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
@@ -67,6 +67,7 @@ const Private2 = () => {
     const [spdata, setSpdata] = React.useState([]);
     const [piedata, setPiedata] = React.useState([]);
     const [memberInfo, setMememberInfo] = useState([]);
+    const location = useLocation().key;
     //멤버정보
     React.useEffect(() => {
         axios.get(`/studyMember?studyBoardId=${key}`).then((response) => {
@@ -89,8 +90,8 @@ const Private2 = () => {
             let pieTemp = piedata.concat({
                 title: memberInfo[i].nickname,
                 value: memberInfo[i].posts + memberInfo[i].comments,
-                color: "#" + (0xbfbfaf + i * 16)
-            })
+                color: "#" + (0xbfbfaf + i * 16),
+            });
             setPiedata(pieTemp);
         }
     }
@@ -99,9 +100,9 @@ const Private2 = () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%99%B8%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
-        setId(...id, response.data);
+        setId(()=>response.data);
     };
-    const getData =  () => {
+    const getData = () => {
         (id || []).reduce((prev, cur) => {
             return prev.then(async () => {
                 await axios
@@ -114,18 +115,17 @@ const Private2 = () => {
             });
         }, Promise.resolve());
     };
-    const {state}=useLocation();
+
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
-
-        setId(state);
         getId();
-    }, [state]);
+
+        console.log(location);
+    }, [location]);
 
     React.useEffect(() => {
         getData();
-
     }, [id]);
     const columns = [
         {

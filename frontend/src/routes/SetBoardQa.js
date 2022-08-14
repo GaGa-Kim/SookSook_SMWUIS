@@ -76,12 +76,7 @@ const SetBoardQa = () => {
     const [filename, setFilename] = React.useState("파일 선택하기");
 
     const [id,setId]=React.useState([]);
-    const getId = async () => {
-        const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
-        );
-        setId(...id, response.data);
-    };
+    
 
     React.useEffect(()=>{
         if(emailL===""){
@@ -125,7 +120,7 @@ const SetBoardQa = () => {
         .post("https://sooksook.herokuapp.com/studyPost/question", formData)
         .then((response) => {
             console.log(response.data);
-            getId();
+            navigate("/qaboard");
         });
     }
     const handleUploadClick = (e) => {
@@ -147,7 +142,7 @@ const SetBoardQa = () => {
 
             upload();
 
-            navigate("/qaboard",{state:id});
+           
         }
     };
 

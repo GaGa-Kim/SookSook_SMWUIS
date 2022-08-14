@@ -1,6 +1,6 @@
 import "../css/board2.css";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useLocation} from "react-router-dom";
 import { Table } from "antd";
 import "antd/dist/antd.css";
 import styled from "styled-components";
@@ -25,9 +25,11 @@ const Select = styled.select`
 const Board2 = () => {
     const [data, setData] = useState("");
     const [category, setCategory] = React.useState("전체");
+    const location=useLocation().key;
+
     const getAll = async () => {
         const response = await axios.get(
-            "http://localhost:8080/studyBoards/list?lecture=false"
+            "https://sooksook.herokuapp.com/studyBoards/list?lecture=false"
         );
         setData(response.data);
     };
@@ -39,33 +41,20 @@ const Board2 = () => {
         });
         setData(response.data);
     };
+    
     React.useEffect(() => {
         if (category === "전체") {
             getAll();
-
-            axios
-                .get(
-                    "https://sooksook.herokuapp.com/studyBoards/list?lecture=false"
-                )
-                .then((response) => {
-                    setData(response.data);
-                });
         } else {
             getCategory();
         }
-    }, [getAll, getCategory]);
+    }, [location,category]);
 
     const onChangeCategory = async (e) => {
         const category = setCategory(e.target.value);
         return category;
     };
-    React.useEffect(() => {
-        axios
-            .get("/studyBoards/category?category=${category}")
-            .then((response) => {
-                setData(response.data);
-            });
-    }, []);
+    
     const columns = [
         {
             title: <div className="studyname">스터디 명</div>,
