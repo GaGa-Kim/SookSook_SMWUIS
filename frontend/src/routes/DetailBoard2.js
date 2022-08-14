@@ -184,7 +184,8 @@ const DetailBoard2 = () => {
     const formData = new FormData();
     const handleDelFile=(id)=>{
         console.log("삭제");
-        fileInfo[id].isDel=true;
+        setDelFileId((prev) => [...prev, id]);
+        setFileInfo(fileInfo.map((item)=>item.fileId===id?{...item,fileName:"삭제되었습니다."}:item));
     }
     const handleFileClick=()=>{
         setAddFormData([]);
@@ -235,6 +236,8 @@ const DetailBoard2 = () => {
             }
         }
             upload();
+            setDelFileId([]);
+            navigate(`/private2/${dataKey}`);
        
     };
     //게시글 삭제
@@ -370,29 +373,51 @@ const DetailBoard2 = () => {
                     <Quest>파일</Quest>
                     <Box width="200px" left="100px" top="17px">
                         {/* 파일 정보 */}
-
                         {fileInfo &&
                             fileInfo.map((item) => {
                                 return (
-                                    <div>
-                                        <a
-                                            href={item.fileDownload}
-                                            download={item.fileName}
+                                   
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                marginBottom: "7px",
+                                            }}
                                         >
-                                            {item.fileName}
-                                        </a>
-                                    </div>
+                                            <a
+                                                href={item.fileDownload}
+                                                download={item.fileName}
+                                            >
+                                                {item.fileName}
+                                            </a>
+                                            {!isDisable && (
+                                                <Button
+                                                    margin="0px 10px"
+                                                    onClick={() =>
+                                                        handleDelFile(
+                                                            item.fileId
+                                                        )
+                                                    }
+                                                >
+                                                    삭제
+                                                </Button>
+                                            )}
+                                        </div>
+
                                 );
                             })}
                         {!isDisable && (
                             <>
                                 <LabelFile for="inputFile">
-                                    파일 선택하기
+                                    {filename}
                                 </LabelFile>
-                                <InputFile
+
+                                <input
                                     id="inputFile"
                                     type="file"
+                                    multiple="multiple"
                                     style={{ display: "none" }}
+                                    onChange={handleFileChange}
+                                    onClick={handleFileClick}
                                 />
                             </>
                         )}

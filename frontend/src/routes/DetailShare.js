@@ -15,6 +15,7 @@ import "../fonts/Font.css";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { getTransitionDirection } from "antd/lib/_util/motion";
 const Title = styled.div`
     position: absolute;
     top: 30px;
@@ -31,7 +32,7 @@ const Main = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 50px;
-    padding-bottom:30px;
+    padding-bottom: 30px;
     font-family: "DoHyeon";
     border-bottom: thin solid #c1daff;
 `;
@@ -104,15 +105,16 @@ const DetailShare = () => {
     const [fileId, setFileId] = React.useState([]);
     const [fileInfo, setFileInfo] = React.useState([]);
     const [email, setEmail] = React.useState("");
-    const fileName=useRef();
-    const fileDownload=useRef();
+    const fileName = useRef();
+    const fileDownload = useRef();
+
     const getPost = async () => {
         const response = await axios.get(
             `https://sooksook.herokuapp.com/studyPost/info?id=${dataKey}`
         );
         setTitle(response.data.title);
         setContent(response.data.content);
-        setFileId(prev=>prev.concat(response.data.fileId));
+        setFileId((prev) => prev.concat(response.data.fileId));
         setEmail(response.data.email);
         if (emailL === response.data.email) {
             setIsShow(true);
@@ -130,7 +132,6 @@ const DetailShare = () => {
     }, []);
 
     const getFile = () => {
-        
         (fileId || []).reduce((prev, cur) => {
             return prev.then(async () => {
                 await axios
@@ -138,7 +139,7 @@ const DetailShare = () => {
                         `https://sooksook.herokuapp.com/studyPost/fileInfo?id=${cur}`
                     )
                     .then((res) => {
-                       fileName.current=res.data.origFileName;
+                        fileName.current = res.data.origFileName;
                     });
                 await axios
                     .get(
@@ -149,11 +150,14 @@ const DetailShare = () => {
                     )
                     .then((res) => {
                         const file = new Blob([res.data]);
-                        fileDownload.current=window.URL.createObjectURL(file);
+                        fileDownload.current = window.URL.createObjectURL(file);
                     });
-                    const temp={fileName:fileName.current,fileDownload:fileDownload.current,fileId:cur,isDel:false}
-                    setFileInfo(prev=>[...prev,temp]);
-
+                const temp = {
+                    fileName: fileName.current,
+                    fileDownload: fileDownload.current,
+                    fileId: cur,
+                };
+                setFileInfo((prev) => [...prev, temp]);
             });
         }, Promise.resolve());
     };
@@ -161,10 +165,8 @@ const DetailShare = () => {
         getFile();
     }, [fileId]);
 
-    
     //게시글 삭제
-    const [id, setId] = React.useState([]);
-   
+
     const handleDeleteClick = () => {
         const removePost = async () => {
             const response = await axios.delete("/studyPost", {
@@ -182,7 +184,7 @@ const DetailShare = () => {
     /*게시글 수정*/
     const [isModify, setIsModify] = React.useState(false);
     const [isDisable, setIsDisable] = React.useState(true);
-   
+
     const handleModifyClick = () => {
         setIsModify(true);
         setIsDisable(false);
@@ -196,17 +198,20 @@ const DetailShare = () => {
 
     const [filename, setFilename] = React.useState("파일 추가하기");
     const [addFormData, setAddFormData] = React.useState([]);
-    const [delFileId,setDelFileId]=React.useState([]);
+    const [delFileId, setDelFileId] = React.useState([]);
+    
     const formData = new FormData();
-    const handleDelFile=(id)=>{
+    const handleDelFile = (id) => {
         console.log("삭제");
-        fileInfo[id].isDel=true;
-    }
-    const handleFileClick=()=>{
+        setDelFileId((prev) => [...prev, id]);
+        setFileInfo(fileInfo.map((item)=>item.fileId===id?{...item,fileName:"삭제되었습니다."}:item));
+
+    };
+    const handleFileClick = () => {
         setAddFormData([]);
-    }
+    };
     const handleFileChange = (e) => {
-        const nowFile=[...addFormData];
+        const nowFile = [...addFormData];
         if (e.target.value === "") {
             setFilename("파일 추가하기");
         } else {
@@ -225,9 +230,8 @@ const DetailShare = () => {
         }
         setAddFormData(nowFile);
     };
-    const upload=async()=>{
-        await axios
-        .put(`/studyPost`, formData);
+    const upload = async () => {
+        await axios.put(`/studyPost`, formData);
         setIsDisable(true);
     };
     const handleUploadClick = () => {
@@ -241,17 +245,18 @@ const DetailShare = () => {
             formData.append("title", title);
             formData.append("email", emailL);
             formData.append("content", content);
-            formData.append("id",key)
+            formData.append("id", key);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
                 formData.append("files", addFormData[i]);
             }
-            for(let i=0;i<delFileId.length;i++){
-                formData.append("deleteId",delFileId[i])
+            for (let i = 0; i < delFileId.length; i++) {
+                formData.append("deleteId", delFileId[i]);
             }
         }
-            upload();
-       
+        upload();
+        setDelFileId([]);
+        navigate("/share");
     };
     /*댓글*/
     const [comment, setComment] = React.useState("");
@@ -260,67 +265,71 @@ const DetailShare = () => {
         setComment(text);
     };
     //전체 댓글 가져오기
-    const getAllComment=async()=>{
-        const res=await axios
-        .get("https://sooksook.herokuapp.com/studyComments/all", {
-            params: {
-                studyPostId: dataKey,
-            },
-        });
+    const getAllComment = async () => {
+        const res = await axios.get(
+            "https://sooksook.herokuapp.com/studyComments/all",
+            {
+                params: {
+                    studyPostId: dataKey,
+                },
+            }
+        );
         setCommentList(res.data);
     };
     React.useEffect(() => {
-       
-       getAllComment();
+        getAllComment();
     }, []);
     //댓글 추가하기
-    const addComment=async ()=>{
-        const res=await axios
-        .post("https://sooksook.herokuapp.com/studyComment", {
-            content: comment,
-            email: emailL,
-            studyPostId: dataKey,
-            upIndex: "null",
-        });
-        
+    const addComment = async () => {
+        const res = await axios.post(
+            "https://sooksook.herokuapp.com/studyComment",
+            {
+                content: comment,
+                email: emailL,
+                studyPostId: dataKey,
+                upIndex: "null",
+            }
+        );
+
         setComment("");
         getAllComment();
     };
     const handlePlusClick = () => {
         addComment();
     };
-    const handleXclick = async (email,id) => {
-         console.log(1);
-        const res=await axios.delete("/studyComment", {
+    const handleXclick = async (email, id) => {
+        console.log(1);
+        const res = await axios.delete("/studyComment", {
             params: {
                 email: email,
                 id: id,
             },
         });
         getAllComment();
-        };
+    };
     const [isRecomment, setIsRecomment] = React.useState(false);
     const [upIndex, setUpIndex] = React.useState();
     const handleSendClick = (id) => {
         setIsRecomment(true);
         setUpIndex(id);
-
     };
     //대댓글 추가
-    const addRecomment=async ()=>{
-        const res=await axios
-        .post("https://sooksook.herokuapp.com/studyComment", {
-            content: comment,
-            email: emailL,
-            studyPostId: dataKey,
-            upIndex: upIndex,
-        });
+    const addRecomment = async () => {
+        const res = await axios.post(
+            "https://sooksook.herokuapp.com/studyComment",
+            {
+                content: comment,
+                email: emailL,
+                studyPostId: dataKey,
+                upIndex: upIndex,
+            }
+        );
 
-        setComment('');
+        setComment("");
         getAllComment();
-    }
+    };
     const handleRecommentClick = () => {
-       addRecomment();
+        addRecomment();
     };
     const handleCommentClick = () => {
         setIsRecomment(false);
@@ -359,35 +368,52 @@ const DetailShare = () => {
                     <Box width="200px" left="100px" top="17px">
                         {/* 파일 정보 */}
 
-                        {fileInfo && 
+                        {fileInfo &&
                             fileInfo.map((item) => {
-                                !item.isDel&&
-                                    <div style={{display:"flex", marginBottom:"7px"}}>
-                                        <a
-                                            href={item.fileDownload}
-                                            download={item.fileName}
+                                return (
+                                   
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                marginBottom: "7px",
+                                            }}
                                         >
-                                            {item.fileName}
-                                        </a>
-                                        {!isDisable && <Button margin="0px 10px" onClick={()=>handleDelFile(item.fileId)}>삭제</Button>}
-                                    </div>
-                                
-                               
+                                            <a
+                                                href={item.fileDownload}
+                                                download={item.fileName}
+                                            >
+                                                {item.fileName}
+                                            </a>
+                                            {!isDisable && (
+                                                <Button
+                                                    margin="0px 10px"
+                                                    onClick={() =>
+                                                        handleDelFile(
+                                                            item.fileId
+                                                        )
+                                                    }
+                                                >
+                                                    삭제
+                                                </Button>
+                                            )}
+                                        </div>
+
+                                );
                             })}
                         {!isDisable && (
                             <>
                                 <LabelFile for="inputFile">
-                                {filename}
+                                    {filename}
                                 </LabelFile>
-                                
+
                                 <input
-                            id="inputFile"
-                            type="file"
-                            multiple="multiple"
-                            style={{ display: "none" }}
-                            onChange={handleFileChange}
-                            onClick={handleFileClick}
-                        />
+                                    id="inputFile"
+                                    type="file"
+                                    multiple="multiple"
+                                    style={{ display: "none" }}
+                                    onChange={handleFileChange}
+                                    onClick={handleFileClick}
+                                />
                             </>
                         )}
                     </Box>
@@ -433,7 +459,7 @@ const DetailShare = () => {
             <Footer>
                 <CommentTitle onClick={handleCommentClick}>댓글</CommentTitle>
                 <ListBox>
-                {commentList &&
+                    {commentList &&
                         commentList.map((comment) => (
                             <CommentList
                                 email={comment.email}
@@ -444,7 +470,6 @@ const DetailShare = () => {
                                 childList={comment.childList}
                                 handleXclick={handleXclick}
                                 removed={comment.removed}
-                               
                             />
                         ))}
                 </ListBox>
