@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../css/board1.css";
-import React from "react";
-import { Input } from "antd";
+import React, { useEffect, useRef } from "react";
+import { Input, AutoComplete } from "antd";
 import "antd/dist/antd.css";
 import MenuBar from "./MenuBar";
 import logo from "../../images/logo.png";
@@ -9,9 +9,7 @@ import "../../fonts/Font.css";
 import { useSelector } from "react-redux";
 import store from "../redux/store";
 import { INPUT_VALUE } from "../redux/login/types";
-
-const onSearch = (value) => console.log(value);
-const { Search } = Input;
+import axios from "axios";
 
 const Top = (props) => {
     return <h2 className="topright">{props.children}</h2>;
@@ -25,7 +23,7 @@ const Login = () => {
             loginId: "",
             password: "",
             isLogin: false,
-            email: ""
+            email: "",
         });
     };
     if (isLogin) {
@@ -57,6 +55,63 @@ const Logo = () => {
             setShow(false);
         }
     };
+
+    let title = useRef([]);
+    const searchResult = (value) => {
+        const getKeyword = async () => {
+            const res = await axios.get(
+                "https://sooksook.herokuapp.com/studyBoard/search",
+                {
+                    params: {
+                        keyword: value,
+                    },
+                }
+            );
+            title.current = res.data;
+        };
+        getKeyword();
+        let url = "";
+        title.current
+            .map((item) => {
+                console.log(item);
+                if (item.studyBoardId == null) {
+                    switch (item.category) {
+                        case "판매/나눔 게시글":
+                            url = `/detailsell/${item.studyPostId}`;
+                            break;
+                        case "자료 공유 게시글":
+                            url = `/detailshare/${item.studyPostId}`;
+                            break;
+                        case "질문 게시글":
+                            url = `/detailqa/${item.studyPostId}`;
+                            break;
+                    }
+                } else {
+                    if (item.category === "강의 스터디") {
+                        url = `/board1/${item.studyBoardId}`;
+                    } else {
+                        url = `/board2/${item.studyBoardId}`;
+                    }
+                }
+                console.log(url);
+                return {
+                    value: url,
+                    label: <Link to={url}>{item.title}</Link>,
+                };
+            });
+    };
+    const [options, setOptions] = React.useState([]);
+    const opt = useRef();
+    const handleSearch = (value) => {
+        opt.current = searchResult(value);
+
+        setOptions(()=>value ? opt.current : []);
+        console.log(opt.current);
+    };
+
+    const onSelect = (value) => {
+        console.log("onSelect", value);
+    };
     return (
         <section className="logo" style={{ display: "flex" }}>
             <div className="title">
@@ -66,13 +121,30 @@ const Logo = () => {
                     <Link to="/">SookSook</Link>
                 </div>
             </div>
-            <div className="search">
-                <Search onSearch={onSearch} enterButton />
+            <div className="search" style={{ width: "500px" }}>
+                <AutoComplete
+                    dropdownMatchSelectWidth={252}
+                    style={{
+                        width: 300,
+                    }}
+                    options={options}
+                    onSelect={onSelect}
+                    onSearch={handleSearch}
+                >
+                    <Input.Search size="large" enterButton />
+                </AutoComplete>
             </div>
 
             <div className="customer" style={{ fontFamily: "DoHyeon" }}>
                 <Login />
-                <Top><a href="https://forms.gle/5aDqADeFdQCeHdu49" target="_blank">고객센터</a></Top>
+                <Top>
+                    <a
+                        href="https://forms.gle/5aDqADeFdQCeHdu49"
+                        target="_blank"
+                    >
+                        고객센터
+                    </a>
+                </Top>
             </div>
         </section>
     );

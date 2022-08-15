@@ -1,7 +1,7 @@
 import axios from "axios";
 import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import "antd/dist/antd.css";
@@ -18,9 +18,12 @@ const Block = () => {
     //스터디 개설한 부원 이메일 가져오기
     const [emailM, setEmailM] = React.useState("");
     const getEmailM = async () => {
-        const res = await axios.get(`studyBoard?id=${key}`);
+        const res = await axios.get(`/studyBoard?id=${key}`);
         setEmailM(res.data.email);
     };
+    useEffect(()=>{
+        getEmailM();
+    },[])
     const handleFinishClick = () => {
         if (window.confirm("스터디를 종료하시겠습니까?")) {
             axios
@@ -121,9 +124,10 @@ const Private = () => {
     //게시글
     const getId = async () => {
         const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+            `https://sooksook.herokuapp.com/studyPosts/studyList?studyBoardId=${key}`
         );
         setId(() => response.data);
+        console.log(response.data);
     };
     const getData = () => {
         (id || []).reduce((prev, cur) => {

@@ -96,9 +96,8 @@ const EnterBoard = () => {
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([]);
 
-    const { boardId } = useParams();
+    const { key } = useParams();
     const location = useLocation();
-    const dataKey = location.state.boardId;
 
     const [studyBoard, setStudyBoard] = React.useState(null);
     const [on, setOn] = React.useState(false);
@@ -133,7 +132,7 @@ const EnterBoard = () => {
         axios
             .get("https://sooksook.herokuapp.com/studyBoard", {
                 params: {
-                    id: dataKey,
+                    id: parseInt(key),
                 },
             })
             .then((response) => {
@@ -168,7 +167,7 @@ const EnterBoard = () => {
         axios
             .get("https://sooksook.herokuapp.com/passwordComment/all", {
                 params: {
-                    studyBoardId: dataKey,
+                    studyBoardId: parseInt(key),
                 },
             })
             .then((response) => {
@@ -210,7 +209,7 @@ const EnterBoard = () => {
     // 게시글 수정 정보 저장
     const handleUploadClick = async () => {
         await axios
-            .put(`/studyBoard?id=${dataKey}`, {
+            .put(`/studyBoard?id=${parseInt(key)}`, {
                 category: category,
                 email: email,
                 number: number,
@@ -229,7 +228,7 @@ const EnterBoard = () => {
         const res = await axios.delete("/studyBoard", {
             params: {
                 email: email,
-                id: dataKey,
+                id: parseInt(key),
             },
         });
         navigate("/board2");
@@ -255,11 +254,11 @@ const EnterBoard = () => {
         //멤버라면 바로 입장
         axios
             .post(
-                `https://sooksook.herokuapp.com/studyMember?email=${emailL}&studyBoardId=${dataKey}`
+                `https://sooksook.herokuapp.com/studyMember?email=${emailL}&studyBoardId=${parseInt(key)}`
             )
             .then((response) => {
                 if (response.data === true) {
-                    navigate(`/private2/${dataKey}`);
+                    navigate(`/private2/${parseInt(key)}`);
                 } else {
                     setIsOpen(true);
                 }
@@ -273,9 +272,9 @@ const EnterBoard = () => {
             axios.post("https://sooksook.herokuapp.com/studyMember/password", {
                 email: emailL,
                 password: pw,
-                studyBoardId: dataKey,
+                studyBoardId: parseInt(key),
             });
-            navigate(`/private/${dataKey}`);
+            navigate(`/private/${parseInt(key)}`);
         } else {
             alert("비밀번호가 틀렸습니다");
         }
@@ -290,7 +289,7 @@ const EnterBoard = () => {
         const res=await axios
         .get("https://sooksook.herokuapp.com/passwordComment/all", {
             params: {
-                studyBoardId: dataKey,
+                studyBoardId: parseInt(key),
             },
         });
         setCommentList(res.data);
@@ -304,7 +303,7 @@ const EnterBoard = () => {
         .post("https://sooksook.herokuapp.com/passwordComment", {
             content: comment,
             email: emailL,
-            studyBoardId: dataKey,
+            studyBoardId: parseInt(key),
             upIndex: "null",
         });
         
@@ -337,7 +336,7 @@ const EnterBoard = () => {
         .post("https://sooksook.herokuapp.com/passwordComment", {
             content: comment,
             email: emailL,
-            studyBoardId: dataKey,
+            studyBoardId: parseInt(key),
             upIndex: upIndex,
         });
 
@@ -540,7 +539,7 @@ const EnterBoard = () => {
                             writeEmail={email}
                             handleSendClick={handleSendClick}
                             id={comment.id}
-                            dataKey={dataKey}
+                            dataKey={parseInt(key)}
                             childList={comment.childList}
                             handleXclick={handleXclick}
                             removed={comment.removed}

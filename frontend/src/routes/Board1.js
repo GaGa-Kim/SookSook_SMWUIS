@@ -92,6 +92,11 @@ const Board1 = () => {
             title: <div className="user">작성자</div>,
             dataIndex: "nickname",
             key: "nickname",
+            render:(nickname,record,index)=>(
+                <Link to={`/profile/${data[index].email}`}>
+                    {nickname}
+                </Link>
+            ),
         },
     ];
 

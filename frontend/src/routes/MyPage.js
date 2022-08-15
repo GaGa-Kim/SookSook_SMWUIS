@@ -127,6 +127,7 @@ function MyPage() {
     const [level, setLevel] = React.useState("");
     const [point, setPoint] = React.useState(0);
 
+
     const email = useSelector(state => state.email);
     React.useEffect(() => {
         axios
@@ -142,6 +143,7 @@ function MyPage() {
                 setComment(response.data.introduction);
                 setLevel(response.data.rating);
                 setPoint(response.data.points);
+
             });
     }, []);
 
