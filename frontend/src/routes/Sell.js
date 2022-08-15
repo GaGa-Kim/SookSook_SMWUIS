@@ -87,7 +87,7 @@ const Sell = () => {
             <Logo />
             <Shareblock />
             <section className="table">
-                <Table columns={columns} dataSource={data} />;
+                <Table columns={columns} dataSource={data} />
             </section>
         </>
     );
