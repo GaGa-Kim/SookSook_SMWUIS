@@ -28,18 +28,32 @@ const Board2 = () => {
     const location=useLocation().key;
 
     const getAll = async () => {
+        setData([]);
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyBoards/list?lecture=false"
         );
-        setData(response.data);
+        response.data.map((item)=>{
+            console.log(item);
+            if(item.finished===false){
+                
+                setData((prev)=>[...(prev),item]);
+            }
+        });
     };
     const getCategory = async () => {
+        setData([]);
         const response = await axios.get("/studyBoards/category", {
             params: {
                 category: category,
             },
         });
-        setData(response.data);
+        response.data.map((item)=>{
+            console.log(item);
+            if(item.finished===false){
+                
+                setData((prev)=>[...(prev),item]);
+            }
+        });
     };
     
     React.useEffect(() => {

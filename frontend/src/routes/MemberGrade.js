@@ -217,10 +217,8 @@ const MemberGrade = () => {
         navigate(`/private/${Key}`);
     };
 
-    const handleNameClick = () => {
-        axios.get(`/ studyMember ? studyBoardId = ${Key}`).then((response) => {
-            setRemail(response.data.email);
-        })
+    const handleNameClick = (remail) => {
+            setRemail(remail);
     };
     const [memberInfo, setMememberInfo] = useState([]);
     React.useEffect(() => {
@@ -230,10 +228,10 @@ const MemberGrade = () => {
         });
     }, []);
     // 멤버정보
-    // const memberInfo = ['송송', '송파', '파파'];
+    
     const Mem = (props) => {
         return (
-            <MemberButton onClick={handleNameClick}>{props.name}</MemberButton>
+            <MemberButton onClick={()=>handleNameClick(props.email)}>{props.name}</MemberButton>
         )
     };
     const memberList = memberInfo.map((memberInfo) => (<Mem name={memberInfo} />))
