@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -13,21 +13,17 @@ import ListHeader from "./components/ListHeader";
 import ListTitle from "./components/ListTitle";
 import StudySchedule from "./components/StudySchedule";
 import Box from "./components/Box";
-
 import InputText from "./components/InputText";
 import StudyHistory from "./components/StudyHistory";
 import "../fonts/Font.css";
-
 import setting from "../images/setting.png";
 import profile from "../images/profile.png";
 import snowflake from "../images/snowflake.png";
-
 import plus from "../images/plus.png";
-
+import { useSelector } from 'react-redux';
 import { Progress } from "antd";
 import { DatePicker, Space } from "antd";
 
-import { useSelector } from 'react-redux';
 
 const SettingImg = styled.img`
     width: 50px;
@@ -116,25 +112,21 @@ const PlusImg = styled.img`
 `;
 
 function MyPage() {
-
-    const [date, setDate] = React.useState("");
-    const onChange = (date, dateString) => {
-        setDate(dateString);
-    };
+    const [id, setId] = useState("");
     const [target, setTarget] = React.useState(true);
     const [name, setName] = React.useState("");
     const [comment, setComment] = React.useState("");
     const [level, setLevel] = React.useState("");
     const [point, setPoint] = React.useState(0);
 
-
     const email = useSelector(state => state.email);
+
     React.useEffect(() => {
         axios
             .get(
                 "https://sooksook.herokuapp.com/user/myInfo", {
                 params: {
-                    email: email
+                    email: email,
                 }
             }
             )
@@ -145,39 +137,72 @@ function MyPage() {
                 setPoint(response.data.points);
 
             });
+        axios
+            .get(
+                "https://sooksook.herokuapp.com/userSchedule/myInfo", {
+                params: {
+                    email: email,
+                }
+            })
+            .then((response) => {
+                setStudyScheduleList(response.data);
+            });
+        axios
+            .get(
+                "https://sooksook.herokuapp.com/userSchedule/info", {})
+            .then((response) => {
+                setId(response.data.id);
+            });
+        axios
+            .get(
+                "https://sooksook.herokuapp.com/userSchedule/check", {
+                params: {
+                    email: email,
+                    id: id
+                }
+            })
+            .then((response) => {
+                setStudyScheduleList(response.data);
+            });
     }, []);
 
     const handleScheduleClick = () => {
         setTarget(false);
     };
     const handleHistoryClick = () => {
-        setTarget(true);
+        setTarget(true)
     };
     const [studyScheduleList, setStudyScheduleList] = React.useState([]);
 
-    const handleXclick = (id) => {
-        const nextStudyScheduleList = studyScheduleList.filter(
-            (schedule) => schedule.id !== id
-        );
-        setStudyScheduleList(nextStudyScheduleList);
+
+    const handleXclick = async (email, id) => {
+
+        const res = await axios.delete("https://sooksook.herokuapp.com/userSchedule", {
+            params: {
+                email: email,
+                id: id,
+            }
+        });
+
     };
-    const [nextId, setNextId] = React.useState(1);
+    const onChange = (date, dateString) => {
+        setDate(dateString);
+    };
+    const [date, setDate] = React.useState("");
     const [text, setText] = React.useState("");
     const getText = (text) => {
         setText(text);
     };
     const handlePlusClick = () => {
-        const nextStudyScheduleList = studyScheduleList.concat({
-            id: nextId,
-            date: date,
-            content: text,
-        });
-        setNextId(nextId + 1);
-        setStudyScheduleList(nextStudyScheduleList);
-        setText("");
+        axios
+            .post("https://sooksook.herokuapp.com/userSchedule", {
+                content: text,
+                period: date,
+                email: email,
+            });
     };
-    return (
 
+    return (
         <Root>
             <GlobalStyle />
             <Logo />
