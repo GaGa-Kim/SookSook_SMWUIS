@@ -48,8 +48,7 @@ const Quest = styled.div`
 const Setting = () => {
     const handleDeleteClick = (e) => {
         // 회원탈퇴
-        if(window.confirm("정말로 탈퇴하시겠습니까?")){
-            
+        if (window.confirm("정말로 탈퇴하시겠습니까?")) {
             axios
                 .delete("https://sooksook.herokuapp.com/user", {
                     params: {
@@ -64,7 +63,7 @@ const Setting = () => {
                         loginId: "",
                         password: "",
                         isLogin: false,
-                        email: ""
+                        email: "",
                     });
                     navigate("/");
                 });
@@ -91,9 +90,9 @@ const Setting = () => {
     const [introduction, setIntroduction] = React.useState("");
     const navigate = useNavigate();
     const emailL = useSelector((state) => state.email);
-    const [id,setId] = React.useState("");
+    const [id, setId] = React.useState("");
     React.useEffect(() => {
-        if(emailL===""){
+        if (emailL === "") {
             alert("로그인이 필요합니다.");
             navigate("/login");
         }
@@ -115,7 +114,7 @@ const Setting = () => {
         // 유저 정보 수정후 저장
         axios
             .put(`/user?id=${id}`, {
-                email:emailL,
+                email: emailL,
                 introduction: introduction,
                 nickname: nickname,
                 name: name,
@@ -126,25 +125,24 @@ const Setting = () => {
     const handlePasswordClick = () => {
         //비밀번호 수정
         axios
-        .put(`/user/password?email=${emailL}&oldPassword=${password}`, {
-
-            newPassword: newPassword,
-
-        })
-        .then(setIsDisable(true));
+            .put(
+                `/user/password?email=${emailL}&newPassword=${newPassword}&oldPassword=${password}`
+            )
+            .then(setIsPwDisable(true))
+            .catch((err) => {
+                alert("현재 비밀번호를 확인하세요");
+            });
     };
-
 
     const [isPwDisable, setIsPwDisable] = React.useState(true);
     const [isDisable, setIsDisable] = React.useState(true);
 
     const handleModifyClick = () => {
-
         setIsDisable(false);
     };
-    const handlePwModifyClick=()=>{
+    const handlePwModifyClick = () => {
         setIsPwDisable(false);
-    }
+    };
     return (
         <Root>
             <GlobalStyle />
