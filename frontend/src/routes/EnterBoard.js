@@ -99,7 +99,6 @@ const EnterBoard = () => {
 
     const { key } = useParams();
     const location = useLocation();
-    const dataKey = location.state.boardId;
 
     const [studyBoard, setStudyBoard] = React.useState(null);
     const [on, setOn] = React.useState(false);

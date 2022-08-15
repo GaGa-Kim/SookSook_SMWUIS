@@ -132,6 +132,7 @@ const SetBoardShare = () => {
             formData.append("title", title);
             formData.append("email", emailL);
             formData.append("content", content);
+            formData.append("studyBoardId",key);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
                 formData.append("files", addFormData[i]);

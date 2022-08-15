@@ -69,7 +69,8 @@ const SetBoardPrivate2 = () => {
     const navigate = useNavigate();
     const emailL = useSelector((state) => state.email);
     const params=useParams();
-
+    const location=useLocation();
+    const key=location.state.boardId;
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
     const [filename, setFilename] = React.useState("파일 선택하기");
@@ -132,6 +133,7 @@ const SetBoardPrivate2 = () => {
             formData.append("title", title);
             formData.append("email", emailL);
             formData.append("content", content);
+            formData.append("studyBoardId",key);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
                 formData.append("files", addFormData[i]);

@@ -10,11 +10,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import ButtonBox from "./components/ButtonBox";
 import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
-import Logo from './components/Logo';
+import Logo from "./components/Logo";
 import "../fonts/Font.css";
 import { Rate, Input, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-
 
 const Title = styled.div`
     position: absolute;
@@ -45,7 +44,7 @@ const Quest = styled.div`
 `;
 
 const MemberButton = styled.button`
-    width: 49px;
+    width: auto;
     height: 32px;
     background-color: #d9d9d9;
     border-radius: 50px;
@@ -56,12 +55,12 @@ const MemberButton = styled.button`
         box-shadow: 0px 0px 0 2px #c7e4fe;
         transition: 0.5s;
     }
-    &:active{
+    &:active {
         border-color: #4aacfc;
         box-shadow: 0px 0px 0 2px #c7e4fe;
         transition: 0.5s;
     }
-    &:selected{
+    &:selected {
         border-color: #4aacfc;
         box-shadow: 0px 0px 0 2px #c7e4fe;
         transition: 0.5s;
@@ -69,28 +68,11 @@ const MemberButton = styled.button`
 `;
 
 const MemberGrade = () => {
-    React.useEffect(() => {
-        axios
-            .get("https://sooksook.herokuapp.com/user/myInfo", {
-                params: {
-                    email: email,
-                },
-            })
-
-        axios
-            .get("https://sooksook.herokuapp.com/studyBoard", {
-                params: {
-                    id: Key,
-                },
-            })
-
-    }, []);
-
     const [tags, setTags] = useState([
         "성실해요",
         "과제 제출이 빨라요",
         "약속을 잘 지켜요",
-        "성실하지 않아요"
+        "성실하지 않아요",
     ]);
     const Membertag = () => {
         const [inputVisible, setInputVisible] = useState(false);
@@ -129,12 +111,12 @@ const MemberGrade = () => {
             const tagElem = (
                 <Tag
                     style={{
-                        "border": "0.3px solid purple",
+                        border: "0.3px solid purple",
                         "background-color": "rgb(250, 230, 255)",
-                        "paddingTop": "2.5px",
-                        "marginBottom": "5px", "borderRadius": "30px"
-                    }
-                    }
+                        paddingTop: "2.5px",
+                        marginBottom: "5px",
+                        borderRadius: "30px",
+                    }}
                     closable
                     onClose={(e) => {
                         e.preventDefault();
@@ -142,7 +124,7 @@ const MemberGrade = () => {
                     }}
                 >
                     {tag}
-                </Tag >
+                </Tag>
             );
             return <span key={tag}>{tagElem}</span>;
         };
@@ -152,9 +134,9 @@ const MemberGrade = () => {
             <>
                 <div
                     style={{
-                        "display": "flex",
+                        display: "flex",
                         "flex-direction": "column",
-                        "marginBottom": "4px"
+                        marginBottom: "4px",
                     }}
                 >
                     {tagChild}
@@ -165,7 +147,8 @@ const MemberGrade = () => {
                         type="text"
                         size="small"
                         style={{
-                            width: 78, "borderRadius": "30px"
+                            width: 78,
+                            borderRadius: "30px",
                         }}
                         value={inputValue}
                         onChange={handleInputChange}
@@ -174,9 +157,12 @@ const MemberGrade = () => {
                     />
                 )}
                 {!inputVisible && (
-                    <Tag style={{
-                        "borderRadius": "30px"
-                    }} onClick={showInput}>
+                    <Tag
+                        style={{
+                            borderRadius: "30px",
+                        }}
+                        onClick={showInput}
+                    >
                         <PlusOutlined />
                     </Tag>
                 )}
@@ -186,62 +172,69 @@ const MemberGrade = () => {
     //현재 로그인 중인 email 받기
     const email = useSelector((state) => state.email);
     const navigate = useNavigate();
-    const { Key } = useParams();
+    const { key } = useParams();
     const rates = [1, 2, 3, 4, 5];
-
+    const [rate, setRate] = React.useState(3);
     const RateMem = () => {
-        const [value, setValue] = useState(3);
+        const getRate = (e) => {
+            const num = parseInt(e);
+            setRate(num);
+        };
         return (
             <span>
-                <Rate onChange={setValue} value={value} />
-                {value ? <span >&nbsp;&nbsp;&nbsp;{rates[value - 1]}&nbsp;</span> : ''}
+                <Rate onChange={getRate} value={rate} />
+                {rate ? (
+                    <span>&nbsp;&nbsp;&nbsp;{rates[rate - 1]}&nbsp;</span>
+                ) : (
+                    ""
+                )}
             </span>
         );
-    }
-
-    const [rate, setRate] = React.useState("");
-    const [remail, setRemail] = React.useState("");
-    const getRate = (value) => {
-        const num = parseInt(value);
-        setRate(num);
     };
+
+  
+    const [remail, setRemail] = React.useState("");
+    
 
     const handleSaveClick = () => {
         axios.post("https://sooksook.herokuapp.com/userRating", {
             score: rate,
-            comment: tags,
+            contents:JSON.stringify(tags),
             giverEmail: email,
             receiverEmail: remail,
-            studyBoardId: Key,
+            studyBoardId: parseInt(key),
+            subject:""
         });
-        navigate(`/private/${Key}`);
+
+    };
+    const handleCompleteClick=()=>{
+        navigate("/mypage",{state:key});
+    }
+    const handleNameClick = (remail) => {
+        setRemail(remail);
+
     };
 
-    const handleNameClick = () => {
-        axios.get(`/ studyMember ? studyBoardId = ${Key}`).then((response) => {
-            setRemail(response.data.email);
-        })
-    };
     const [memberInfo, setMememberInfo] = useState([]);
-    React.useEffect(() => {
-        axios.get(`/ studyMember ? studyBoardId = ${Key}`).then((response) => {
-            setMememberInfo(response.data);
-
+    //멤버 정보 가져오는 함수
+    const getMem = async () => {
+        const res = await axios.get(`/studyMember?studyBoardId=${key}`);
+        res.data.map((item) => {
+            if (item.email !== email) {
+                setMememberInfo((prev) => [...prev, item]);
+            }
         });
-    }, []);
-    // 멤버정보
-    // const memberInfo = ['송송', '송파', '파파'];
-    const Mem = (props) => {
-        return (
-            <MemberButton onClick={handleNameClick}>{props.name}</MemberButton>
-        )
     };
-    const memberList = memberInfo.map((memberInfo) => (<Mem name={memberInfo} />))
+
+    React.useEffect(() => {
+        getMem();
+    }, []);
+ 
 
 
 
     return (
-        <Root >
+        <Root>
             <GlobalStyle />
             <Logo />
             <ColorBox height="90px">
@@ -251,13 +244,25 @@ const MemberGrade = () => {
                 <InputBox>
                     <Quest>스터디원 선택</Quest>
                     <Box width="700px" left="140px" top="4px">
-                        {memberList}
+                        {memberInfo &&
+                            memberInfo.map((member) => {
+                                return member.email !== email ? 
+                                    <MemberButton
+                                        onClick={() =>
+                                            handleNameClick(member.email)
+                                        }
+                                    >
+                                        {member.nickname}
+                                    </MemberButton>:null
+                                
+                            })}
                     </Box>
                 </InputBox>
                 <InputBox>
                     <Quest>별점</Quest>
                     <Box width="200px" left="145px" top="13px">
-                        <RateMem getText={getRate} />/&nbsp;5
+                        <RateMem/>
+                        /&nbsp;5
                     </Box>
                 </InputBox>
                 <InputBox>
@@ -271,8 +276,11 @@ const MemberGrade = () => {
                 <Button width="100px" mg="30px" onClick={handleSaveClick}>
                     저장하기
                 </Button>
+                <Button width="100px" mg="30px" onClick={handleCompleteClick}>
+                    완료
+                </Button>
             </ButtonBox>
-        </Root >
+        </Root>
     );
 };
 export default MemberGrade;

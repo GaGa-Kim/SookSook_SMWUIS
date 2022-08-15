@@ -29,18 +29,33 @@ const Board1 = () => {
     const [rerender,setRerender]=useState("");
    
     const getAll = async () => {
+        setData([]);
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyBoards/list?lecture=true"
         );
-        setData(response.data);
+        response.data.map((item)=>{
+            console.log(item);
+            if(item.finished===false){
+                
+                setData((prev)=>[...(prev),item]);
+            }
+        });
+           
     };
     const getDpt = async () => {
+        setData([]);
         const response = await axios.get("/studyBoards/department", {
             params: {
                 department: dpt,
             },
         });
-        setData(response.data);
+        response.data.map((item)=>{
+            console.log(item);
+            if(item.finished===false){
+                
+                setData((prev)=>[...(prev),item]);
+            }
+        });
     };
     
     React.useEffect(() => {
@@ -77,6 +92,11 @@ const Board1 = () => {
             title: <div className="user">작성자</div>,
             dataIndex: "nickname",
             key: "nickname",
+            render:(nickname,record,index)=>(
+                <Link to={`/profile/${data[index].email}`}>
+                    {nickname}
+                </Link>
+            ),
         },
     ];
 

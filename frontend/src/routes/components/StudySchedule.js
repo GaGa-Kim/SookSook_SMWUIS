@@ -11,31 +11,29 @@ const XImg = styled.img`
     height: 30px;
     display: block;
     vertical-align: center;
-    &:hover  {
-        width:32px;
-        height:32px;
+    &:hover {
+        width: 32px;
+        height: 32px;
     }
 `;
 
-const StudySchedule = ({handleXclick,id,date,content}) => {
-    
+const StudySchedule = ({ handleXclick, id, date, content, finish, email }) => {
     return (
         <List>
             <Box left="50px" top="13px">
-                <CheckBox />
+                <CheckBox checked={finish} />
             </Box>
             <Box left="70px" top="13px">
-                <ListText>
-                   {date}
-                </ListText>
+                <ListText>{date.substr(0, 10)}</ListText>
             </Box>
             <Box left="230px">
                 <ListText>{content}</ListText>
             </Box>
             <Box right="20px">
-                <XImg src={x} onClick={()=>handleXclick(id)}></XImg>
+                <XImg src={x} onClick={() => handleXclick(email, id)}></XImg>
             </Box>
         </List>
     );
 };
+
 export default StudySchedule;

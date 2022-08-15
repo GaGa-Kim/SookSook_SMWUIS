@@ -3,12 +3,14 @@ import "../css/private.css";
 import GlobalStyle from "./components/GlobalStyle";
 import React, { useState } from "react";
 import { Table } from "antd";
-import { Link, useParams, useLocation } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
 import "../fonts/Font.css";
+import { useSelector } from "react-redux";
 import plus from "../images/plus.png";
+import styled from "styled-components";
 
 const PlusImg = styled.img`
     width: 20px;
@@ -19,6 +21,59 @@ const PlusImg = styled.img`
         height: 27px;
     }
 `;
+
+const Block = () => {
+    const { key } = useParams();
+    //현재 로그인 중인 부원 이메일
+    const emailL = useSelector((state) => state.email);
+    const navigate = useNavigate();
+    //스터디 개설한 부원 이메일 가져오기
+    const [emailM, setEmailM] = React.useState("");
+    const getEmailM = async () => {
+        const res = await axios.get(`/studyBoard?id=${key}`);
+        setEmailM(res.data.email);
+    };
+    React.useEffect(() => {
+        getEmailM();
+    }, []);
+    const handleFinishClick = () => {
+        if (window.confirm("스터디를 종료하시겠습니까?")) {
+            axios
+                .put(`/studyBoard/finish?email=${emailL}&id=${key}`)
+                .then(navigate("/mypage"));
+        }
+    };
+    return (
+        <section
+            className="block"
+            style={{ display: "flex", justifyContent: "space-between" }}
+        >
+            <div>
+                <button className="upcome">다가오는 스터디 일정</button>
+                <button className="qrbutton" style={{ marginRight: "0px" }}>
+                    [7/21] 3주차 과제 제출
+                </button>
+            </div>
+            <div>
+                {emailL === emailM ? (
+                    <button className="prbutton" onClick={handleFinishClick}>
+                        스터디 종료
+                    </button>
+                ) : null}
+                <button className="prbutton">
+                    <Link to="/setboard_private" state={{ boardId: key }}>
+                        글 작성하기
+                    </Link>
+                </button>
+            </div>
+        </section>
+    );
+};
+
+
+
+
+
 
 const Piein = (props) => {
     return <h1 className="ptitle">{props.children}</h1>;
@@ -85,7 +140,7 @@ const Private2 = () => {
     //게시글
     const getId = async () => {
         const response = await axios.get(
-            "https://sooksook.herokuapp.com/studyPosts/category?category=%EA%B0%95%EC%9D%98%20%EC%99%B8%20%EC%8A%A4%ED%84%B0%EB%94%94%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
+            `https://sooksook.herokuapp.com/studyPosts/studyList?studyBoardId=${key}`
         );
         setId(() => response.data);
     };
@@ -122,7 +177,7 @@ const Private2 = () => {
             render: (text, record, index) => (
                 <Link
                     to={`/detailboard2/${id[index]}`}
-                    state={{ boardId: id[index] }}
+                    state={{ boardId: key}}
                 >
                     {text}
                 </Link>

@@ -26,6 +26,7 @@ import SetBoardSell from './routes/SetBoardSell';
 import SetBoardShare from './routes/SetBoardShare';
 import SetBoardPrivate from './routes/SetBoardPrivate';
 import setBoardPrivate2 from './routes/SetBoardPrivate2';
+import Profile from './routes/Profile';
 
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
         <Route path="/enterboard2/:key" element={<EnterBoard2 />}></Route>
         <Route path="/openstudy" element={<OpenStudy />}></Route>
         <Route path="/openstudy2" element={<OpenStudy2 />}></Route>
-        <Route path="/membergrade" element={<MemberGrade />}></Route>git
+        <Route path="/membergrade/:key" element={<MemberGrade />}></Route>git
         <Route path="/setboard_private" element={<SetBoardPrivate />}></Route>
         <Route path="/setboard_private2" element={<SetBoardPrivate />}></Route>
         <Route path="/setboard_qa" element={<SetBoardQa />}></Route>
@@ -58,6 +59,7 @@ function App() {
         <Route path="/join" element={<Join />}></Route>
         <Route path="/share" element={<Share />}></Route>
         <Route path="/qaboard" element={<Qaboard />}></Route>
+        <Route path="/profile/:key" element={<Profile/>}></Route>
         <Route path="/" element={<Home />}></Route>
       </Routes>
     </Router>
