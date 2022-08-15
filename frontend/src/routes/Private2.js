@@ -8,31 +8,17 @@ import "antd/dist/antd.css";
 import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
 import "../fonts/Font.css";
+import plus from "../images/plus.png";
 
-const Block = () => {
-    const { key } = useParams();
-
-    return (
-        <section
-            className="block"
-            style={{ display: "flex", justifyContent: "space-between" }}
-        >
-            <div>
-                <button className="upcome">스터디 비밀게시판</button>
-            </div>
-            <div>
-                <button className="prbutton">
-                    <Link to="/membergrade">스터디 종료</Link>
-                </button>
-                <button className="prbutton">
-                    <Link to="/setboard_private" state={{ boardId: key }}>
-                        글 작성하기
-                    </Link>
-                </button>
-            </div>
-        </section>
-    );
-};
+const PlusImg = styled.img`
+    width: 20px;
+    height: 20px;
+    margin-right:15px;
+    &:hover {
+        width: 27px;
+        height: 27px;
+    }
+`;
 
 const Piein = (props) => {
     return <h1 className="ptitle">{props.children}</h1>;
@@ -64,11 +50,15 @@ const Private2 = () => {
     const [spdata, setSpdata] = React.useState([]);
     const [piedata, setPiedata] = React.useState([]);
     const [memberInfo, setMememberInfo] = useState([]);
+    const [schedule, setSchedule] = useState(["[8/22] 1주차 과제 제출하기"]);
     const location = useLocation().key;
     //멤버정보
     React.useEffect(() => {
-        axios.get(`/studyMember?studyBoardId=${key}`).then((response) => {
+        axios.get(`studyMember?studyBoardId=${key}`).then((response) => {
             setMememberInfo(response.data);
+        });
+        axios.get(`https://sooksook.herokuapp.com/studySchedules/all?studyBoardId=${key}`).then((response) => {
+            setSchedule(response.data);
         });
     }, []);
     //참여율 데이터
@@ -160,7 +150,28 @@ const Private2 = () => {
         >
             <GlobalStyle />
             <Logo />
-            <Block />
+            <section
+                className="block"
+                style={{ display: "flex", justifyContent: "space-between" }}
+            >
+                <div>
+                    <button className="upcome">다가오는 스터디 일정</button>
+                    <button className="qrbutton" style={{ marginRight: "0px" }}>
+                        {schedule}
+                    </button>
+                </div>
+                <div>
+                    <PlusImg src={plus}></PlusImg>
+                    <button className="prbutton">
+                        <Link to="/membergrade">스터디 종료</Link>
+                    </button>
+                    <button className="prbutton">
+                        <Link to="/setboard_private" state={{ boardId: key }}>
+                            글 작성하기
+                        </Link>
+                    </button>
+                </div>
+            </section>
             <section className="chart">
                 <Piein>스터디 참여율</Piein>
                 <div className="hp">
