@@ -12,8 +12,15 @@ import { useSelector } from "react-redux";
 
 const Block = () => {
     const { key } = useParams();
+    //현재 로그인 중인 부원 이메일
     const emailL = useSelector((state) => state.email);
     const navigate = useNavigate();
+    //스터디 개설한 부원 이메일 가져오기
+    const [emailM, setEmailM] = React.useState("");
+    const getEmailM = async () => {
+        const res = await axios.get(`studyBoard?id=${key}`);
+        setEmailM(res.data.email);
+    };
     const handleFinishClick = () => {
         if (window.confirm("스터디를 종료하시겠습니까?")) {
             axios
@@ -34,9 +41,11 @@ const Block = () => {
                 </button>
             </div>
             <div>
-                <button className="prbutton" onClick={handleFinishClick}>
-                    스터디 종료
-                </button>
+                {emailL===emailM ?
+                    <button className="prbutton" onClick={handleFinishClick}>
+                        스터디 종료
+                    </button>
+                :null}
                 <button className="prbutton">
                     <Link to="/setboard_private" state={{ boardId: key }}>
                         글 작성하기
