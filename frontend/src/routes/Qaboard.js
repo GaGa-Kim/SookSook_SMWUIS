@@ -75,7 +75,7 @@ const Qaboard = () => {
         },
 
         {
-            title: <div className="user">작성자</div>,
+            title: <div className="user">제목</div>,
             dataIndex: "nickname",
             key: "nickname"
         }
