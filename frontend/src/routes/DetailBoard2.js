@@ -111,7 +111,7 @@ const DetailBoard2 = () => {
     const fileDownload = useRef();
     const getPost = async () => {
         const response = await axios.get(
-            `https://sooksook.herokuapp.com/studyPost/info?id=${dataKey}`
+            `https://sooksook.herokuapp.com/studyPost/info?id=${key}`
         );
         setTitle(response.data.title);
         setContent(response.data.content);
@@ -253,7 +253,7 @@ const DetailBoard2 = () => {
             const response = await axios.delete("/studyPost", {
                 params: {
                     email: email,
-                    id: dataKey,
+                    id: key,
                 },
             });
             if (response.data) {
@@ -275,7 +275,7 @@ const DetailBoard2 = () => {
             "https://sooksook.herokuapp.com/studyComments/all",
             {
                 params: {
-                    studyPostId: dataKey,
+                    studyPostId: key,
                 },
             }
         );
@@ -291,7 +291,7 @@ const DetailBoard2 = () => {
             {
                 content: comment,
                 email: emailL,
-                studyPostId: dataKey,
+                studyPostId: key,
                 upIndex: "null",
             }
         );
@@ -325,7 +325,7 @@ const DetailBoard2 = () => {
             {
                 content: comment,
                 email: emailL,
-                studyPostId: dataKey,
+                studyPostId: key,
                 upIndex: upIndex,
             }
         );
@@ -471,7 +471,7 @@ const DetailBoard2 = () => {
                                 writeEmail={email}
                                 handleSendClick={handleSendClick}
                                 id={comment.id}
-                                dataKey={dataKey}
+                                dataKey={key}
                                 childList={comment.childList}
                                 handleXclick={handleXclick}
                                 removed={comment.removed}

@@ -92,9 +92,9 @@ const CommentTitle = styled.div`
     background-color: #c1daff;
 `;
 const DetailBoard = () => {
-    const {key}=useParams();
+    const {key}=useParams();//게시판의 게시글 id
     const location = useLocation();
-    const dataKey = location.state.boardId;
+    const dataKey = location.state.boardId;//게시판id
     const navigate = useNavigate();
     //현재 로그인 중인 email 받기
     const emailL = useSelector((state) => state.email);
@@ -111,7 +111,7 @@ const DetailBoard = () => {
     const fileDownload = useRef();
     const getPost = async () => {
         const response = await axios.get(
-            `https://sooksook.herokuapp.com/studyPost/info?id=${dataKey}`
+            `https://sooksook.herokuapp.com/studyPost/info?id=${key}`
         );
         setTitle(response.data.title);
         setContent(response.data.content);
@@ -227,7 +227,7 @@ const DetailBoard = () => {
             formData.append("title", title);
             formData.append("email", emailL);
             formData.append("content", content);
-            formData.append("id",key)
+            formData.append("id",key);
             console.log(addFormData);
             for (let i = 0; i < addFormData.length; i++) {
                 formData.append("files", addFormData[i]);
@@ -254,7 +254,7 @@ const DetailBoard = () => {
             const response = await axios.delete("/studyPost", {
                 params: {
                     email: email,
-                    id: dataKey,
+                    id: key,
                 },
             });
             if (response.data) {
@@ -276,7 +276,7 @@ const DetailBoard = () => {
             "https://sooksook.herokuapp.com/studyComments/all",
             {
                 params: {
-                    studyPostId: dataKey,
+                    studyPostId: key,
                 },
             }
         );
@@ -292,7 +292,7 @@ const DetailBoard = () => {
             {
                 content: comment,
                 email: emailL,
-                studyPostId: dataKey,
+                studyPostId: key,
                 upIndex: "null",
             }
         );
@@ -326,7 +326,7 @@ const DetailBoard = () => {
             {
                 content: comment,
                 email: emailL,
-                studyPostId: dataKey,
+                studyPostId: key,
                 upIndex: upIndex,
             }
         );
@@ -473,7 +473,7 @@ const DetailBoard = () => {
                                 writeEmail={email}
                                 handleSendClick={handleSendClick}
                                 id={comment.id}
-                                dataKey={dataKey}
+                                dataKey={key}
                                 childList={comment.childList}
                                 handleXclick={handleXclick}
                                 removed={comment.removed}

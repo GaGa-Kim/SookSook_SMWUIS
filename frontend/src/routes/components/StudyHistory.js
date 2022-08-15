@@ -7,7 +7,7 @@ import Button from "./Button";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import React, { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams,Link } from "react-router-dom";
 
 const StarImg = styled.img`
     width: 20px;
@@ -111,7 +111,10 @@ const StudyHistory = () => {
                 <List key={index}>
                     <ListText>
                         <ListText width="100px" style={{ flexShrink: 1 }}>
-                            {history.title}
+                            {history.lecture==="강의 스터디"?
+                            <Link to={`/private/${history.id}`}>{history.title}</Link>
+                            :
+                            <Link to={`/private2/${history.id}`}>{history.title}</Link>}
                         </ListText>
                     </ListText>
                     <ListText>진행중</ListText>

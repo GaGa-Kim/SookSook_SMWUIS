@@ -9,6 +9,18 @@ import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
+import plus from "../images/plus.png";
+import styled from "styled-components";
+
+const PlusImg = styled.img`
+    width: 20px;
+    height: 20px;
+    margin-right:15px;
+    &:hover {
+        width: 27px;
+        height: 27px;
+    }
+`;
 
 const Block = () => {
     const { key } = useParams();
@@ -58,17 +70,9 @@ const Block = () => {
     );
 };
 
-import plus from "../images/plus.png";
 
-const PlusImg = styled.img`
-    width: 20px;
-    height: 20px;
-    margin-right:15px;
-    &:hover {
-        width: 27px;
-        height: 27px;
-    }
-`;
+
+
 
 
 const Piein = (props) => {
@@ -173,7 +177,7 @@ const Private2 = () => {
             render: (text, record, index) => (
                 <Link
                     to={`/detailboard2/${id[index]}`}
-                    state={{ boardId: id[index] }}
+                    state={{ boardId: key}}
                 >
                     {text}
                 </Link>

@@ -10,7 +10,7 @@ import { PieChart } from "react-minimal-pie-chart";
 import Logo from "./components/Logo.js";
 import "../fonts/Font.css";
 import { useSelector } from "react-redux";
-
+import plus from "../images/plus.png";
 const Block = () => {
     const { key } = useParams();
     //현재 로그인 중인 부원 이메일
@@ -60,7 +60,7 @@ const Block = () => {
     );
 };
 
-import plus from "../images/plus.png";
+
 
 const PlusImg = styled.img`
     width: 20px;
@@ -183,7 +183,7 @@ const Private = () => {
             render: (text, record, index) => (
                 <Link
                     to={`/detailboard/${id[index]}`}
-                    state={{ boardId: id[index] }}
+                    state={{ boardId: key }}
                 >
                     {text}
                 </Link>

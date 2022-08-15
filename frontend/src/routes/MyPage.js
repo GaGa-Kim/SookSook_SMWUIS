@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
@@ -20,10 +20,9 @@ import setting from "../images/setting.png";
 import profile from "../images/profile.png";
 import snowflake from "../images/snowflake.png";
 import plus from "../images/plus.png";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { Progress } from "antd";
 import { DatePicker, Space } from "antd";
-
 
 const SettingImg = styled.img`
     width: 50px;
@@ -118,88 +117,87 @@ function MyPage() {
     const [comment, setComment] = React.useState("");
     const [level, setLevel] = React.useState("");
     const [point, setPoint] = React.useState(0);
-
-    const email = useSelector(state => state.email);
-
+    const [date, setDate] = React.useState("");
+    const [text, setText] = React.useState("");
+    const email = useSelector((state) => state.email);
     React.useEffect(() => {
         axios
-            .get(
-                "https://sooksook.herokuapp.com/user/myInfo", {
+            .get("https://sooksook.herokuapp.com/user/myInfo", {
                 params: {
                     email: email,
-                }
-            }
-            )
+                },
+            })
             .then((response) => {
                 setName(response.data.nickname);
                 setComment(response.data.introduction);
                 setLevel(response.data.rating);
                 setPoint(response.data.points);
-
-            });
-        axios
-            .get(
-                "https://sooksook.herokuapp.com/userSchedule/myInfo", {
-                params: {
-                    email: email,
-                }
-            })
-            .then((response) => {
-                setStudyScheduleList(response.data);
-            });
-        axios
-            .get(
-                "https://sooksook.herokuapp.com/userSchedule/info", {})
-            .then((response) => {
-                setId(response.data.id);
-            });
-        axios
-            .get(
-                "https://sooksook.herokuapp.com/userSchedule/check", {
-                params: {
-                    email: email,
-                    id: id
-                }
-            })
-            .then((response) => {
-                setStudyScheduleList(response.data);
             });
     }, []);
-
+    //모든 스케줄 가져오는 함수
+    const getAllSchedule = async () => {
+        const res = await axios.get(
+            "https://sooksook.herokuapp.com/userSchedule/myInfo",
+            {
+                params: {
+                    email: email,
+                },
+            }
+        );
+        setStudyScheduleList(res.data);
+    };
+    //체크 수정 함수
+    const getCheck = async (id) => {
+        const res = await axios.put(
+            "https://sooksook.herokuapp.com/userSchedule/check",
+            {
+                params: {
+                    email: email,
+                    id: id,
+                },
+            }
+        );
+    };
+      //스케줄 수정하는 함수
+      const getPost = async () => {
+        const res = await axios.post(
+            "https://sooksook.herokuapp.com/userSchedule",
+            {
+                content: text,
+                period: date,
+                email: email,
+            }
+        );
+    };
+   
+    React.useEffect(() => {
+        getAllSchedule();
+    }, []);
     const handleScheduleClick = () => {
         setTarget(false);
     };
     const handleHistoryClick = () => {
-        setTarget(true)
+        setTarget(true);
     };
     const [studyScheduleList, setStudyScheduleList] = React.useState([]);
 
-
     const handleXclick = async (email, id) => {
-
-        const res = await axios.delete("https://sooksook.herokuapp.com/userSchedule", {
-            params: {
-                email: email,
-                id: id,
-            }
-        });
-
+        const res = await axios.delete(
+            `https://sooksook.herokuapp.com/userSchedule?email=${email}&id=${id}`
+        );
+        getAllSchedule();
     };
     const onChange = (date, dateString) => {
         setDate(dateString);
     };
-    const [date, setDate] = React.useState("");
-    const [text, setText] = React.useState("");
+ 
     const getText = (text) => {
         setText(text);
     };
+  
     const handlePlusClick = () => {
-        axios
-            .post("https://sooksook.herokuapp.com/userSchedule", {
-                content: text,
-                period: date,
-                email: email,
-            });
+        getPost();
+        getAllSchedule();
     };
 
     return (
@@ -260,14 +258,19 @@ function MyPage() {
                             </Box>
                         </List>
 
-                        {studyScheduleList.map((schedule) => (
-                            <StudySchedule
-                                key={schedule.id}
-                                {...schedule}
-                                handleXclick={handleXclick}
-                                studyScheduleList={studyScheduleList}
-                            />
-                        ))}
+                        {studyScheduleList &&
+                            studyScheduleList.map((schedule) => (
+                                <StudySchedule
+                                    {...schedule}
+                                    id={schedule.id}
+                                    handleXclick={handleXclick}
+                                    date={schedule.period}
+                                    content={schedule.content}
+                                    finish={schedule.finish}
+                                    getCheck={getCheck}
+                                    email={email}
+                                />
+                            ))}
                     </ListBox>
                     <Add>
                         <Box left="50px" width="120px">
@@ -285,7 +288,6 @@ function MyPage() {
                 </>
             )}
         </Root>
-
     );
 }
 
