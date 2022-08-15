@@ -63,7 +63,7 @@ const Share = () => {
 
     const columns = [
         {
-            title: <div className="studyname">스터디 명</div>,
+            title: <div className="studyname">제목</div>,
             dataIndex: "title",
             key: "title",
             render: (text, record, index) => (

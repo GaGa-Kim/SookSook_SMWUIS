@@ -1,6 +1,6 @@
 import "../css/qacss.css";
 import { Table } from "antd";
-import { Link,useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import GlobalStyle from "./components/GlobalStyle";
 import "antd/dist/antd.css";
 import Logo from "./components/Logo.js";
@@ -31,9 +31,9 @@ const Qaboard = () => {
         const response = await axios.get(
             "https://sooksook.herokuapp.com/studyPosts/category?category=%EC%A7%88%EB%AC%B8%20%EA%B2%8C%EC%8B%9C%EA%B8%80"
         );
-        setId(()=> response.data);
+        setId(() => response.data);
     };
-    const getData =  () => {
+    const getData = () => {
         (id || []).reduce((prev, cur) => {
             return prev.then(async () => {
                 await axios
@@ -46,7 +46,7 @@ const Qaboard = () => {
             });
         }, Promise.resolve());
     };
-    const {state}=useLocation();
+    const { state } = useLocation();
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
     React.useEffect(() => {
@@ -75,7 +75,7 @@ const Qaboard = () => {
         },
 
         {
-            title: <div className="user">작성자</div>,
+            title: <div className="user">제목</div>,
             dataIndex: "nickname",
             key: "nickname"
         }
@@ -87,7 +87,7 @@ const Qaboard = () => {
             <Logo />
             <Qablock />
             <section className="table">
-                <Table columns={columns} dataSource={data} />;
+                <Table columns={columns} dataSource={data} />
             </section>
         </>
     )
