@@ -35,7 +35,7 @@ public class UserService {
                     .rating("새싹등급")
                     .build();
             userRepository.save(singUser);
-            return new UserResponseDto(singUser, saveRequestDto.getPassword());
+            return new UserResponseDto(singUser);
         }
         else {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
@@ -51,7 +51,7 @@ public class UserService {
             user.update(updateRequestDto.getName(),
                     updateRequestDto.getNickname(),
                     updateRequestDto.getIntroduction());
-            return new UserResponseDto(user, passwordEncoder.encode(user.getPassword()));
+            return new UserResponseDto(user);
         }
         else {
             throw new RuntimeException("유저 수정에 실패했습니다.");
@@ -63,9 +63,9 @@ public class UserService {
     public UserResponseDto updatePassword(String email, String oldPassword, String newPassword) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
 
-        if(user.getPassword().equals(oldPassword)) {
+        if(passwordEncoder.matches(oldPassword, user.getPassword())) {
             user.updatePassword(passwordEncoder.encode(newPassword));
-            return new UserResponseDto(user, newPassword);
+            return new UserResponseDto(user);
         }
         else {
             throw new RuntimeException("유저 비밀번호 수정에 실패했습니다.");
@@ -95,7 +95,7 @@ public class UserService {
             if(user == null || !passwordEncoder.matches(password, user.getPassword())) {
                 throw new RuntimeException("로그인에 실패했습니다.");
             }
-            return new UserResponseDto(user, passwordEncoder.encode(user.getPassword()));
+            return new UserResponseDto(user);
         }
         else {
             throw new RuntimeException("로그인에 실패했습니다. 탈퇴한 회원입니다.");
@@ -106,7 +106,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDto findUser(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));
-        return new UserResponseDto(user, passwordEncoder.encode(user.getPassword()));
+        return new UserResponseDto(user);
     }
 
 }
