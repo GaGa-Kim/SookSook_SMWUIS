@@ -43,7 +43,7 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email", value = "이메일", example = "이메일", required = true),
             @ApiImplicitParam(name = "oldPassword", value = "현재 비밀번호", example = "현재 비밀번호", required = true),
-            @ApiImplicitParam(name = "oldPassword", value = "새 비밀번호", example = "새 비밀번호", required = true)
+            @ApiImplicitParam(name = "newPassword", value = "새 비밀번호", example = "새 비밀번호", required = true)
     })
     public ResponseEntity<UserResponseDto> updatePassword(@RequestParam String email, String oldPassword, String newPassword) {
         logger.info("updatePassword (유저 비밀번호 수정)");

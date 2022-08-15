@@ -24,9 +24,6 @@ public class UserResponseDto {
     @ApiModelProperty(notes = "닉네임", example = "닉네임")
     private String nickname;
 
-    @ApiModelProperty(notes = "인코딩 전 비밀번호", example = "비밀번호")
-    private String origPassword;
-
     @ApiModelProperty(notes = "비밀번호", example = "비밀번호")
     private String password;
 
@@ -39,13 +36,12 @@ public class UserResponseDto {
     @ApiModelProperty(notes = "등급", example = "새싹 등급")
     private String rating;
 
-    public UserResponseDto(User user, String origPassword) {
+    public UserResponseDto(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.loginId = user.getLoginId();
         this.email = user.getEmail();
         this.nickname = user.getNickname();
-        this.origPassword = origPassword;
         this.password = user.getPassword();
         this.introduction = user.getIntroduction();
         this.points = user.getPoints();
