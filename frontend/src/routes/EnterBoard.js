@@ -87,10 +87,17 @@ const CommentTitle = styled.div`
     border-bottom: thin solid #c1daff;
     background-color: #c1daff;
 `;
+const Name = styled.div`
+    height: 40px;
+    margin-top:9px;
+    margin-left:7px;
+    display: flex;
+    font-size: 17px;
+
+`;
 const EnterBoard = () => {
     const navigate = useNavigate();
     const dateFormat = "YYYY-MM-DD";
-
     //현재 로그인 중인 email 받기
     const emailL = useSelector((state) => state.email);
     let nicknameL = "";
@@ -106,8 +113,9 @@ const EnterBoard = () => {
     //게시글 정보
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [dpt, setDpt] = React.useState("문과대학");
+    const [category, setCategory] = React.useState("토익/토플");
     const [title, setTitle] = React.useState("");
+    const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [subject, setSubject] = React.useState("");
     const [date, setDate] = React.useState("");
@@ -115,13 +123,12 @@ const EnterBoard = () => {
     const [onoff, setOnoff] = React.useState("");
     //수정 삭제 버튼 유무
     const [isShow, setIsShow] = React.useState(false);
+
     React.useEffect(() => {
         if (emailL === "") {
             alert("로그인이 필요합니다.");
             navigate("/login");
         }
-    }, [emailL]);
-    React.useEffect(() => {
         axios
             .get("https://sooksook.herokuapp.com/user/myInfo", {
                 params: {
@@ -140,7 +147,7 @@ const EnterBoard = () => {
             .then((response) => {
                 const data = response.data;
                 setEmail(data.email);
-                setDpt(data.department);
+                setCategory(data.category);
                 setSubject(data.subject);
                 setTitle(data.title);
                 setNumber(data.number);
@@ -148,6 +155,7 @@ const EnterBoard = () => {
                 setDate(data.period);
                 setOnoff(data.onoff);
                 setPassword(data.password);
+                setNickname(data.nickname);
                 if (response.data.onoff === "on") {
                     setOn(true);
                     setOff(false);
@@ -163,6 +171,19 @@ const EnterBoard = () => {
                 }
             });
     }, []);
+
+    React.useEffect(() => {
+        /*db에서 댓글 가져오기*/
+        axios
+            .get("https://sooksook.herokuapp.com/passwordComment/all", {
+                params: {
+                    studyBoardId: parseInt(key),
+                },
+            })
+            .then((response) => {
+                setCommentList(response.data);
+            });
+    }, [commentList]);
 
     const [isModify, setIsModify] = React.useState(false);
     const [isDisable, setIsDisable] = React.useState(true);
@@ -183,8 +204,8 @@ const EnterBoard = () => {
     const onChangeDate = (date, dateString) => {
         setDate(dateString);
     };
-    const onChangeDpt = (dpt) => {
-        setDpt(dpt.target.value);
+    const onChangeCategory = (category) => {
+        setCategory(category.target.value);
     };
     const onChangeOn = (on) => {
         setOnoff(on.target.value);
@@ -199,7 +220,7 @@ const EnterBoard = () => {
     const handleUploadClick = async () => {
         await axios
             .put(`/studyBoard?id=${parseInt(key)}`, {
-                department: dpt,
+                category: category,
                 email: email,
                 number: number,
                 onoff: onoff,
@@ -208,7 +229,7 @@ const EnterBoard = () => {
                 subject: subject,
                 title: title,
                 content: content,
-                lecture: true,
+                lecture: false,
             })
             .then(setIsDisable(true));
     };
@@ -220,7 +241,7 @@ const EnterBoard = () => {
                 id: parseInt(key),
             },
         });
-        navigate("/board1");
+        navigate("/board2");
     };
     const handleDeleteClick = async () => {
         del();
@@ -230,7 +251,7 @@ const EnterBoard = () => {
     };
     //목록 클릭
     const handleListClick = () => {
-        navigate("/board1");
+        navigate("/board2");
     };
     //isOpen true이면 modal보임
     const [isOpen, setIsOpen] = React.useState(false);
@@ -247,7 +268,7 @@ const EnterBoard = () => {
             )
             .then((response) => {
                 if (response.data === true) {
-                    navigate(`/private/${parseInt(key)}`);
+                    navigate(`/private2/${parseInt(key)}`);
                 } else {
                     setIsOpen(true);
                 }
@@ -275,34 +296,30 @@ const EnterBoard = () => {
 
     //댓글 가져오기
     const getComment = async () => {
-        const res = await axios.get(
-            "https://sooksook.herokuapp.com/passwordComment/all",
-            {
+        const res = await axios
+            .get("https://sooksook.herokuapp.com/passwordComment/all", {
                 params: {
                     studyBoardId: parseInt(key),
                 },
-            }
-        );
+            });
         setCommentList(res.data);
-    };
+    }
     React.useEffect(() => {
         getComment();
     }, [location.key]);
     //댓글 추가하기
     const addComment = async () => {
-        const res = await axios.post(
-            "https://sooksook.herokuapp.com/passwordComment",
-            {
+        const res = await axios
+            .post("https://sooksook.herokuapp.com/passwordComment", {
                 content: comment,
                 email: emailL,
                 studyBoardId: parseInt(key),
                 upIndex: "null",
-            }
-        );
+            });
 
         setComment("");
         getComment();
-    };
+    }
     const handlePlusClick = () => {
         addComment();
     };
@@ -321,22 +338,21 @@ const EnterBoard = () => {
     const handleSendClick = (id) => {
         setIsRecomment(true);
         setUpIndex(id);
+
     };
     //대댓글 추가
     const addRecomment = async () => {
-        const res = await axios.post(
-            "https://sooksook.herokuapp.com/passwordComment",
-            {
+        const res = await axios
+            .post("https://sooksook.herokuapp.com/passwordComment", {
                 content: comment,
                 email: emailL,
                 studyBoardId: parseInt(key),
                 upIndex: upIndex,
-            }
-        );
+            });
 
-        setComment("");
+        setComment('');
         getComment();
-    };
+    }
     const handleRecommentClick = () => {
         addRecomment();
     };
@@ -353,38 +369,41 @@ const EnterBoard = () => {
             {studyBoard && (
                 <Main>
                     <InputBox>
-                        <Quest ftSize="25px">학부</Quest>
+                        <Quest ftSize="25px">작성자</Quest>
+                        <Box width="200px" left="100px" top="7px">
+                            <Name>
+                                <Link to={`/profile/${email}`}>
+                                    {nickname}
+                                </Link>
+                            </Name>
+                        </Box>
+                    </InputBox>
+                    <InputBox>
+                        <Quest ftSize="25px">카테고리</Quest>
                         <Box width="200px" left="100px" top="7px">
                             {isDisable && (
                                 <InputText
-                                    value={studyBoard.department}
+                                    value={studyBoard.category}
                                     disable={isDisable}
                                 />
                             )}
                             {!isDisable && (
-                                <Select onChange={onChangeDpt}>
-                                    <option value="문과대학">문과대학</option>
-                                    <option value="이과대학">이과대학</option>
-                                    <option value="공과대학">공과대학</option>
-                                    <option value="생활과학대학">
-                                        생활과학대학
+                                <Select onChange={onChangeCategory}>
+                                    <option value="토익/토플">토익/토플</option>
+                                    <option value="면접">면접</option>
+                                    <option value="자소서">자소서</option>
+                                    <option value="코딩">코딩</option>
+                                    <option value="어학자격증">
+                                        어학자격증
                                     </option>
-                                    <option value="법과대학">법과대학</option>
-                                    <option value="경과대학">경상대학</option>
-                                    <option value="음악대학">음악대학</option>
-                                    <option value="약학대학">약학대학</option>
-                                    <option value="미술대학">미술대학</option>
-                                    <option value="기초교양대학">
-                                        기초교양대학
+                                    <option value="LEET">LEET</option>
+                                    <option value="공무원시험">
+                                        공무원시험
                                     </option>
-                                    <option value="글로벌서비스학부">
-                                        글로벌서비스학부
-                                    </option>
-                                    <option value="영어영문학부">
-                                        영어영문학부
-                                    </option>
-                                    <option value="미디어대학">
-                                        미디어학부
+                                    <option value="해외유학">해외유학</option>
+                                    <option value="취미언어">취미언어</option>
+                                    <option value="전문자격증">
+                                        전문자격증
                                     </option>
                                 </Select>
                             )}

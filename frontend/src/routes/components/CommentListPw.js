@@ -3,6 +3,7 @@ import styled from "styled-components";
 import List from "./List";
 import Box from "./Box";
 import ListText from "./ListText";
+import { Link } from "react-router-dom";
 import x from "../../images/x.png";
 import cut from "../../images/cut.png";
 import arrow from "../../images/arrow_forward.png";
@@ -53,7 +54,7 @@ const Recomment = ({ id, emailL, upRemoved }) => {
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [removed,setRemoved]=React.useState(true);
+    const [removed, setRemoved] = React.useState(true);
 
     const getRecomment = async () => {
         const response = await axios.get(
@@ -69,10 +70,10 @@ const Recomment = ({ id, emailL, upRemoved }) => {
         setContent(response.data.content);
         setEmail(response.data.email);
         setRemoved(response.data.removed);
-        
+
     };
     const handleXclick = async (email, id) => {
- 
+
         const res = await axios.delete("/passwordComment", {
             params: {
                 email: email,
@@ -96,7 +97,7 @@ const Recomment = ({ id, emailL, upRemoved }) => {
             <Box left="100px">
                 <ListText>{content}</ListText>
             </Box>
-            {emailL === email && !removed && !upRemoved? (
+            {emailL === email && !removed && !upRemoved ? (
                 <Box right="35px" onClick={() => handleXclick(email, id)}>
                     <XImg src={x}></XImg>
                 </Box>
@@ -133,7 +134,7 @@ const CommentListPw = ({
     const [isSend, setIsSend] = React.useState(false);
     const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
-    const [upRemoved,setUpRemoved]=React.useState(false);
+    const [upRemoved, setUpRemoved] = React.useState(false);
 
     const getComment = async () => {
         const response = await axios.get(
@@ -153,7 +154,7 @@ const CommentListPw = ({
         getComment();
     }, [removed]);
     React.useState(() => {
-        emailL === email  ? setIsDelete(true) : setIsDelete(false);
+        emailL === email ? setIsDelete(true) : setIsDelete(false);
         emailL === writeEmail || emailL === email
             ? setIsSend(true)
             : setIsSend(false);
@@ -162,7 +163,7 @@ const CommentListPw = ({
         <>
             <List>
                 <Box left="25px">
-                    <ListText>{nickname}</ListText>
+                    <Link to={`/profile/${email}`}><ListText>{nickname}</ListText></Link>
                 </Box>
                 <Box left="100px">
                     <ListText>{content}</ListText>
@@ -173,7 +174,7 @@ const CommentListPw = ({
                     onClick={() => handleXclick(email, id)}
                     style={{ overflow: "hidden" }}
                 >
-                    {isDelete && !removed &&(
+                    {isDelete && !removed && (
                         // <div
                         //     style={{
                         //         display: "flex",

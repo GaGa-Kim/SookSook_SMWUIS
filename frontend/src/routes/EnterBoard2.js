@@ -87,7 +87,15 @@ const CommentTitle = styled.div`
     border-bottom: thin solid #c1daff;
     background-color: #c1daff;
 `;
-const EnterBoard = () => {
+const Name = styled.div`
+    height: 40px;
+    margin-top:9px;
+    margin-left:7px;
+    display: flex;
+    font-size: 17px;
+
+`;
+const EnterBoard2 = () => {
     const navigate = useNavigate();
     const dateFormat = "YYYY-MM-DD";
     //현재 로그인 중인 email 받기
@@ -107,6 +115,7 @@ const EnterBoard = () => {
     const [password, setPassword] = React.useState("");
     const [category, setCategory] = React.useState("토익/토플");
     const [title, setTitle] = React.useState("");
+    const [nickname, setNickname] = React.useState("");
     const [content, setContent] = React.useState("");
     const [subject, setSubject] = React.useState("");
     const [date, setDate] = React.useState("");
@@ -146,6 +155,7 @@ const EnterBoard = () => {
                 setDate(data.period);
                 setOnoff(data.onoff);
                 setPassword(data.password);
+                setNickname(data.nickname);
                 if (response.data.onoff === "on") {
                     setOn(true);
                     setOff(false);
@@ -282,47 +292,47 @@ const EnterBoard = () => {
     const handleRequestCloseFunc = () => {
         setIsOpen(false);
     };
-     /*댓글*/
+    /*댓글*/
 
     //댓글 가져오기
-    const getComment=async()=>{
-        const res=await axios
-        .get("https://sooksook.herokuapp.com/passwordComment/all", {
-            params: {
-                studyBoardId: parseInt(key),
-            },
-        });
+    const getComment = async () => {
+        const res = await axios
+            .get("https://sooksook.herokuapp.com/passwordComment/all", {
+                params: {
+                    studyBoardId: parseInt(key),
+                },
+            });
         setCommentList(res.data);
     }
     React.useEffect(() => {
-       getComment();
+        getComment();
     }, [location.key]);
     //댓글 추가하기
-    const addComment=async ()=>{
-        const res=await axios
-        .post("https://sooksook.herokuapp.com/passwordComment", {
-            content: comment,
-            email: emailL,
-            studyBoardId: parseInt(key),
-            upIndex: "null",
-        });
-        
+    const addComment = async () => {
+        const res = await axios
+            .post("https://sooksook.herokuapp.com/passwordComment", {
+                content: comment,
+                email: emailL,
+                studyBoardId: parseInt(key),
+                upIndex: "null",
+            });
+
         setComment("");
         getComment();
     }
     const handlePlusClick = () => {
         addComment();
     };
-    const handleXclick = async (email,id) => {
-         console.log(1);
-        const res=await axios.delete("/passwordComment", {
+    const handleXclick = async (email, id) => {
+        console.log(1);
+        const res = await axios.delete("/passwordComment", {
             params: {
                 email: email,
                 id: id,
             },
         });
         getComment();
-        };
+    };
     const [isRecomment, setIsRecomment] = React.useState(false);
     const [upIndex, setUpIndex] = React.useState();
     const handleSendClick = (id) => {
@@ -331,20 +341,20 @@ const EnterBoard = () => {
 
     };
     //대댓글 추가
-    const addRecomment=async ()=>{
-        const res=await axios
-        .post("https://sooksook.herokuapp.com/passwordComment", {
-            content: comment,
-            email: emailL,
-            studyBoardId: parseInt(key),
-            upIndex: upIndex,
-        });
+    const addRecomment = async () => {
+        const res = await axios
+            .post("https://sooksook.herokuapp.com/passwordComment", {
+                content: comment,
+                email: emailL,
+                studyBoardId: parseInt(key),
+                upIndex: upIndex,
+            });
 
         setComment('');
         getComment();
     }
     const handleRecommentClick = () => {
-       addRecomment();
+        addRecomment();
     };
     const handleCommentClick = () => {
         setIsRecomment(false);
@@ -358,6 +368,16 @@ const EnterBoard = () => {
             </ColorBox>
             {studyBoard && (
                 <Main>
+                    <InputBox>
+                        <Quest ftSize="25px">작성자</Quest>
+                        <Box width="200px" left="100px" top="7px">
+                            <Name>
+                                <Link to={`/profile/${email}`}>
+                                    {nickname}
+                                </Link>
+                            </Name>
+                        </Box>
+                    </InputBox>
                     <InputBox>
                         <Quest ftSize="25px">카테고리</Quest>
                         <Box width="200px" left="100px" top="7px">
@@ -535,14 +555,14 @@ const EnterBoard = () => {
                     {commentList &&
                         commentList.map((comment) => (
                             <CommentListPw
-                            email={comment.email}
-                            writeEmail={email}
-                            handleSendClick={handleSendClick}
-                            id={comment.id}
-                            dataKey={parseInt(key)}
-                            childList={comment.childList}
-                            handleXclick={handleXclick}
-                            removed={comment.removed}
+                                email={comment.email}
+                                writeEmail={email}
+                                handleSendClick={handleSendClick}
+                                id={comment.id}
+                                dataKey={parseInt(key)}
+                                childList={comment.childList}
+                                handleXclick={handleXclick}
+                                removed={comment.removed}
                             />
                         ))}
                 </ListBox>
@@ -616,4 +636,4 @@ const EnterBoard = () => {
     );
 };
 
-export default EnterBoard;
+export default EnterBoard2;
