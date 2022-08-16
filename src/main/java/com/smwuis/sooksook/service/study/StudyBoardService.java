@@ -153,6 +153,7 @@ public class StudyBoardService {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
             map.put("studyBoardId", studyBoard.getId());
+            map.put("lecture", setLecture(studyBoard));
             map.put("countComment", countPasswordComments(studyBoard.getId()));
 
             countList.add(map);
@@ -184,6 +185,7 @@ public class StudyBoardService {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
             map.put("studyBoardId", studyBoard.getId());
+            map.put("lecture", setLecture(studyBoard));
 
             newList.add(map);
         }
@@ -236,6 +238,7 @@ public class StudyBoardService {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
             map.put("studyBoardId", studyBoard.getId());
+            map.put("lecture", setLecture(studyBoard));
             map.put("countPostsAndComment", countStudyPosts(studyBoard.getId()) + countStudyComments(studyBoard.getId()));
 
             countList.add(map);
@@ -275,5 +278,14 @@ public class StudyBoardService {
                 .stream()
                 .sorted(Comparator.comparing(SearchResponseDto::getCreatedDateTime))
                 .collect(Collectors.toList());
+    }
+
+    public String setLecture(StudyBoard studyBoard) {
+        if(studyBoard.isLecture()) {
+            return "강의 스터디";
+        }
+        else {
+            return  "강의 외 스터디";
+        }
     }
 }
