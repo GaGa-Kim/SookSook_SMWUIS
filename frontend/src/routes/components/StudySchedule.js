@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import CheckBox from "./CheckBox";
 import List from "./List";
 import Box from "./Box";
 import ListText from "./ListText";
 import x from "../../images/x.png";
+import axios from 'axios';
 
 const XImg = styled.img`
     width: 30px;
@@ -17,11 +18,29 @@ const XImg = styled.img`
     }
 `;
 
-const StudySchedule = ({ handleXclick, id, date, content, finish, email }) => {
+const StudySchedule = ({ handleXclick, id, date, content, finish, email,getAllSchedule }) => {
+    const [check,setCheck]=React.useState();
+    useEffect(()=>{
+        setCheck(finish);
+    },[finish]);
+     //체크 수정 함수
+     const getCheck = async () => {
+        const res = await axios.put(
+            `https://sooksook.herokuapp.com/userSchedule/check?email=${email}&id=${id}`
+        );
+    };
+    const onChange=async(e)=>{
+        setCheck(e.target.value);
+        await getCheck();
+        getAllSchedule();
+
+    }
     return (
         <List>
             <Box left="50px" top="13px">
-                <CheckBox checked={finish} />
+
+                <input type="checkbox" checked={check} onChange={onChange} />
+              
             </Box>
             <Box left="70px" top="13px">
                 <ListText>{date.substr(0, 10)}</ListText>
