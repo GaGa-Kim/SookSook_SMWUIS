@@ -138,8 +138,13 @@ const HotStudy = () => {
             });
     }, []);
     return hotStudyList.map((study, index) => (
+        study.lecture==="강의 스터디"?
         <StudyList key={index}>
             {index + 1}위 <Link to={`/enterboard/${study.studyBoardId}`} >{study.title}</Link>
+        </StudyList>
+        :
+        <StudyList key={index}>
+            {index + 1}위 <Link to={`/enterboard2/${study.studyBoardId}`} >{study.title}</Link>
         </StudyList>
     ));
 };
