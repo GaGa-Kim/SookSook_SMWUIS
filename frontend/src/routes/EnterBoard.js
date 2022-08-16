@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactModal from "react-modal";
 import styled from "styled-components";
 import GlobalStyle from "./components/GlobalStyle";
@@ -87,6 +87,14 @@ const CommentTitle = styled.div`
     border-bottom: thin solid #c1daff;
     background-color: #c1daff;
 `;
+const Name = styled.div`
+    height: 40px;
+    margin-top:9px;
+    margin-left:7px;
+    display: flex;
+    font-size: 17px;
+
+`;
 const EnterBoard = () => {
     const navigate = useNavigate();
     const dateFormat = "YYYY-MM-DD";
@@ -96,7 +104,6 @@ const EnterBoard = () => {
     let nicknameL = "";
     const [comment, setComment] = React.useState("");
     const [commentList, setCommentList] = React.useState([]);
-
     const { key } = useParams();
     const location = useLocation();
 
@@ -105,6 +112,7 @@ const EnterBoard = () => {
     const [off, setOff] = React.useState(false);
     //게시글 정보
     const [email, setEmail] = React.useState("");
+    const [nickname, setNickname] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [dpt, setDpt] = React.useState("문과대학");
     const [title, setTitle] = React.useState("");
@@ -148,6 +156,7 @@ const EnterBoard = () => {
                 setDate(data.period);
                 setOnoff(data.onoff);
                 setPassword(data.password);
+                setNickname(data.nickname);
                 if (response.data.onoff === "on") {
                     setOn(true);
                     setOff(false);
@@ -317,6 +326,7 @@ const EnterBoard = () => {
         getComment();
     };
     const [isRecomment, setIsRecomment] = React.useState(false);
+    const [data, setData] = useState("");
     const [upIndex, setUpIndex] = React.useState();
     const handleSendClick = (id) => {
         setIsRecomment(true);
@@ -352,6 +362,16 @@ const EnterBoard = () => {
             </ColorBox>
             {studyBoard && (
                 <Main>
+                    <InputBox>
+                        <Quest ftSize="25px">작성자</Quest>
+                        <Box width="200px" left="100px" top="7px">
+                            <Name>
+                                <Link to={`/profile/${email}`}>
+                                    {nickname}
+                                </Link>
+                            </Name>
+                        </Box>
+                    </InputBox>
                     <InputBox>
                         <Quest ftSize="25px">학부</Quest>
                         <Box width="200px" left="100px" top="7px">
