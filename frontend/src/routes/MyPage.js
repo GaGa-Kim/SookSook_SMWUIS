@@ -146,18 +146,7 @@ function MyPage() {
         );
         setStudyScheduleList(res.data);
     };
-    //체크 수정 함수
-    const getCheck = async (id) => {
-        const res = await axios.put(
-            "https://sooksook.herokuapp.com/userSchedule/check",
-            {
-                params: {
-                    email: email,
-                    id: id,
-                },
-            }
-        );
-    };
+   
       //스케줄 수정하는 함수
       const getPost = async () => {
         const res = await axios.post(
@@ -195,8 +184,8 @@ function MyPage() {
         setText(text);
     };
   
-    const handlePlusClick = () => {
-        getPost();
+    const handlePlusClick = async () => {
+        await getPost();
         getAllSchedule();
     };
 
@@ -261,14 +250,14 @@ function MyPage() {
                         {studyScheduleList &&
                             studyScheduleList.map((schedule) => (
                                 <StudySchedule
+                                id={schedule.id}
                                     {...schedule}
-                                    id={schedule.id}
                                     handleXclick={handleXclick}
                                     date={schedule.period}
                                     content={schedule.content}
                                     finish={schedule.finish}
-                                    getCheck={getCheck}
                                     email={email}
+                                    getAllSchedule={getAllSchedule}
                                 />
                             ))}
                     </ListBox>
