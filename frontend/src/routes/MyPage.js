@@ -195,8 +195,8 @@ function MyPage() {
         setText(text);
     };
   
-    const handlePlusClick = () => {
-        getPost();
+    const handlePlusClick = async () => {
+        await getPost();
         getAllSchedule();
     };
 
