@@ -1,6 +1,5 @@
 package com.smwuis.sooksook.service.study;
 
-import com.smwuis.sooksook.domain.BaseTimeEntity;
 import com.smwuis.sooksook.domain.study.*;
 import com.smwuis.sooksook.domain.user.User;
 import com.smwuis.sooksook.domain.user.UserRepository;
@@ -9,16 +8,9 @@ import com.smwuis.sooksook.web.dto.study.StudyBoardResponseDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardSaveRequestDto;
 import com.smwuis.sooksook.web.dto.study.StudyBoardUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,7 +35,7 @@ public class StudyBoardService {
         studyBoard.setLecture(tf);
         studyBoard.setUser(userRepository.findByEmail(saveRequestDto.getEmail()).orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다.")));
         studyBoardRepository.save(studyBoard);
-        
+
         return new StudyBoardResponseDto(studyBoard);
     }
 
@@ -153,6 +145,7 @@ public class StudyBoardService {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
             map.put("studyBoardId", studyBoard.getId());
+            map.put("lecture", setLecture(studyBoard));
             map.put("countComment", countPasswordComments(studyBoard.getId()));
 
             countList.add(map);
@@ -184,6 +177,7 @@ public class StudyBoardService {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
             map.put("studyBoardId", studyBoard.getId());
+            map.put("lecture", setLecture(studyBoard));
 
             newList.add(map);
         }
@@ -236,6 +230,7 @@ public class StudyBoardService {
             Map<String, Object> map = new HashMap<>();
             map.put("title", studyBoard.getTitle());
             map.put("studyBoardId", studyBoard.getId());
+            map.put("lecture", setLecture(studyBoard));
             map.put("countPostsAndComment", countStudyPosts(studyBoard.getId()) + countStudyComments(studyBoard.getId()));
 
             countList.add(map);
@@ -255,7 +250,7 @@ public class StudyBoardService {
             return countList.subList(0, 5);
         }
     }
-    
+
     // 스터디 모집 게시판 및 게시글 제목 검색
     @Transactional
     public List<SearchResponseDto> searchKeyword(String keyword) {
@@ -275,5 +270,14 @@ public class StudyBoardService {
                 .stream()
                 .sorted(Comparator.comparing(SearchResponseDto::getCreatedDateTime))
                 .collect(Collectors.toList());
+    }
+
+    public String setLecture(StudyBoard studyBoard) {
+        if(studyBoard.isLecture()) {
+            return "강의 스터디";
+        }
+        else {
+            return  "강의 외 스터디";
+        }
     }
 }
