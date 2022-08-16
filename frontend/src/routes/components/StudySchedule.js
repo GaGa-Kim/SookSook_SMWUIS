@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import CheckBox from "./CheckBox";
 import List from "./List";
 import Box from "./Box";
 import ListText from "./ListText";

@@ -57,7 +57,9 @@ const Logo = () => {
     };
 
     let title = useRef([]);
+    const [options, setOptions] = React.useState([]);
     const searchResult = (value) => {
+        setOptions([]);
         const getKeyword = async () => {
             const res = await axios.get(
                 "https://sooksook.herokuapp.com/studyBoard/search",
@@ -71,42 +73,105 @@ const Logo = () => {
         };
         getKeyword();
         let url = "";
-        title.current
-            .map((item) => {
-                console.log(item);
-                if (item.studyBoardId == null) {
-                    switch (item.category) {
-                        case "판매/나눔 게시글":
-                            url = `/detailsell/${item.studyPostId}`;
-                            break;
-                        case "자료 공유 게시글":
-                            url = `/detailshare/${item.studyPostId}`;
-                            break;
-                        case "질문 게시글":
-                            url = `/detailqa/${item.studyPostId}`;
-                            break;
-                    }
-                } else {
-                    if (item.category === "강의 스터디") {
-                        url = `/board1/${item.studyBoardId}`;
-                    } else {
-                        url = `/board2/${item.studyBoardId}`;
-                    }
-                }
-                console.log(url);
-                return {
-                    value: url,
-                    label: <Link to={url}>{item.title}</Link>,
-                };
-            });
-    };
-    const [options, setOptions] = React.useState([]);
-    const opt = useRef();
-    const handleSearch = (value) => {
-        opt.current = searchResult(value);
 
-        setOptions(()=>value ? opt.current : []);
-        console.log(opt.current);
+        title.current.map((item) => {
+            if (item.studyBoardId == null) {
+                switch (item.category) {
+                    case "판매/나눔 게시글":
+                        url = `/detailsell/${item.studyPostId}`;
+                        setOptions((prev) => [
+                            ...prev,
+                            {
+                                value: url,
+                                label: (
+                                    <Link
+                                        to={url}
+                                        state={{ boardId: item.studyPostId }}
+                                    >
+                                        {item.category}: {item.title}
+                                    </Link>
+                                ),
+                            },
+                        ]);
+                        return;
+                    case "자료 공유 게시글":
+                        url = `/detailshare/${item.studyPostId}`;
+                        setOptions((prev) => [
+                            ...prev,
+                            {
+                                value: url,
+                                label: (
+                                    <Link
+                                        to={url}
+                                        state={{ boardId: item.studyPostId }}
+                                    >
+                                        {item.category}: {item.title}
+                                    </Link>
+                                ),
+                            },
+                        ]);
+                        return;
+                    case "질문 게시글":
+                        url = `/detailqa/${item.studyPostId}`;
+                        setOptions((prev) => [
+                            ...prev,
+                            {
+                                value: url,
+                                label: (
+                                    <Link
+                                        to={url}
+                                        state={{ boardId: item.studyPostId }}
+                                    >
+                                        {item.category}: {item.title}
+                                    </Link>
+                                ),
+                            },
+                        ]);
+                        return;
+                }
+            } else {
+                switch (item.category) {
+                    case "강의 스터디":
+                        url = `/board1/${item.studyBoardId}`;
+                        setOptions((prev) => [
+                            ...prev,
+                            {
+                                value: url,
+                                label: (
+                                    <Link
+                                        to={url}
+                                        state={{ boardId: item.studyBoardId }}
+                                    >
+                                        {item.category}: {item.title}
+                                    </Link>
+                                ),
+                            },
+                        ]);
+                        return;
+                    case "강의 외 스터디":
+                        url = `/board2/${item.studyBoardId}`;
+                        setOptions((prev) => [
+                            ...prev,
+                            {
+                                value: url,
+                                label: (
+                                    <Link
+                                        to={url}
+                                        state={{ boardId: item.studyBoardId }}
+                                    >
+                                        {item.category}: {item.title}
+                                    </Link>
+                                ),
+                            },
+                        ]);
+                        return;
+                }
+            }
+        });
+    };
+
+    const handleSearch = (value) => {
+        searchResult(value);
     };
 
     const onSelect = (value) => {
