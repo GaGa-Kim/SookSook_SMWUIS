@@ -211,29 +211,7 @@ const Private = () => {
         >
             <GlobalStyle />
             <Logo />
-            <section
-                className="block"
-                style={{ display: "flex", justifyContent: "space-between" }}
-            >
-                <div>
-                    <button className="upcome">다가오는 스터디 일정</button>
-                    <button className="qrbutton" style={{ marginRight: "0px" }}>
-                        {schedule}
-                    </button>
-
-                </div>
-                <div>
-                    <PlusImg src={plus}></PlusImg>
-                    <button className="prbutton">
-                        <Link to="/membergrade">스터디 종료</Link>
-                    </button>
-                    <button className="prbutton">
-                        <Link to="/setboard_private" state={{ boardId: key }}>
-                            글 작성하기
-                        </Link>
-                    </button>
-                </div>
-            </section>
+            <Block/>
             <section className="chart">
                 <Piein>스터디 참여율</Piein>
                 <div className="hp">

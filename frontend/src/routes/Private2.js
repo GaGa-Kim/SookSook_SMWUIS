@@ -15,7 +15,7 @@ import styled from "styled-components";
 const PlusImg = styled.img`
     width: 20px;
     height: 20px;
-    margin-right:15px;
+    margin-right: 15px;
     &:hover {
         width: 27px;
         height: 27px;
@@ -70,11 +70,6 @@ const Block = () => {
     );
 };
 
-
-
-
-
-
 const Piein = (props) => {
     return <h1 className="ptitle">{props.children}</h1>;
 };
@@ -112,9 +107,13 @@ const Private2 = () => {
         axios.get(`studyMember?studyBoardId=${key}`).then((response) => {
             setMememberInfo(response.data);
         });
-        axios.get(`https://sooksook.herokuapp.com/studySchedules/all?studyBoardId=${key}`).then((response) => {
-            setSchedule(response.data);
-        });
+        axios
+            .get(
+                `https://sooksook.herokuapp.com/studySchedules/all?studyBoardId=${key}`
+            )
+            .then((response) => {
+                setSchedule(response.data);
+            });
     }, []);
     //참여율 데이터
     for (let i = 0; i < memberInfo.length; i++) {
@@ -177,7 +176,7 @@ const Private2 = () => {
             render: (text, record, index) => (
                 <Link
                     to={`/detailboard2/${id[index]}`}
-                    state={{ boardId: key}}
+                    state={{ boardId: key }}
                 >
                     {text}
                 </Link>
@@ -205,28 +204,7 @@ const Private2 = () => {
         >
             <GlobalStyle />
             <Logo />
-            <section
-                className="block"
-                style={{ display: "flex", justifyContent: "space-between" }}
-            >
-                <div>
-                    <button className="upcome">다가오는 스터디 일정</button>
-                    <button className="qrbutton" style={{ marginRight: "0px" }}>
-                        {schedule}
-                    </button>
-                </div>
-                <div>
-                    <PlusImg src={plus}></PlusImg>
-                    <button className="prbutton">
-                        <Link to="/membergrade">스터디 종료</Link>
-                    </button>
-                    <button className="prbutton">
-                        <Link to="/setboard_private" state={{ boardId: key }}>
-                            글 작성하기
-                        </Link>
-                    </button>
-                </div>
-            </section>
+            <Block/>
             <section className="chart">
                 <Piein>스터디 참여율</Piein>
                 <div className="hp">

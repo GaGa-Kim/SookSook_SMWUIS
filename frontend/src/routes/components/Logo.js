@@ -59,7 +59,6 @@ const Logo = () => {
     let title = useRef([]);
     const [options, setOptions] = React.useState([]);
     const searchResult = (value) => {
-        setOptions([]);
         const getKeyword = async () => {
             const res = await axios.get(
                 "https://sooksook.herokuapp.com/studyBoard/search",
@@ -78,6 +77,7 @@ const Logo = () => {
             if (item.studyBoardId == null) {
                 switch (item.category) {
                     case "판매/나눔 게시글":
+                        console.log("판매나눔");
                         url = `/detailsell/${item.studyPostId}`;
                         setOptions((prev) => [
                             ...prev,
@@ -95,6 +95,7 @@ const Logo = () => {
                         ]);
                         return;
                     case "자료 공유 게시글":
+                        console.log("자료공유");
                         url = `/detailshare/${item.studyPostId}`;
                         setOptions((prev) => [
                             ...prev,
@@ -112,6 +113,7 @@ const Logo = () => {
                         ]);
                         return;
                     case "질문 게시글":
+                        console.log("질문");
                         url = `/detailqa/${item.studyPostId}`;
                         setOptions((prev) => [
                             ...prev,
@@ -128,11 +130,12 @@ const Logo = () => {
                             },
                         ]);
                         return;
-                }
+                };
             } else {
                 switch (item.category) {
                     case "강의 스터디":
-                        url = `/board1/${item.studyBoardId}`;
+                        console.log("강의");
+                        url = `/enterboard/${item.studyBoardId}`;
                         setOptions((prev) => [
                             ...prev,
                             {
@@ -149,7 +152,8 @@ const Logo = () => {
                         ]);
                         return;
                     case "강의 외 스터디":
-                        url = `/board2/${item.studyBoardId}`;
+                        console.log("강의 외");
+                        url = `/enterboard2/${item.studyBoardId}`;
                         setOptions((prev) => [
                             ...prev,
                             {
@@ -165,7 +169,7 @@ const Logo = () => {
                             },
                         ]);
                         return;
-                }
+                };
             }
         });
     };
@@ -175,6 +179,7 @@ const Logo = () => {
     };
 
     const onSelect = (value) => {
+        setOptions([]);
         console.log("onSelect", value);
     };
     return (
