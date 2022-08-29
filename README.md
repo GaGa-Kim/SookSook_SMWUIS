@@ -8,11 +8,11 @@
 ![목적 및 의도](https://user-images.githubusercontent.com/87821678/187165654-99e0f7d2-ee59-4a5d-9e06-68b8071f9284.png)
 <br/><br/>
 
-## ✏ 기술 스택
+## 🌳 기술 스택
 ![기술스택](https://user-images.githubusercontent.com/87821678/187164801-e2812ab8-5798-41a1-9cc1-6114d946e253.png)
 <br/><br/>
 
-## ✏ 구현 기능
+## 🌳 구현 기능
 ![기능1](https://user-images.githubusercontent.com/87821678/187165405-5caa6a1d-321d-440d-817c-0e94359e3631.png)
 ![기능2](https://user-images.githubusercontent.com/87821678/187165407-1d32fcab-f26e-4dde-a564-6952ddfbf7fc.png)
 ![기능3](https://user-images.githubusercontent.com/87821678/187165409-e76940fb-854c-48a6-98fb-c13389e2fdbf.png)
@@ -29,7 +29,7 @@
 ![기능14](https://user-images.githubusercontent.com/87821678/187165398-8ba7f205-1921-4ddb-b05d-5eb411778971.png)
 <br/><br/>
 
-## ✏ 개발자 
+## 🌳 개발자 
 | 이름 | 김가경 | 신정은 | 홍선민 |
 | :-: | :-: | :-: | :-: |
 | **Github ID** | [@GaGa-Kim](https://github.com/GaGa-Kim) | [@JEONGEUN0204](https://github.com/JEONGEUN0204) | [@seonmin23](https://github.com/seonmin23) |
