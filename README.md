@@ -1,7 +1,7 @@
 # 솔룩스 2022-1학기 프로젝트 : 🌳 쑥쑥이 🌳
-> **숙명인들을 위한 차별화된 스터디 웹 사이트 '쑥쑥이🌱'**<br/>
-쑥쑥이를 통해 알맞은 스터디원을 찾아 열정적으로 스터디에 참여하세요!<br/><br/>
-> 팀 숙명이즈 멤버 : 김가경, 신정은, 홍선민<br/><br/>
+**숙명인들을 위한 차별화된 스터디 웹 사이트 '쑥쑥이🌱'**<br/>
+쑥쑥이를 통해 알맞은 스터디원을 찾아 열정적으로 스터디에 참여하세요!<br/>
+> 팀 숙명이즈 멤버 : 김가경, 신정은, 홍선민<br/>
 > 기획 및 개발 기간 : 2022.04.01 ~ 05.13 / 2022.07.02 ~ 08.17 (총 11번의 회의 진행)<br/>
 
 ![메인](https://user-images.githubusercontent.com/87821678/187164461-215d544e-ac2a-4215-a590-49bde3a8041f.png)
@@ -9,6 +9,11 @@
 <br/><br/>
 
 ## 🌳 기술 스택
+> **Frontend** : React, HTML, JavaScript, CSS<br/>
+> **Backend** : JAVA 11, Spring Boot (Gradle), Spring Data JPA<br/>
+> **Deploy** : Heroku, JawsDB (MySQL), AWS S3<br/>
+> **REST API Documentation** : Swagger<br/>
+
 ![기술스택1](https://user-images.githubusercontent.com/87821678/187164801-e2812ab8-5798-41a1-9cc1-6114d946e253.png)
 ![기술스택2](https://user-images.githubusercontent.com/87821678/217682664-61af75b1-c297-44c1-b0b5-6bf1f37b825a.png)
 ![기술스택3](https://user-images.githubusercontent.com/87821678/217682642-51e8c984-fa11-4102-a13d-ef90507260e5.png)
@@ -29,6 +34,10 @@
 ![기능12](https://user-images.githubusercontent.com/87821678/187165432-58e0ab10-7bfa-41f8-8410-706d52a8f0e1.png)
 ![기능13](https://user-images.githubusercontent.com/87821678/187165392-bc10e48a-6865-467c-8ce7-27a363af5ec1.png)
 ![기능14](https://user-images.githubusercontent.com/87821678/187165398-8ba7f205-1921-4ddb-b05d-5eb411778971.png)
+<br/><br/>
+
+## 🌳 시연 영상
+[쑥쑥이 시연 영상](https://www.youtube.com/watch?v=PcK4FtPrs6E&feature=youtu.be)
 <br/><br/>
 
 ## 🌳 개발자 
